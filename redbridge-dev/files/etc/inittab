@@ -1,0 +1,3 @@
+::sysinit:/etc/init.d/rcS S boot
+::shutdown:/etc/init.d/rcS K shutdown
+::respawn:/sbin/getty 115200 ttyUSB0 -l/bin/login.sh

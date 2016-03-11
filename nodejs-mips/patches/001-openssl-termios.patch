@@ -1,0 +1,12 @@
+--- a/deps/openssl/openssl/crypto/ui/ui_openssl.c
++++ b/deps/openssl/openssl/crypto/ui/ui_openssl.c
+@@ -220,6 +220,9 @@
+ #undef SGTTY
+ #endif
+ 
++#undef TERMIO
++#define TERMIOS
++
+ #ifdef TERMIOS
+ # include <termios.h>
+ # define TTY_STRUCT		struct termios

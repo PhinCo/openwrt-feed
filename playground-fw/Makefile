@@ -36,7 +36,7 @@ TOP_DIRS := \
 	etc \
 	etc/init.d \
 
-TOP_FILES := \
+TOP_SCRIPTS := \
 	etc/init.d/gpiosetup-led \
 
 define Package/playground-fw
@@ -66,8 +66,8 @@ define Package/playground-fw/install
 	for f in $(TOP_DIRS); do \
 		$(INSTALL_DIR) $(1)/$$$$f; \
 	done
-	for f in $(TOP_FILES); do \
-		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
+	for f in $(TOP_SCRIPTS); do \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
 	for f in $(FW_DIRS); do \
 		$(INSTALL_DIR) $(1)/opt/playground/$$$$f; \

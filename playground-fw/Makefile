@@ -32,6 +32,13 @@ FW_DIRS := \
 	logs \
 	svc \
 
+TOP_DIRS := \
+	etc \
+	etc/init.d \
+
+TOP_FILES := \
+	etc/init.d/gpiosetup-led \
+
 define Package/playground-fw
   SECTION:=utils
   CATEGORY:=Utilities
@@ -46,7 +53,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	cp -R $(FW_DIRS) $(PKG_BUILD_DIR)/
+	cp -R $(FW_DIRS) $(TOP_DIRS) $(PKG_BUILD_DIR)/
 endef
 
 define Build/Configure
@@ -56,6 +63,12 @@ define Build/Compile
 endef
 
 define Package/playground-fw/install
+	for f in $(TOP_DIRS); do \
+		$(INSTALL_DIR) $(1)/$$$$f; \
+	done
+	for f in $(TOP_FILES); do \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
+	done
 	for f in $(FW_DIRS); do \
 		$(INSTALL_DIR) $(1)/opt/playground/$$$$f; \
 	done

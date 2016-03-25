@@ -1,0 +1,82 @@
+# Xtal frequency
+# 26MHz                      
+&01fe = 6590
+# Host transport, BCSP
+&01F9 = 0001
+# Uart baud rate, 115200
+&01EA = 0001 c200
+#pcm_config32
+&01b3 = 0880 2000
+# PSKEY_PCM_USE_LOW_JITTER_MODE
+&23C9 = 00001
+# PSKEY_PCM_SLOTS_PER_FRAME
+&23bb = 0004
+# clock_request_enable
+&0246 = 0000
+#hostio_map_sco_pcm
+&01ab = 0001
+#map_sco_pcm_slot
+&01bd = 0001
+#deep_sleep_state
+&0229 = 0000
+#afh_options
+&00f9 = 0007
+#conditional_scan_enable
+&0036 = 0001
+# =============== COEXistence Settings ==================
+# PSKEY_CLOCK_REQUEST_ENABLE, 0=disable (default = 3)
+&0246 = 0000          
+# PSKEY_COEX_SCHEME   
+# COEX_scheme = Unity-3+
+&2480 = 0005
+# PSKEY_COEX_PIO_UNITY_3_BT_ACTIVE
+# COEX_unity_3_bt_active
+&2483 = 0000 0001
+# PSKEY_COEX_PIO_UNITY_3_BT_STATUS
+# COEX_unity_3_bt_status
+&2484 = 0001 0001
+# PSKEY_COEX_PIO_UNITY_3_BT_DENY
+# COEX_unity_3_bt_deny
+&2485 = 0002 0001
+# PSKEY_COEX_PIO_UNITY_3_BT_PERIODIC
+# COEX_unity_3_bt_periodic
+#&2487 = 0002 0001
+# PSKEY_COEX_PIO_UNITY_3_TIMINGS
+# COEX_unity_express_timings
+#&248a = 0014 000a
+# ================= End of COEXistence Settings ==============
+#pssets deep_sleep_use_external_clock t 0x0001
+&03C3 = 0000
+# Set maximum BT Tx Power
+&0017 = 04
+# Set default BT Tx Power
+&0021 = 00
+# PSKEY_BT_TX_MIXER_CTRIM_OFFSET
+&2175 = 2222 1100 f000 ffff eeee
+# explicit, PSKEY_BT_POWER_TABLE_V0 (0x241a, 9242), 30 words
+&241a = 1E17 0040 1F28 0030 EC00 1D17 0030 1F28 0020 F000 1D17 0020 1F28 0010 F400 1E17 0010 2C28 0010 F800 2117 0000 2E29 0000 FC00 3218 0000 394B 00
+# PSKEY_BT_MIXER_CTRIM_CHAN0_MAX
+&216d = 0007
+# ================= CSR8811-A08 FW PB Rev.16 =================
+&003c = 0426
+&212c = 0000 c47d 5714 0018 ff2b ff0e d800 7918 009e 0018 ff2b ff0e c500 8018 00e2 7080
+&212d = 0002 5b79 0014 e700 9525 011b 0626 089a 0af4 0218 ff2b ff0e 5b00 4318 009e 0014 011b 0826 0218 ff2b ff0e 5c00 8218 00e2 a63a
+&212e = 0002 d0a7 0316 0318 ff2b ff0e 2300 0618 009e e199 14f4 e119 0812 8000 00c0 10f0 061b 0212 0100 ffc0 0780 0af0 0316 0010 0318 ff2b ff0e 3800 13
+&212f = 0003 c916 0114 0027 0517 2b00 a484 06f0 2b00 a914 0527 0114 02e0 0014 0127 0014 0227 0323 e315 0318 ff2b ff0e c900 1d18 00e2 cb5f
+&2130 = 0002 ca7a 0018 ff2b ff0e 8400 cb18 009e ea00 5f11 0100 0080 0524 0100 00b0 ea00 5f21 0218 ff2b ff0e ca00 7d18 00e2 2513
+&2131 = 0003 fe75 eb00 c114 0218 ff2b ff0e 6700 e718 009e ea00 6714 0218 ff2b ff0e 6700 e718 009e 0318 ff2b ff0e fe00 7a18 00e2 0c6f
+&2134 = 0001 1a6f 051b 0116 0284 03f0 0310 0122 0110 071b 0100 8922 0118 ff2b ff0e 1a00 7318 00e2 d58c
+&2135 = 0001 14d1 ff40 0627 0523 091b 0116 0284 07f0 0310 0122 5f16 4800 00b4 5f26 0118 ff2b ff0e 1500 d418 00e2 f7fe
+&2136 = 0003 f9a5 0318 ff2b ff0e f900 f018 009e e199 04f4 4000 ff14 f90f 0318 ff2b ff0e f900 7318 00e2 aec3
+&2137 = 0001 e8f2 0118 ff2b ff0e e900 f618 00e2 5830
+&2139 = 0001 8d02 0018 ff2b ff0e d600 cc18 009e 0118 ff2b ff0e 7900 3118 009e e199 09f4 e100 b219 0316 fe27 0216 ff27 ff0e fe9f 0114 f80f d06f
+&213a = 0000 d5ae 0118 ff2b ff0e 6a00 e418 009e e199 15f4 0513 7700 b580 02f4 0534 e119 0016 0434 f825 0116 08a0 f835 021b 0126 0018 ff2b ff0e d600 bf
+&213b = 0001 8cae 0af0 e100 a315 0118 ff2b ff0e 6900 a518 009e f80f 049b 0bf0 e100 a114 e500 ed10 0018 ff2b ff0e d600 8c18 009e 0118 ff2b ff0e 8d00 cc
+&21fb = f000 3215 0800 00b4 f000 3225 f000 3215 f800 ffc4 f000 3225 f000 3215 0800 00b4 f000 3225 00e2 49e0
+&2200 = f100 cf15 01b4 f100 cf25 00e2 9dd1
+# =============== Freq. trim and BT address Settings ==================
+# ANA_FTRIM_OFFSET, range(0x00~0x3f, default = 0x1d)
+&01f6 = {FTRIM}
+# PSKEY_BDADDR, default = 0000 a5a5 005b 0002 (i.e. 0x00025b00a5a5) E.g.:00F3 9354 0044 48E2
+&0001 = {BDADDR}
+# =============== End of Freq. trim and BT address Settings ==================

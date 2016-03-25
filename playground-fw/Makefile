@@ -38,13 +38,21 @@ TOP_DIRS := \
 
 TOP_SCRIPTS := \
 	etc/init.d/gpiosetup-led \
+	etc/init.d/playgroundPsr \
+	etc/init.d/playgroundServices \
+
+FW_SCRIPTS := \
+	bin/btsetup.sh \
+
+TOP_TEMPLATES := \
+	etc/default.psr \
 
 define Package/playground-fw
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=Playground Framework
   VERSION:=42
-  DEPENDS:=+nodejs-mips +ble-hci-bridge
+  DEPENDS:=+ble-hci-bridge
 endef
 
 define Package/playground-fw/description
@@ -74,6 +82,12 @@ define Package/playground-fw/install
 	done
 	for f in $(FW_FILES); do \
 		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/opt/playground/$$$$f; \
+	done
+	for f in $(FW_SCRIPTS); do \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/opt/playground/$$$$f; \
+	done
+	for f in $(TOP_TEMPLATES); do \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
 endef
 

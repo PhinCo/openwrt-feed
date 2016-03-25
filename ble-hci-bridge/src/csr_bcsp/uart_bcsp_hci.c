@@ -228,7 +228,7 @@ uint8_t get_uart(uint8_t *ch) {
 int hci_powerup_device() {
 	printf("Calling btsetup\n");
 
-	if (system("/opt/Playground/bin/btsetup.sh") < 0) {
+	if (system("/opt/playground/bin/btsetup.sh") < 0) {
 		printf("Error executing init script\n");
 		return ERROR;
 	}

@@ -43,12 +43,7 @@ int cmd_psload() {
 	char *str, val[7];
 	int err, reset = 1;
 
-/*	if (hci_open_device_internal(NULL) == ERROR) {
-		printf("Error opening the UART\n");
-		return ERROR;
-	}*/
-
-	if (psr_read("/opt/Playground/default.psr") < 0) {
+	if (psr_read("/opt/playground/default.psr") < 0) {
 		printf("Error loading PSR commands\n");
 		return ERROR;
 	}

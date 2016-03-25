@@ -5,7 +5,7 @@ USE_PROCD=1
 
 start_service() {
         procd_open_instance
-        procd_set_param command /opt/Playground/bin/playgroundble
+        procd_set_param command /bin/ble-hci-bridge
         procd_set_param respawn ${respawn_retry:-0}
         procd_close_instance
 

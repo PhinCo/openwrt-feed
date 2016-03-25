@@ -3,8 +3,8 @@
 START=95
 
 boot() {
-	if ! [ -f /opt/Playground/default.psr ]
+	if ! [ -f /opt/playground/default.psr ]
     	then
-        	node /opt/Playground/bin/generateDefaultPSR.js
+        	node /opt/playground/bin/generateDefaultPSR.js
     	fi
 }

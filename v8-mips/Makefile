@@ -25,8 +25,8 @@ define Package/v8-mips/description
   Since tip-of-tree V8 doesn't support MIPS anymore, this is a build
   of antique V8 0.15.5
 endef
-
-MAKE_FLAGS+=LINK=mips-openwrt-linux-g++ dependencies mips.release library=shared snapshot=off werror=no
+GYPFLAGS:=GYPFLAGS="-Dv8_use_mips_abi_hardfloat=false -Dv8_can_use_fpu_instructions=false -Dcomponent=shared_library -Dwerror='' -Dv8_use_snapshot='false'"
+MAKE_FLAGS+=LINK=mips-openwrt-linux-g++ $(GYPFLAGS) dependencies mips.release
 
 # TARGET_CXXFLAGS here is a kludge. The v8 MIPS build requires both -mips32r2 to the compiler and
 # -Wa,-mips32r2 to pass to the assembler; without the latter, the assembler assumes mips32, which

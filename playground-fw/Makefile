@@ -52,7 +52,7 @@ define Package/playground-fw
   CATEGORY:=Utilities
   TITLE:=Playground Framework
   VERSION:=42
-  DEPENDS:=+ble-hci-bridge
+  DEPENDS:=+nodejs-mips +ble-hci-bridge
 endef
 
 define Package/playground-fw/description

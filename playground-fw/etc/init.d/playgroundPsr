@@ -1,0 +1,10 @@
+#!/bin/sh /etc/rc.common
+
+START=95
+
+boot() {
+	if ! [ -f /opt/Playground/default.psr ]
+    	then
+        	node /opt/Playground/bin/generateDefaultPSR.js
+    	fi
+}

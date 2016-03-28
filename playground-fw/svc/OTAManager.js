@@ -10,7 +10,7 @@ const DEST = '/tmp/';
     2. openssl rsa -in ./privkey.pem -pubout -out ./pubkey.pem
 */
 
-function FirmwareUpgradeManager() {
+function OTAManager() {
 }
 
 // Call this method first and wait for the callback's status value. If the status
@@ -19,7 +19,7 @@ function FirmwareUpgradeManager() {
 // sigCheckUrl: Url to retrieve digital signature of the OTA image
 // callback(matches, error): ststus true means the download and verification succeeded so it is safe to call doUpgrade.
 //  If status is false, error contains an error message
-FirmwareUpgradeManager.prototype.downloadAndVerify = function(pubKeyPath, downloadUrl, sigCheckUrl, callback) {
+OTAManager.prototype.downloadAndVerify = function(pubKeyPath, downloadUrl, sigCheck, callback) {
 	download(downloadUrl, DEST, function(status, res) {
         if (!status) {
             callback(false, res);
@@ -32,7 +32,7 @@ FirmwareUpgradeManager.prototype.downloadAndVerify = function(pubKeyPath, downlo
                 return;
             }
 
-			checkSignature(pubKeyPath, sigCheckUrl, hash, function(matches, error) {
+			checkSignature(pubKeyPath, sigCheck, hash, function(matches, error) {
                 if (!matches) {
                     callback(false, 'Error checking signature');
                     return;
@@ -43,9 +43,49 @@ FirmwareUpgradeManager.prototype.downloadAndVerify = function(pubKeyPath, downlo
 	})
 }
 
-FirmwareUpgradeManager.prototype.doUpgrade = function(callback) {
+// Downloads a tar file containing both the image and the signature check
+OTAManager.prototype.downloadImageAndSignatureCheck = function(downloadUrl, pubKeyPath, callback) {
+    Utils.cmd_system('rm ' + DEST + '*tar* ' + DEST + '*bin*', function(status) {
+        download(downloadUrl, DEST, function(status, res) {
+            if (!status) {
+                callback(false, res);
+                return
+            }
+
+            // Expand tar file
+            Utils.cmd_system('gzip -d ' + DEST + res + '; tar xvf ' + DEST + res.substring(0, res.length - 3) + ' -C /tmp', function(status) {
+                hashFileWithSHA256(DEST + 'sysupgrade.bin', function(status, hash) {
+                    if (!status) {
+                        callback(false, 'Hash generation error');
+                        return;
+                    }
+
+                    // Read signature check
+                    fs.readFile(DEST + 'sysupgrade.bin.chk', 'utf8', function (err, data) {
+                        if (err) {
+                            callback(false, err.message);
+                            return
+                        }
+
+                        checkSignature(pubKeyPath, data, hash, function(matches, error) {
+                            if (!matches) {
+                                callback(false, 'Error checking signature: ' + error);
+                                return;
+                            }
+                            callback(matches);
+                        })
+                    })
+                })
+            })
+        })
+    })
+}
+
+OTAManager.prototype.doUpgrade = function(callback) {
+    console.log('DO UPGRADE!');
     Utils.cmd_system('tar zcf /tmp/sysupgrade.tgz /etc/config', function(status) {
         if (status) {
+            Utils.blinkLedFast();
             Utils.cmd_system('mtd -r -j /tmp/sysupgrade.tgz write /tmp/sysupgrade.bin /dev/mtd6', function(status) {
                 callback(status);
             })
@@ -58,7 +98,7 @@ FirmwareUpgradeManager.prototype.doUpgrade = function(callback) {
 // callback(status, error/sigCheck)
 // If status is true, then the second parameter is the sigCheck. Otherwise
 // the second parameter is the error message
-FirmwareUpgradeManager.prototype.downloadOTASigCheck = function(sigCheckUrl, callback) {
+OTAManager.prototype.downloadOTASigCheck = function(sigCheckUrl, callback) {
     var request = http.get(sigCheckUrl, function(response) {
         // check if response is success
         if (response.statusCode !== 200) {
@@ -86,7 +126,9 @@ FirmwareUpgradeManager.prototype.downloadOTASigCheck = function(sigCheckUrl, cal
 }
 
 
-// callback(status, message)
+// callback(status, fileName/message)
+// If status is true, the second parameter is the fileName. Otherwise the second parameter 
+// is the error message
 function download(url, dest, callback) {
     var request = http.get(url, function(response) {
         // check if response is success
@@ -96,6 +138,11 @@ function download(url, dest, callback) {
         }
 
         var cd = response.headers['content-disposition'];
+        if (cd === undefined) {
+            callback(false, 'Cannot find update file');
+            return;
+        }
+
         var fileName = cd.substring(cd.indexOf('filename="') + 'filename="'.length, cd.length - 1);
 		var file = fs.createWriteStream(dest + fileName);
 
@@ -127,7 +174,6 @@ function download(url, dest, callback) {
         });
 
         if (callback) {
-            console.log('BBOOMM: ' + err);
             return callback(false, err);
         }
     });
@@ -204,7 +250,6 @@ function checkSignature(pubKeyPath, sigCheck, localSignature, callback) {
     });
 }
 
-
 function convertHexToArray(hex) {
     if (hex.length % 2 != 0) {
         hex.unshift(0);
@@ -219,12 +264,13 @@ function convertHexToArray(hex) {
     return result;
 }
 
-/* Usage Example
-const HOST = "10.9.0.247";
-const PORT = 9000;
+// Usage Example
+// const HOST = "10.9.0.247";
+// const PORT = 9408;
 
-var fm = new FirmwareUpgradeManager();
-fm.downloadOTASigCheck('http://' + HOST + ':' + PORT + '/v1/ota/check/1', function(status, value) {
+// var fm = new OTAManager();
+// Get image and check from separate URL calls
+/*fm.downloadOTASigCheck('http://' + HOST + ':' + PORT + '/v1/ota/check/1', function(status, value) {
     if (status) {
         fm.downloadAndVerify('/opt/Playground/lib/pubkey.pem', 
                              'http://' + HOST + ':' + PORT + '/v1/ota/1', 
@@ -241,5 +287,20 @@ fm.downloadOTASigCheck('http://' + HOST + ':' + PORT + '/v1/ota/check/1', functi
     } else {
         console.log('Error downloading OTA Signature check: ' + value);
     }
-});
-*/
+});*/
+
+// Get image and check in a single tar file
+// fm.downloadImageAndSignatureCheck('http://' + HOST + ':' + PORT + '/v1/ota/1', 
+//     '/opt/Playground/lib/pubkey.pem', 
+//     function(status, err) {
+//         if (status) {
+//             //fm.doUpgrade();
+//             console.log('Veredict for updating: ' + status);
+//         } else {
+//             console.log('There was an error: ' + err);
+//         }
+// });
+
+module.exports = {
+    OTAManager: OTAManager
+}

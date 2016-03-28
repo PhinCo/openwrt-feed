@@ -30,13 +30,12 @@ BTCtrlrLoopbackTCPAdapter.prototype.connect = function(callback) {
 	});
 
 	this.socket.on('error', function(e) {
-    	console.log('error ' + e)
+    	console.log('BLE Daemon connection error: ' + e)
     	this.isConnected = false;
     	process.exit(1);
 	});
 
 	this.socket.on('close', function(had_error) {
-    	console.log('close ' + had_error)
     	this.isConnected = false;
     	process.exit(1);
 	});

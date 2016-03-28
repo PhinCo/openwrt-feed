@@ -2,12 +2,15 @@ var utils = require('./Utils');
 var Log = require('./Logger');
 
 function StateStore(namespace) {
+	console.log('Create state store');
 	utils.cmd_system('touch /etc/config/' + namespace, function(status) {
 		if (!status) {
+			console.log('Error initializing state store');
+
 			Log.Log('Error initializing state store', Log.ERROR);
 			return;
 		} 
-		utils.cmd_system('uci set ' + namespace + '.phin=provisioning', function(status) {
+		utils.cmd_system('uci set ' + namespace + '.misc=settings', function(status) {
 			if (!status) {
 				Log.Log('Error initializing state store: Adding provisioning section', Log.ERROR);
 				return;
@@ -22,7 +25,7 @@ function StateStore(namespace) {
 }
 
 StateStore.prototype.putValue = function(namespace, name, value, callback) {	
-	utils.cmd_system('uci set ' + namespace + '.phin.' + name + '=' + value, function(status) {
+	utils.cmd_system('uci set ' + namespace + '.misc.' + name + '=' + value, function(status) {
 		if (!status) {
 			console.log('Error storing state');
 			callback(false);
@@ -40,7 +43,7 @@ StateStore.prototype.putValue = function(namespace, name, value, callback) {
 }
 
 StateStore.prototype.getValue = function(namespace, name, callback) {
-    utils.cmd_exec('sh',['-c','uci get ' + namespace + '.phin.' + name + ' 2>/dev/null'],
+    utils.cmd_exec('sh',['-c','uci get ' + namespace + '.misc.' + name + ' 2>/dev/null'],
         function (me, data) { me.stdout += data.toString(); },
         function (me) { 
         	var value = me.stdout.trim();
@@ -53,7 +56,7 @@ StateStore.prototype.getValue = function(namespace, name, callback) {
 }
 
 StateStore.prototype.removeValue = function(namespace, name, callback) {
-	utils.cmd_system('uci delete ' + namespace + '.phin.' + name, function(status) {
+	utils.cmd_system('uci delete ' + namespace + '.misc.' + name, function(status) {
 		if (!status) {
 			callback(false);
 			return;

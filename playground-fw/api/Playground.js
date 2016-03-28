@@ -55,48 +55,6 @@ if (SharedState.getValue('autoConnect') === true) {
 }
 // End of initializations
 
-// Introspection Web Server
-const PORT = 9408;
-var server = http.createServer(handleRequest);
-server.listen(PORT, function(){
-    console.log("Server listening on: http://localhost: " + PORT);
-});
-
-var	STATE_UUID = [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0B];
-var	SSID_UUID = [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0C];
-var	AUTH_UUID = [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0D];
-var	KEY_UUID = [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0E];
-
-function handleRequest(request, response){
-	Components.playgroundCommandHandler.getInternalStatus(function(status, data) {
-		// Get ssid, auth, key
-		var state = PeripheralApi.getAttributeValue(STATE_UUID);
-		var auth = PeripheralApi.getAttributeValue(AUTH_UUID);
-		var ssid = PeripheralApi.getAttributeValue(SSID_UUID);
-		var key = PeripheralApi.getAttributeValue(KEY_UUID);
-
-		if (state !== null) state = state.toString().charCodeAt(0);
-		if (auth !== null) auth = auth.toString();
-		if (ssid !== null) ssid = ssid.toString();
-
-		data.isAdvertising = Components.hciProtocolHandler.sIsAdvertising;
-		data.shouldAdvertise = Components.hciProtocolHandler.sShouldAdvertise;
-		data.connections = Components.connectionManager.connectionDb;
-
-		var provisioning = {
-			state:state,
-			auth:auth,
-			ssid:ssid,
-			key:key
-		};
-		data.provisioning = provisioning;
-
-		response.writeHead(200, {'Content-Type': 'application/json'});
-		response.end(JSON.stringify(data));	
-	});
-}
-// End of Introspection Web Server
-
 // APIS //
 var MasterApi = {
 	scan: function(enable, callback) {

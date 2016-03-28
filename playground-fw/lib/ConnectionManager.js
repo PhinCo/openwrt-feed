@@ -42,14 +42,14 @@ ConnectionManager.prototype.bleConnectionCallback = function(bc, status) {
 	}
 
 	// Watchdog to terminate inactive connections
-	var that = this;
+/*	var that = this;
 	if (status == 0) {
 		Logger.Log('Connection Callback: Set Timeout ' + bc.info.handle, Logger.DEBUG);
 
 		setTimeout(function() {
 			inactivityHandler(that, bc);
 		}, CONNECTION_TIMEOUT);
-	}
+	}*/
 
 	return true;
 }

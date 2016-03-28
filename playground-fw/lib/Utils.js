@@ -84,6 +84,22 @@ function processDefaultPSR(srcPath, dstPath) {
 	});
 }
 
+const SW_BUILD_ID_PATH = '/opt/Playground/swbuildid.txt';
+
+// callback(status, id)
+function readSwBuildId(callback) {
+	var fs = require('fs'); 
+
+    fs.readFile(SW_BUILD_ID_PATH, 'utf8', function (err, data) {
+        if (err) {
+        	Logger.Log('Error reading ' + SW_BUILD_ID_PATH, Logger.ERROR);
+        	callback(false);
+        	return;
+        }
+        callback(true, data.trim());
+    });
+}
+
 function typeOf (obj) {
 	return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
 }
@@ -110,6 +126,46 @@ function generateWifiConfigFile(ssid, auth, key, callback) {
     });
 }
 
+var keepBlinking = true;
+var finalLedState = false;
+
+function blinkLed(value, delay) {
+        setTimeout(function() {
+                fs.writeFile('/sys/class/gpio/gpio14/value', value, function(err) {
+                });
+                if (keepBlinking) {
+                        if (value === '1') {
+                                value = '0'
+                        } else {
+                                value = '1';
+                        }
+                        blinkLed(value, delay);
+                } else {
+                	enableLed(finalLedState);
+                }
+        }, delay);
+}
+
+function blinkLedFast() {
+	keepBlinking = true;	
+    blinkLed('1', 100);
+}
+
+function blinkLedSlow() {
+	keepBlinking = true;
+	blinkLed('1', 750);
+}
+
+// enable: Target final state of the LED after it stops blinking
+function stopBlinking(enable) {
+	keepBlinking = false;
+	finalLedState = enable;
+}
+
+function enableLed(enable) {
+        fs.writeFile('/sys/class/gpio/gpio14/value', enable == true ? '1' : '0', function(err) {
+        });
+}
 
 module.exports = {
 	cmd_exec:cmd_exec,
@@ -119,5 +175,9 @@ module.exports = {
 	readDeviceInfo:readDeviceInfo,
 	typeOf:typeOf,
 	processDefaultPSR:processDefaultPSR,
-	generateWifiConfigFile:generateWifiConfigFile	
+	generateWifiConfigFile:generateWifiConfigFile,
+	readSwBuildId:readSwBuildId,
+	blinkLedFast:blinkLedFast,
+	blinkLedSlow:blinkLedSlow,
+	enableLed:enableLed
 }

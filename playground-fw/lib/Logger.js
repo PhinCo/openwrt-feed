@@ -5,9 +5,9 @@ const DEBUG = 2;
 const ERROR = 3;
 const NET = 4;
 
-var SHOW_HCI_LOGS = false;
+var SHOW_HCI_LOGS = true;
 var DISABLE_ALL = false;
-var USE_FILE = true;
+var USE_FILE = false;
 
 var PATH = '/opt/Playground/logs/';
 
@@ -61,14 +61,14 @@ function Log(text, type, callback) {
 			if (USE_FILE) {
 				writeToFile(Date() + ' :: ' + text);
 			} else {
-				console.log(Date() + ' :: ' + text);
+				console.log(text);
 			}
 		}
 	} else {
 		if (USE_FILE) {
 			writeToFile(Date() + ' :: ' + text, callback);
 		} else {
-			console.log(Date() + ' :: ' + text);
+			console.log(text);
 		}
 	}
 }

@@ -48,6 +48,7 @@ FW_SCRIPTS := \
 TOP_TEMPLATES := \
 	etc/default.psr \
 	etc/config/network \
+	etc/config/wireless \
 
 define Package/playground-fw
   SECTION:=utils

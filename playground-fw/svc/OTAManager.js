@@ -272,7 +272,7 @@ function convertHexToArray(hex) {
 // Get image and check from separate URL calls
 /*fm.downloadOTASigCheck('http://' + HOST + ':' + PORT + '/v1/ota/check/1', function(status, value) {
     if (status) {
-        fm.downloadAndVerify('/opt/Playground/lib/pubkey.pem', 
+        fm.downloadAndVerify('/pubkey.pem', 
                              'http://' + HOST + ':' + PORT + '/v1/ota/1', 
                              value, 
                              function(status, err) {
@@ -291,7 +291,7 @@ function convertHexToArray(hex) {
 
 // Get image and check in a single tar file
 // fm.downloadImageAndSignatureCheck('http://' + HOST + ':' + PORT + '/v1/ota/1', 
-//     '/opt/Playground/lib/pubkey.pem', 
+//     '/keys/pubkey.pem', 
 //     function(status, err) {
 //         if (status) {
 //             //fm.doUpgrade();

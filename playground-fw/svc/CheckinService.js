@@ -232,7 +232,7 @@ CheckinService.prototype.main = function() {
  					that.otaInProgress = true;
  					var fm = new OTAManager.OTAManager();
 					fm.downloadImageAndSignatureCheck('http://' + HOST + ':' + PORT + '/v1/ota/' + remoteVersion, 
-					    '/opt/Playground/keys/pubkey.pem', 
+					    '/keys/pubkey.pem', 
 					    function(status, err) {
 					        if (status) {
 					            Logger.Log('About to start the low level update process', Logger.DEBUG);

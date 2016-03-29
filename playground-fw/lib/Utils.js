@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 function le16(d,i) {
 	return d[i] | (d[i+1] << 8);
 }
@@ -61,8 +63,6 @@ function processBTMacAddress(input) {
 }
 
 function processDefaultPSR(srcPath, dstPath) {
-	var fs = require('fs'); 
-
 	fs.exists(dstPath, function(exists) {
 	  	if (exists) { 
 	    	console.log('Custom default.psr file already exists');
@@ -84,12 +84,10 @@ function processDefaultPSR(srcPath, dstPath) {
 	});
 }
 
-const SW_BUILD_ID_PATH = '/opt/Playground/swbuildid.txt';
+const SW_BUILD_ID_PATH = '/swbuildid.txt';
 
 // callback(status, id)
 function readSwBuildId(callback) {
-	var fs = require('fs'); 
-
     fs.readFile(SW_BUILD_ID_PATH, 'utf8', function (err, data) {
         if (err) {
         	Logger.Log('Error reading ' + SW_BUILD_ID_PATH, Logger.ERROR);
@@ -105,7 +103,6 @@ function typeOf (obj) {
 }
 
 function generateWifiConfigFile(ssid, auth, key, callback) {
-	var fs = require('fs'); 
 	var srcPath = '/etc/config/wireless_template';
 	var dstPath = '/etc/config/wireless';
 

@@ -35,6 +35,7 @@ FW_DIRS := \
 TOP_DIRS := \
 	etc \
 	etc/init.d \
+	etc/config \
 
 TOP_SCRIPTS := \
 	etc/init.d/gpiosetup-led \

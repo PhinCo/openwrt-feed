@@ -45,8 +45,7 @@ var AttributeUUIDs = {
 	PHONE_PUB_KEY_UUID: [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x10]
 }
 
-//const PLAYGROUND_BRIDGE_DEFAULT_GAP_NAME = 'PlaygroundRedBridge';
-const PLAYGROUND_BRIDGE_DEFAULT_GAP_NAME = 'PlaygroundGreenBridge';
+const PLAYGROUND_BRIDGE_DEFAULT_GAP_NAME = 'PlaygroundRedBridge';
 
 function setupWiFiSecurity(ssid, auth, key) {
 	var keyStr = '';
@@ -461,9 +460,6 @@ PlaygroundBridgeProvisioning.prototype.addProvisioningCharacteristic = function(
 	Playground.PeripheralApi.addCharacteristic(uuid, permission, value, readHandler, writeHandler);
 	Playground.PeripheralApi.addCharacteristicUserDescription(description);
 }
-
-var provisioning = new PlaygroundBridgeProvisioning('GreenBridge');
-Playground.PeripheralApi.enableAdvertising('GreenBridge', true);
 
 module.exports = {
 	PlaygroundBridgeProvisioning:PlaygroundBridgeProvisioning,

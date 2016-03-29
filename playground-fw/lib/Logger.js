@@ -9,7 +9,7 @@ var SHOW_HCI_LOGS = true;
 var DISABLE_ALL = false;
 var USE_FILE = false;
 
-var PATH = '/opt/Playground/logs/';
+var PATH = '/opt/playground/logs/';
 
 var MAX_FILE_SIZE_BYTES = 524288;
 

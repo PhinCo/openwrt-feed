@@ -1,12 +1,11 @@
-var fs = require('fs');
+var fs = require('fs'); 
 
 function le16(d,i) {
 	return d[i] | (d[i+1] << 8);
 }
 
 function cmd_exec(cmd, args, cb_stdout, cb_end) {
-	var spawn = require('child_process').spawn, child = spawn(cmd, args), me = this;
-	me.exit = 0;  // Send a cb to set 1 when cmd exits
+	var spawn = require('child_process').spawn, child = spawn(cmd, args), me = {};
 	me.stdout = '';
 	child.stdout.on('data', function (data) { cb_stdout(me, data) });
 	child.stdout.on('end', function () { cb_end(me) });
@@ -19,7 +18,6 @@ function execCommand(command, callback) {
 			me.stdout += data.toString();
 		},
 		function (me) {
-			me.exit = 1;
 			callback(me.stdout);
 	    }
 	);
@@ -154,9 +152,10 @@ function blinkLedSlow() {
 }
 
 // enable: Target final state of the LED after it stops blinking
-function stopBlinking(enable) {
+function stopLedBlinking(enable) {
 	keepBlinking = false;
 	finalLedState = enable;
+	enableLed(enable);
 }
 
 function enableLed(enable) {
@@ -176,5 +175,6 @@ module.exports = {
 	readSwBuildId:readSwBuildId,
 	blinkLedFast:blinkLedFast,
 	blinkLedSlow:blinkLedSlow,
+	stopLedBlinking:stopLedBlinking,
 	enableLed:enableLed
 }

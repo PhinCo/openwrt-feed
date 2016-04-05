@@ -1,4 +1,4 @@
-#include <ble/ecdh.h>
+#include <ecdh.h>
 #include <openssl/buffer.h>
 #include <string.h>
 #include <openssl/pem.h>

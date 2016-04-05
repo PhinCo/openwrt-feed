@@ -4,8 +4,8 @@
 #define TRUE 1
 #define FALSE 0
 
-#define ERROR -1
-#define OK 0
+#define PG_ERROR -1
+#define PG_OK 0
 #define UNHANDLED 2
 
 #endif

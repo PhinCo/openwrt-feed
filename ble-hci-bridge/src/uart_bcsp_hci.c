@@ -23,22 +23,16 @@
  *
  */
 
-#include <ble/csr_bcsp/uart_bcsp_hci.h>
-#include <ble/log.h>
+#include <uart_bcsp_hci.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <ble/csr_bcsp/csr.h>
-#include <ble/hci.h>
-#include <ble/internal.h>
-#include <ble/hci_bridge.h>
+#include <hci_bridge.h>
 #include <termios.h>
 #include <pthread.h>
-
-int cmd_psload();
 
 struct ubcsp_packet send_packet;
 uint8_t send_buffer[512];
@@ -59,7 +53,7 @@ static uint8_t *dataQueue[64];
 static uint16_t lengthQueue[64];
 static int channelQueue[64];
 
-void queue_hci_op(u8 *value, u16 length, int channel) {
+void queue_hci_op(uint8_t *value, uint16_t length, int channel) {
 	// Channel: 5 --> HCI_COMMAND
 	// Channel: 6 --> ACL
 	// Channel: 8 --> L2CAP
@@ -88,8 +82,8 @@ static void dequeueIntoSendPacket() {
 	pthread_mutex_unlock(&queueLock);
 }
 
-static u16 getOpFromSendPacket() {
-	u16 resp = 0;
+static uint16_t getOpFromSendPacket() {
+	uint16_t resp = 0;
 	pthread_mutex_lock(&queueLock);
 	resp = dataQueue[queueHead][1] << 8 | dataQueue[queueHead][0];
 	if (queueHead < queueTail) {
@@ -109,8 +103,8 @@ static int isQueueEmpty() {
 	return isIt;
 }
 
-u16 queueSize() {
-	u16 size;
+uint16_t queueSize() {
+	uint16_t size;
 	pthread_mutex_lock(&queueLock);
 	size = queueTail - queueHead;
 	pthread_mutex_unlock(&queueLock);
@@ -121,7 +115,6 @@ int hci_open_device_internal(char *device) {
 	struct termios ti;
 	uint8_t delay, activity = 0x00;
 	int timeout = 0;
-
 	if (!device)
 		device = "/dev/ttyS0";
 
@@ -129,7 +122,7 @@ int hci_open_device_internal(char *device) {
 	if (fd < 0) {
 		fprintf(stderr, "Can't open serial port: %s (%d)\n",
 						strerror(errno), errno);
-		return ERROR;
+		return PG_ERROR;
 	}
 
 	tcflush(fd, TCIOFLUSH);
@@ -138,7 +131,7 @@ int hci_open_device_internal(char *device) {
 		fprintf(stderr, "Can't get port settings: %s (%d)\n",
 						strerror(errno), errno);
 		close(fd);
-		return ERROR;
+		return PG_ERROR;
 	}
 
 	cfmakeraw(&ti);
@@ -160,7 +153,7 @@ int hci_open_device_internal(char *device) {
 		fprintf(stderr, "Can't change port settings: %s (%d)\n",
 						strerror(errno), errno);
 		close(fd);
-		return ERROR;
+		return PG_ERROR;
 	}
 
 	tcflush(fd, TCIOFLUSH);
@@ -169,7 +162,7 @@ int hci_open_device_internal(char *device) {
 		fprintf(stderr, "Can't set non blocking mode: %s (%d)\n",
 						strerror(errno), errno);
 		close(fd);
-		return ERROR;
+		return PG_ERROR;
 	}
 
 	memset(&send_packet, 0, sizeof(send_packet));
@@ -197,12 +190,11 @@ int hci_open_device_internal(char *device) {
 
 			if (timeout++ > 5000) {
 				fprintf(stderr, "Initialization timed out\n");
-				return ERROR;
+				return PG_ERROR;
 			}
 		}
 	}
-
-	return OK;
+	return PG_OK;
 }
 
 void hci_close_device(void)
@@ -226,85 +218,29 @@ uint8_t get_uart(uint8_t *ch) {
 }
 
 int hci_powerup_device() {
-	printf("Calling btsetup\n");
-
 	if (system("/opt/playground/bin/btsetup.sh") < 0) {
 		printf("Error executing init script\n");
-		return ERROR;
+		return PG_ERROR;
 	}
-	return OK;
-}
-
-int hci_reset() {
-	// BCSP Cold Reset
-/*	if (fd != -1) {
-		int res = csr_write_bcsp(CSR_VARID_COLD_RESET, NULL, 0);
-	}*/
-
-	return cmd_psload();
+	return PG_OK;
 }
 
 int hci_open_device(char *device) {
-	if (hci_powerup_device() == ERROR) {
-		printf("Error powering up the BT chipset\n");
-		return ERROR;
+	if (hci_powerup_device() == PG_ERROR) {
+		return PG_ERROR;
+	}
+
+	if (system("/bin/psr-loader") < 0) {
+		printf("Error executing psr-loader\n");
+		return PG_ERROR;
 	}
 
 	int res = hci_open_device_internal(NULL);
-	if (res == ERROR) {
-		printf("Error initializing the UART\n");
-		return ERROR;
+	if (res == PG_ERROR) {
+		return PG_ERROR;
 	}
 
-	return cmd_psload();
-}
-
-
-// Add support to make this async. We need to pass a callback method to report the response.
-// The current code supports a window of 1 command, so we can keep the callback as a global
-// variable until we get a response.
-int hci_cmd_send(struct xhci *hci, u16 op, const void *data, int dlen) {
-	int r;
-	u8 delay, activity;
-
-	if ((dlen < 0) || (dlen > 255)) return ERROR;
-	u8 *tmp = (u8 *) malloc(sizeof(u8) * (dlen + 3));
-
-	tmp[0] = op;
-	tmp[1] = op >> 8;
-	tmp[2] = dlen;
-	memcpy(tmp + 3, data, dlen);
-
-	printf("SENDING HCI_COMMAND\n");
-	int i;
-	for (i = 0; i < dlen + 3; i++) {
-		printf("%02x ", tmp[i]);
-	}
-	printf("\n");
-	
-	// Last 5 --> HCI_COMMAND Channel (BCSP)
-	queue_hci_op(tmp, dlen + 3, 5);
-	return OK;
-}
-
-int hci_acl_send(xhci *hci, const void *hdr, int hlen, const void *data, int dlen) {
-	int r, xfer;
-
-	u8 *allData = (u8 *) malloc(sizeof(u8) * (hlen + dlen));
-	memcpy(allData, hdr, hlen);
-	memcpy(allData + hlen, data, dlen);
-
-	printf("SENDING HCI_DATA\n");
-	int i;
-	for (i = 0; i < hlen + dlen; i++) {
-		printf("%02x ", allData[i]);
-	}
-	printf("\n");
-
-	// Last 6 --> ACL Data
-	queue_hci_op(allData, hlen + dlen, 6);
-
-	return OK;
+	return PG_OK;
 }
 
 /*
@@ -325,9 +261,9 @@ void hci_do_poll() {
 	// are expecting a response
 	int fetchNewCommand = 1;
 
-	u16 sentCommand = 0;
+	uint16_t sentCommand = 0;
 
-	printf("@@@@@@@@@@@@@@@@@@@@ ########################################\n");
+	printf("Starting State Machine\n");
 	receive_packet.length = 512;
 	ubcsp_receive_packet(&receive_packet);
 	timeout = 0;	
@@ -342,8 +278,8 @@ void hci_do_poll() {
 		}
 
 		if (activity & UBCSP_PACKET_RECEIVED) {
-			u8 code = 0;
-			u16 operation = 0;
+			uint8_t code = 0;
+			uint16_t operation = 0;
 
 			if (receive_packet.channel == HCI_EVENT_CHANNEL) {
 				printf("OnEvent:\n");
@@ -353,21 +289,11 @@ void hci_do_poll() {
 				}
 				printf("\n");
 
-				hci_bridge_send(HCI_EVENT, receive_packet.payload, receive_packet.length);
-
-				// No native handling
-				/*if (hci_handle_evt(NULL, receive_packet.payload, receive_packet.length, &code, &operation) == OK) {
-					if (code == HCI_COMMAND_COMPLETE_EVT || code == HCI_COMMAND_STATUS_EVT) {
-						if (operation != sentCommand) {
-							printf("Got a response that does not match the expected result for the command: code:%02x op:%04x\n", code, operation);
-							return;
-						}
-					} 
-					printf("HANDLED HCI EVENT\n\n");
+				if (receive_packet.payload[0] != 0x10) {
+					hci_bridge_send(HCI_EVENT, receive_packet.payload, receive_packet.length);
 				} else {
-					printf("Error processing incoming event: %04x\n", receive_packet.payload[1]<<8 | receive_packet.payload[0]);
-					return;
-				}*/
+					printf("HARDWARE ERROR. IGNORING THE EVENT\n");
+				}
 			} else if (receive_packet.channel == HCI_ACL_CHANNEL) {
 				printf("OnAcl:\n");
 				int ii = 0;
@@ -377,13 +303,6 @@ void hci_do_poll() {
 				printf("\n");
 
 				hci_bridge_send(HCI_DATA, receive_packet.payload, receive_packet.length);
-			
-				// No native handling
-/*				if (hci_handle_acl(NULL, receive_packet.payload, receive_packet.length) != OK) {
-					printf("Error processing incoming acl: %04x\n", receive_packet.payload[1]<<8 | receive_packet.payload[0]);
-					return;
-				}
-				printf("HANDLED ACL\n\n");*/
 			} 
 
 			responseExpected = 0;
@@ -402,16 +321,8 @@ void hci_do_poll() {
 		}
 
 		if (delay) {
-			//timeout++;	
 			usleep(delay * 100);
 		}
-
-/*		if (timeout == 2000) {
-			timeout = 0;
-			printf("TIMEOUT DO POLL\n");
-			//return;
-			dequeueIntoSendPacket();
-		}*/
 	}
 }
 

@@ -5,9 +5,9 @@ const DEBUG = 2;
 const ERROR = 3;
 const NET = 4;
 
-var SHOW_HCI_LOGS = true;
+var SHOW_HCI_LOGS = false;
 var DISABLE_ALL = false;
-var USE_FILE = false;
+var USE_FILE = true;
 
 var PATH = '/opt/playground/logs/';
 
@@ -85,11 +85,15 @@ function setLogsPath(path) {
 	PATH = path;
 }
 
+function useFile(enable) {
+	USE_FILE = enable;
+}
+
 function setMaxLogSizeBytes(size) {
 	MAX_FILE_SIZE_BYTES = size;
 }
 
-fs.mkdir('/opt/Playground/logs', function() {});
+fs.mkdir(PATH, function() {});
 
 module.exports = {
 	Log: Log,
@@ -98,6 +102,7 @@ module.exports = {
 	ERROR: ERROR,
 	NET: NET,
 	enableHciLogs:enableHciLogs,
+	useFile:useFile,
 	setLogsPath:setLogsPath,
 	setMaxLogSizeBytes:setMaxLogSizeBytes,
 	NEW_LOG_NAME:NEW_LOG,

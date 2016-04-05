@@ -1,9 +1,8 @@
 #ifndef _HCI_PROXY__
 #define _HCI_PROXY__
 
-#include <ble/constants.h>
-#include <ble/ble.h>
-#include <ble/csr_bcsp/uart_bcsp_hci.h>
+#include <constants.h>
+#include <uart_bcsp_hci.h>
 
 #define HCI_BRIDGE_OK 		0
 #define HCI_BRIDGE_ERROR	1
@@ -29,6 +28,6 @@ int hci_bridge_start(int port);
 // 2 bytes: size
 // 1 byte:  commandType (HCI_EVENT, HCI_DATA)
 // n bytes: payload
-int hci_bridge_send(u8 commandType, u8 *data, u16 length);
+int hci_bridge_send(uint8_t commandType, uint8_t *data, uint16_t length);
 
 #endif

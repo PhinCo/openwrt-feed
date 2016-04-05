@@ -236,7 +236,7 @@ CheckinService.prototype.main = function() {
 					    function(status, err) {
 					        if (status) {
 					            Logger.Log('About to start the low level update process', Logger.DEBUG);
-								fm.doUpgrade(function(status) {
+								fm.doUpgrade(true, function(status) {
 									that.otaInProgress = false;
 								});
 					        } else {

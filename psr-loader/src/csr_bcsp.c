@@ -15,19 +15,17 @@
 #include <stdint.h>
 #include <termios.h>
 
-#include "ble/csr_bcsp/csr.h"
-#include "ble/csr_bcsp/ubcsp.h"
+#include <csr.h>
+#include <ubcsp.h>
 
-/*extern*/ struct ubcsp_packet send_packet;
-/*extern*/ uint8_t send_buffer[512];
-
-/*extern*/ struct ubcsp_packet receive_packet;
-/*extern*/ uint8_t receive_buffer[512];
+struct ubcsp_packet send_packet;
+uint8_t send_buffer[512];
+struct ubcsp_packet receive_packet;
+uint8_t receive_buffer[512];
 
 static uint16_t seqnum = 0;
 
-static int do_bcsp_command(uint16_t command, uint16_t seqnum, uint16_t varid, uint8_t *value, uint16_t length)
-{
+static int do_bcsp_command(uint16_t command, uint16_t seqnum, uint16_t varid, uint8_t *value, uint16_t length) {
 	unsigned char cp[254], rp[254];
 	uint8_t cmd[10];
 	uint16_t size;
@@ -83,8 +81,7 @@ static int do_bcsp_command(uint16_t command, uint16_t seqnum, uint16_t varid, ui
 		if (activity & UBCSP_PACKET_SENT) {
 			switch (varid) {
 			case CSR_VARID_COLD_RESET:
-			case CSR_VARID_WARM_RESET:break; //I added the break because the CSR device sends a packet after a while, so I want to wait until I get it.
-											 //otherwise, when I start with HCI I get an invalid event
+			case CSR_VARID_WARM_RESET:
 			case CSR_VARID_COLD_HALT:
 			case CSR_VARID_WARM_HALT:
 				return 0;
@@ -120,15 +117,6 @@ static int do_bcsp_command(uint16_t command, uint16_t seqnum, uint16_t varid, ui
 	return 0;
 }
 
-/*void csr_commands_setup() {
-	memset(&bcsp_receive_packet, 0, sizeof(bcsp_receive_packet));
-	bcsp_receive_packet.length = 512;
-	bcsp_receive_packet.payload = bcsp_receive_buffer;
-	memset(&bcsp_send_packet, 0, sizeof(bcsp_send_packet));
-	bcsp_send_packet.length = 512;
-	bcsp_send_packet.payload = bcsp_send_buffer;
-}*/
-
 int csr_read_bcsp(uint16_t varid, uint8_t *value, uint16_t length) {
 	return do_bcsp_command(0x0000, seqnum++, varid, value, length);
 }
@@ -136,4 +124,3 @@ int csr_read_bcsp(uint16_t varid, uint8_t *value, uint16_t length) {
 int csr_write_bcsp(uint16_t varid, uint8_t *value, uint16_t length) {
 	return do_bcsp_command(0x0002, seqnum++, varid, value, length);
 }
-

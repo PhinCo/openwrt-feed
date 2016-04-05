@@ -327,9 +327,7 @@ HCIProtocolHandler.prototype.handleHciEvent = function(data) {
 	var dataIndex = 0;		
 
 	var code = data[dataIndex++];
-	console.log('Code: ' + code);
 	var	plen = data[dataIndex++];
-	console.log('Plen: ' + plen);
 
 	length -= 2;
 
@@ -615,7 +613,6 @@ HCIProtocolHandler.prototype.sendHciCommand = function(cmd, data, callback) {
     }
 
     var buf = new Buffer([(d.length >> 8) & 0xFF, d.length & 0xFF].concat(d));
-    console.log(buf);
     Logger.Log('SENDING HCI_COMMAND', Logger.HCI_LOGS);
     Logger.Log(buf, Logger.HCI_LOGS);
     this.commandQueueManager.queue(cmd, buf, callback);
@@ -809,6 +806,10 @@ HCIProtocolHandler.prototype.ble_adv_report = function(data, dataIndex) {
 
 HCIProtocolHandler.prototype.isAdvertising = function() {
 	return this.sIsAdvertising;
+}
+
+HCIProtocolHandler.prototype.isShouldAdvertise = function() {
+	return this.sShouldAdvertise;
 }
 
 module.exports = {

@@ -11,7 +11,7 @@ define Package/ble-hci-bridge
   CATEGORY:=Utilities
   TITLE:=BLE bridge over HCI
   VERSION:=42
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libopenssl +ble-hci-bridge
 endef
 
 define Package/ble-hci-bridge/description
@@ -24,21 +24,10 @@ define Build/Prepare
 	cp -R ./* $(PKG_BUILD_DIR)/
 endef
 
-PSR_LOADER_FILES := \
-	src/hci_bridge.c \
-	src/csr_bcsp/csr_bcsp.c \
-	src/csr_bcsp/uart_bcsp_hci.c \
-	src/csr_bcsp/ubcsp.c \
-	src/utils/bccmd.c \
-	src/utils/csr.c
-
 BLE_HCI_BRIDGE_FILES := \
 	src/main.c \
-	src/utils/bccmd.c \
-	src/utils/csr.c \
-	src/csr_bcsp/csr_bcsp.c \
-	src/csr_bcsp/uart_bcsp_hci.c \
-	src/csr_bcsp/ubcsp.c \
+	src/uart_bcsp_hci.c \
+	src/ubcsp.c \
 	src/log.c \
 	src/ecdh.c \
 	src/encryption.c \
@@ -47,8 +36,7 @@ BLE_HCI_BRIDGE_FILES := \
 BLE_HCI_BRIDGE_CFLAGS := \
 	-I./include \
 	-lcrypto \
-	-lpthread \
-	-s
+	-lpthread
 
 define Build/Compile
 	  $(TARGET_CC) $(TARGET_CFLAGS) $(BLE_HCI_BRIDGE_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(BLE_HCI_BRIDGE_FILES)

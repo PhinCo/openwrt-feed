@@ -1,4 +1,4 @@
-#include <ble/encryption.h>
+#include <encryption.h>
 #include <openssl/buffer.h>
 #include <openssl/evp.h>
 #include <openssl/aes.h>
@@ -8,10 +8,10 @@
 #include <openssl/rsa.h>
 #include <openssl/evp.h>
 #include <openssl/bio.h>
-#include <ble/log.h>
+#include <log.h>
 #include <string.h>
 #include <stdio.h>
-#include <ble/constants.h>
+#include <constants.h>
  
 #define PADDING RSA_PKCS1_PADDING
 
@@ -133,7 +133,7 @@ int encryption_decryptWithPublicKey(unsigned char *ciphertext, int ciphertext_le
     RSA * rsa = createRSA(pubKey,1);
 
 	if (rsa == NULL) {
-		return ERROR;
+		return PG_ERROR;
 	}
 
     int  result = RSA_public_decrypt(ciphertext_len, ciphertext, decrypted, rsa, PADDING);

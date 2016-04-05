@@ -34,12 +34,7 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <sys/socket.h>
-
-/*#include "lib/bluetooth.h"
-#include "lib/hci.h"
-#include "lib/hci_lib.h"*/
-
-#include "ble/csr_bcsp/csr.h"
+#include <csr.h>
 
 struct psr_data {
 	uint16_t pskey;

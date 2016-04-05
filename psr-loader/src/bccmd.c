@@ -22,14 +22,9 @@
  */
 
 #include <stdio.h>
-//#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
-
-#include "ble/csr_bcsp/csr.h"
-#include "ble/csr_bcsp/uart_bcsp_hci.h"
-#include "ble/constants.h"
+#include "csr.h"
 
 #define CSR_STORES_PSI		(0x0001)
 #define CSR_STORES_PSF		(0x0002)
@@ -37,15 +32,27 @@
 #define CSR_STORES_PSRAM	(0x0008)
 #define CSR_STORES_DEFAULT	(CSR_STORES_PSI | CSR_STORES_PSF)
 
-int cmd_psload() {
+#define ERROR -1
+#define OK     0	
+
+int open_device(char *device);
+int close_device();
+void do_poll();
+
+int main(int argc, char **argv) {
 	uint8_t array[256];
 	uint16_t pskey, length, size, stores = CSR_STORES_PSRAM;
 	char *str, val[7];
 	int err, reset = 1;
 
+	if (open_device(NULL) == ERROR) {
+		printf("Error opening the UART\n");
+		return ERROR;
+	}
+
 	if (psr_read("/opt/playground/default.psr") < 0) {
 		printf("Error loading PSR commands\n");
-		return ERROR;
+		return -1;
 	}
 
 	memset(array, 0, sizeof(array));
@@ -82,7 +89,7 @@ int cmd_psload() {
 	if (reset)
 		csr_write_bcsp(CSR_VARID_WARM_RESET, NULL, 0);
 
-	//hci_close_device();
-	
-	return OK;
+	close_device();
+
+	exit(0);
 }

@@ -36,7 +36,7 @@ function inactivityHandler(that, bc) {
 ConnectionManager.prototype.bleConnectionCallback = function(bc, status) {
 	Logger.Log('Connection Callback: Handle: ' + bc.info.handle + ' Status: ' + status, Logger.DEBUG + ' sShouldAdvertise: ' + this.hciProtocolHandler.sShouldAdvertise);
 
-	if (status == 1 && this.hciProtocolHandler.sShouldAdvertise) {
+	if (status == 1 && this.hciProtocolHandler.isShouldAdvertise()) {
 		Logger.Log('BLE Connection Callback: Enable Advertising');
 		this.hciProtocolHandler.enableAdvertising(true);
 	}

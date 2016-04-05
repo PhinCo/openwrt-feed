@@ -47,6 +47,7 @@ var AttributeUUIDs = {
 
 const PLAYGROUND_BRIDGE_DEFAULT_GAP_NAME = 'PlaygroundRedBridge';
 
+
 function setupWiFiSecurity(ssid, auth, key) {
 	var keyStr = '';
 	var authStr = '';

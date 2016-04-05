@@ -1,5 +1,4 @@
-#include <ble/hci_bridge.h>
-#include <ble/ble.h>
+#include <hci_bridge.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <memory.h>
@@ -11,9 +10,9 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <sys/time.h>
-#include <ble/ecdh.h>
+#include <ecdh.h>
 #include <pthread.h>
-#include <ble/encryption.h>
+#include <encryption.h>
 
 
 // Global variables
@@ -28,14 +27,14 @@ static unsigned char *secret;
 
 static pthread_mutex_t socketLock = PTHREAD_MUTEX_INITIALIZER;
 
-static void reportStatus(u8 status, u8 subcommand, u8 *data, u16 length) {
+static void reportStatus(uint8_t status, uint8_t subcommand, uint8_t *data, uint16_t length) {
 	int size = 2;
 
 	if (data != NULL) {
 		size += length;
 	}	
 
-	u8 *buf = (u8 *) malloc(sizeof(u8) * size);
+	uint8_t *buf = (uint8_t *) malloc(sizeof(uint8_t) * size);
 	if (buf == NULL) {
 		printf("Unable to allocate memory in reportStatus\n");
 		return;
@@ -51,13 +50,13 @@ static void reportStatus(u8 status, u8 subcommand, u8 *data, u16 length) {
 	free(buf);
 }
 
-static void handleInternalCommand(u8 *buffer, u16 length) {
+static void handleInternalCommand(uint8_t *buffer, uint16_t length) {
 	if (length < 1) {
-		reportStatus(ERROR, ERROR, NULL, 0);
+		reportStatus(HCI_BRIDGE_ERROR, HCI_BRIDGE_ERROR, NULL, 0);
 		return;
 	}
 
-	u8 command = buffer[0];
+	uint8_t command = buffer[0];
 	buffer++;
 	length--;
 
@@ -70,7 +69,7 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 				if (generateKeyPair(kp)) {
 					free(kp);
 					printf("Error generating key pair\n");
-					reportStatus(ERROR, PG_CREATE_KEY_PAIR, NULL, 0);
+					reportStatus(HCI_BRIDGE_ERROR, PG_CREATE_KEY_PAIR, NULL, 0);
 					return;
 				}
 			}
@@ -80,16 +79,16 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 		case PG_GET_PUB_KEY: {
 			printf("Requesting public key\n");
 			if (kp == NULL) {
-				reportStatus(ERROR, PG_GET_PUB_KEY, NULL, 0);
+				reportStatus(HCI_BRIDGE_ERROR, PG_GET_PUB_KEY, NULL, 0);
 				return;
 			}
 			reportStatus(HCI_BRIDGE_OK, PG_GET_PUB_KEY, kp->public, kp->publicLength);
 			break;
 		}
 		case PG_DERIVE_SECRET: {
-			u16 peerPubKeyLength;
+			uint16_t peerPubKeyLength;
 
-            if (length < sizeof(u16)) {
+            if (length < sizeof(uint16_t)) {
 				printf("Error reading peer's pub key length\n");
 				reportStatus(HCI_BRIDGE_ERROR, PG_DERIVE_SECRET, NULL, 0);
                 break;
@@ -123,9 +122,9 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 				break;
 			}
 
-			u16 dataLength;
+			uint16_t dataLength;
 
-            if (length < sizeof(u16)) {
+            if (length < sizeof(uint16_t)) {
 				printf("Error reading decrypt data\n");
 				reportStatus(HCI_BRIDGE_ERROR, PG_AES_DECRYPT, NULL, 0);
                 break;
@@ -141,7 +140,7 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
                 break;
 			}
 
-			u8 decrypted[4096];
+			uint8_t decrypted[4096];
 			int size = encryption_decrypt(buffer, dataLength, secret, NULL, decrypted);
 
 			reportStatus(HCI_BRIDGE_OK, PG_AES_DECRYPT, decrypted, size);
@@ -153,8 +152,8 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 		}	
 		case PG_PUBLIC_DECRYPT: {
 			// We actually don't need this total data length, so we simply skip it.
-			u16 totalDataLength;
-            if (length < sizeof(u16)) {
+			uint16_t totalDataLength;
+            if (length < sizeof(uint16_t)) {
 				printf("Error reading total data length\n");
 				reportStatus(HCI_BRIDGE_ERROR, PG_PUBLIC_DECRYPT, NULL, 0);
                 break;
@@ -162,8 +161,8 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 			buffer += 2;
 			length -= 2;
 
-			u16 pubKeyLength;
-            if (length < sizeof(u16)) {
+			uint16_t pubKeyLength;
+            if (length < sizeof(uint16_t)) {
 				printf("Error reading peer's pub key length\n");
 				reportStatus(HCI_BRIDGE_ERROR, PG_PUBLIC_DECRYPT, NULL, 0);
                 break;
@@ -185,9 +184,9 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 			buffer += pubKeyLength;
 			length -= pubKeyLength;
 
-			u16 dataLength;
+			uint16_t dataLength;
 
-            if (length < sizeof(u16)) {
+            if (length < sizeof(uint16_t)) {
 				printf("Error reading decrypt data\n");
 				reportStatus(HCI_BRIDGE_ERROR, PG_PUBLIC_DECRYPT, NULL, 0);
                 break;
@@ -201,7 +200,7 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 				reportStatus(HCI_BRIDGE_ERROR, PG_PUBLIC_DECRYPT, NULL, 0);
                 break;
 			}
-			u8 decrypted[4096];
+			uint8_t decrypted[4096];
 			int size = encryption_decryptWithPublicKey(buffer, dataLength, pubKey, decrypted);
 			free(pubKey);
 			if (size == -1) {
@@ -212,14 +211,14 @@ static void handleInternalCommand(u8 *buffer, u16 length) {
 			break;
 		}
 		case PG_INTERNAL_STATUS: {
-			u16 size = queueSize();
+			uint16_t size = queueSize();
 			char buffer[1024];
 			sprintf(buffer, "{\"queueSize\":%d}", size);
 			reportStatus(HCI_BRIDGE_OK, PG_INTERNAL_STATUS, buffer, strlen(buffer));
 			break;
 		}		
 		default:
-			reportStatus(HCI_BRIDGE_ERROR, ERROR, NULL, 0);
+			reportStatus(HCI_BRIDGE_ERROR, HCI_BRIDGE_ERROR, NULL, 0);
 			return;
 	}
 }
@@ -246,10 +245,10 @@ static void session() {
 	
         if (FD_ISSET(sClientFd,&fds)) {
 			// Receive length
-			u16 length;
-            int n = recv(sClientFd, &length, sizeof(u16), 0);			
+			uint16_t length;
+            int n = recv(sClientFd, &length, sizeof(uint16_t), 0);			
 
-			if (n < sizeof(u16)) {
+			if (n < sizeof(uint16_t)) {
 				printf("ERROR RECEIVING LENGTH: %d\n", n);
 				break;
 			}			
@@ -310,12 +309,12 @@ int setupServerSocket() {
 
     if (bind(sListenFd,(struct sockaddr *)&servaddr,sizeof(servaddr))) {
         printf("bind failed\n");
-		return ERROR;
+		return PG_ERROR;
 	}
 
     if (listen(sListenFd,1)) {
         printf("listen failed\n");
-		return ERROR;
+		return PG_ERROR;
 	}
 }
 
@@ -342,7 +341,7 @@ static void hci_bridge_start_internal() {
         printf("Disconnecting from %s\n", inet_ntoa(clientaddr.sin_addr));
 
 		// Listen again
-		if (setupServerSocket() != OK) {
+		if (setupServerSocket() != PG_OK) {
 			printf("Error setting up the server socket\n");
 			return;
 		}
@@ -353,15 +352,15 @@ static void hci_bridge_start_internal() {
 // 2 bytes: size
 // 1 byte:  commandType (HCI_EVENT, HCI_DATA)
 // n bytes: payload
-int hci_bridge_send(u8 commandType, u8 *data, u16 length) {
+int hci_bridge_send(uint8_t commandType, uint8_t *data, uint16_t length) {
 	if (sClientFd == 0) {
-		return ERROR;
+		return PG_ERROR;
 	}
 	int newLength = length + 2 /*size*/ + 1 /*command type*/;
 
-	u8 *newData = (u8 *) malloc(sizeof(u8) * (newLength));
+	uint8_t *newData = (uint8_t *) malloc(sizeof(uint8_t) * (newLength));
 
-	u16 newOrderLength = htons(length + 1);
+	uint16_t newOrderLength = htons(length + 1);
 
 	
 	// Length includes the commandType (1 byte) but not the 2 bytes for the length.
@@ -374,27 +373,27 @@ int hci_bridge_send(u8 commandType, u8 *data, u16 length) {
 	free(newData);
 
 	if (sent == newLength) {
-		return OK;
+		return PG_OK;
 	} else {
 		printf("Error sending payload\n");
-		return ERROR;
+		return PG_ERROR;
 	}
 }
 
 int hci_bridge_start(int port) {
 	if (sServerThread != 0) {
-		return OK;
+		return PG_OK;
 	}
 
 	sPort = port;
 
-	if (setupServerSocket() != OK) {
-		return ERROR;
+	if (setupServerSocket() != PG_OK) {
+		return PG_ERROR;
 	}
 
 	if (pthread_create (&sServerThread, NULL, (void *) hci_bridge_start_internal, NULL) == 0) {
-		return OK;
+		return PG_OK;
 	} else {
-		return ERROR;
+		return PG_ERROR;
 	}
 }

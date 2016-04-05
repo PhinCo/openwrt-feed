@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var CRASH_REPORT_PATH = '/opt/Playground/logs/';
+var CRASH_REPORT_PATH = '/opt/playground/logs/';
 var CRASH_REPORT_FILE = 'crashReport.log';
 
 function CrashManager(path) {

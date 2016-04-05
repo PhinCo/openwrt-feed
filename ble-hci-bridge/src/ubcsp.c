@@ -38,9 +38,7 @@
 /**                                                                         **/
 /*****************************************************************************/
 
-#include "ble/csr_bcsp/ubcsp.h"
-
-#define DEBUG 0
+#include "ubcsp.h"
 
 #if SHOW_PACKET_ERRORS || SHOW_LE_STATES
 #include <stdio.h>
@@ -827,10 +825,6 @@ static uint8 ubcsp_sent_packet (void)
 
 uint8 ubcsp_poll (uint8 *activity)
 {
-	#if DEBUG
-	printf("UBCSP_POLL 1\n");
-	#endif	
-
 	uint8 delay = UBCSP_POLL_TIME_IMMEDIATE;
 
 	uint8 value;
@@ -851,10 +845,6 @@ uint8 ubcsp_poll (uint8 *activity)
 
 		if (ubcsp_config.send_size)
 		{
-			#if DEBUG			
-			printf("UBCSP_POLL 3 (send). Size: %d\n", ubcsp_config.send_size);
-			#endif
-
 			/* We have something to send so send it */
 
 			if (ubcsp_config.send_slip_escape)
@@ -869,10 +859,6 @@ uint8 ubcsp_poll (uint8 *activity)
 			else
 			{
 #if UBCSP_CRC
-				#if DEBUG
-				printf("UBCSP_POLL 5.1\n");
-				#endif
-
 				/* get the value to send, and calculate CRC as we go */
 
 				value = *ubcsp_config.send_ptr ++;
@@ -883,10 +869,6 @@ uint8 ubcsp_poll (uint8 *activity)
 
 				ubcsp_put_slip_uart (value);
 #else
-				#if DEBUG
-				printf("UBCSP_POLL 5.2\n");
-				#endif
-			
 				/* Just output the octet*/
 
 				ubcsp_put_slip_uart (*ubcsp_config.send_ptr ++);
@@ -897,10 +879,6 @@ uint8 ubcsp_poll (uint8 *activity)
 
 			if ((!ubcsp_config.send_slip_escape) && ((ubcsp_config.send_size = ubcsp_config.send_size - 1) == 0))
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 6 - Setting up next block\n");
-				#endif
-
 				/*** We are at the end of a block - either header or payload ***/
 
 				/* setup the next block */
@@ -911,25 +889,13 @@ uint8 ubcsp_poll (uint8 *activity)
 				ubcsp_config.next_send_size = 0;
 
 #if UBCSP_CRC
-				#if DEBUG
-				printf("UBCSP_POLL 7.1\n");
-				#endif
-				
 				/* If we have no successor block
 				   then we might need to send the CRC */
 
 				if (!ubcsp_config.send_ptr)
 				{
-					#if DEBUG
-					printf("UBCSP_POLL - No ubcsp_config.send_ptr\n");
-					#endif
-
 					if (ubcsp_config.need_send_crc)
 					{
-						#if DEBUG
-						printf("UBCSP_POLL - Need to send CRC (updating send_ptr)\n");
-						#endif
-
 						/* reverse the CRC from what we computed along the way */
 
 						ubcsp_config.need_send_crc = 0;
@@ -952,10 +918,6 @@ uint8 ubcsp_poll (uint8 *activity)
 						   either we just have, or this packet doesn't include it */
 
 						/* Output the end of FRAME marker */
-						#if DEBUG
-						printf("UBCSP_POLL - Sending an end of FRAME marker\n");
-						#endif		
-
 						put_uart (SLIP_FRAME);
 
 						/* Check if this is an unreliable packet */
@@ -968,10 +930,6 @@ uint8 ubcsp_poll (uint8 *activity)
 					}
 				}
 #else
-				#if DEBUG
-				printf("UBCSP_POLL 7.2\n");
-				#endif
-				
 				/* If we have no successor block
 				   then we might need to send the CRC */
 
@@ -994,19 +952,11 @@ uint8 ubcsp_poll (uint8 *activity)
 		}
 		else if (ubcsp_config.link_establishment_packet == ubcsp_le_none)
 		{
-			#if DEBUG
-			printf("UBCSP_POLL 8 (nothing ready to send, no le)\n");
-			#endif
-
 			/* We didn't have something to send
 			   AND we have no Link Establishment packet to send */
 
 			if (ubcsp_config.link_establishment_resp & 2)
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 9 --- Setting Up Link?\n");
-				#endif
-
 				/* Send the start of FRAME packet */
 
 				put_uart (SLIP_FRAME);
@@ -1021,10 +971,6 @@ uint8 ubcsp_poll (uint8 *activity)
 			}
 			else if (ubcsp_config.send_packet)
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 10 ---> READY TO SEND AND SEND PACKET READY\n");
-				#endif
-
 				/* There is a packet ready to be sent */
 
 				/* Send the start of FRAME packet */
@@ -1066,10 +1012,6 @@ uint8 ubcsp_poll (uint8 *activity)
 			}
 			else if (ubcsp_config.send_ack)
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 11\n");
-				#endif
-
 				/* Send the start of FRAME packet */
 
 				put_uart (SLIP_FRAME);
@@ -1098,9 +1040,6 @@ uint8 ubcsp_poll (uint8 *activity)
 			}
 			else
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 12\n");
-				#endif
 				/* We didn't have a Link Establishment response packet,
 				   a normal packet or an ACK packet to send */
 
@@ -1116,10 +1055,6 @@ uint8 ubcsp_poll (uint8 *activity)
 #endif
 
 			/* Send A Link Establishment Message */
-			#if DEBUG
-			printf("UBCSP_POLL 13 -- Send a Link Establishment Message\n");
-			#endif
-
 			put_uart (SLIP_FRAME);
 
 			/* Send the Link Establishment header followed by the 
@@ -1146,18 +1081,10 @@ uint8 ubcsp_poll (uint8 *activity)
 	/* We now need to receive any octets from the UART */
 	while ((ubcsp_config.receive_packet) && (get_uart (&value)))
 	{
-		#if DEBUG
-		printf("UBCSP_POLL 14 (RECEIVE)\n");
-		#endif
-
 		/* If the last octet was SLIP_ESCAPE, then special processing is required */
 
 		if (ubcsp_config.receive_slip_escape)
 		{
-			#if DEBUG
-			printf("UBCSP_POLL 15 (RECEIVE)\n");
-			#endif
-
 			/* WARNING - out of range values are not detected !!!
 			   This will probably be caught with the checksum or CRC check */
 
@@ -1167,17 +1094,9 @@ uint8 ubcsp_poll (uint8 *activity)
 		}
 		else
 		{
-			#if DEBUG
-			printf("UBCSP_POLL 16 (RECEIVE - Looking for the SLIP FRAME octet)\n");
-			#endif
-
 			/* Check for the SLIP_FRAME octet - must be start or end of packet */
 			if (value == SLIP_FRAME)
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 17 (RECEIVE)\n");
-				#endif
-				
 				/* If we had a full header then we have a packet */
 
 				if (ubcsp_config.receive_index >= 0)
@@ -1203,10 +1122,6 @@ uint8 ubcsp_poll (uint8 *activity)
 			}
 			else if (value == SLIP_ESCAPE)
 			{
-				#if DEBUG
-				printf("UBCSP_POLL 18 (RECEIVE)\n");
-				#endif
-
 				/* If we receive a SLIP_ESCAPE,
 				   then remember to process the next special octet */
 
@@ -1218,10 +1133,6 @@ uint8 ubcsp_poll (uint8 *activity)
 
 		if (ubcsp_config.receive_index < 0)
 		{
-			#if DEBUG
-			printf("UBCSP_POLL 19 (RECEIVING HEADER) --- Header Pos (0 - 3): %d\n", ubcsp_config.receive_index);
-			#endif
-
 			/* We are still receiving the header */
 
 			ubcsp_receive_header[ubcsp_config.receive_index + 4] = value;
@@ -1230,10 +1141,6 @@ uint8 ubcsp_poll (uint8 *activity)
 		}
 		else if (ubcsp_config.receive_index < ubcsp_config.receive_packet->length)
 		{
-			#if DEBUG
-			printf("UBCSP_POLL 20 (RECEIVING PAYLOAD)\n");
-			#endif
-
 			/* We are receiving the payload */
 			/* We might stop comming here if we are receiving a
 			   packet which is longer than the receive_packet->length
@@ -1246,9 +1153,6 @@ uint8 ubcsp_poll (uint8 *activity)
 
 finished_receive:
 		{
-			#if DEBUG
-			printf("UBCSP_POLL 21 (FINISHED RECEIVING)\n");
-			#endif
 		}
 	}
 
@@ -1258,15 +1162,9 @@ finished_receive:
 		   this could be cancelled if we received something */
 
 		ubcsp_config.delay --;
-		#if DEBUG
-		printf("UBCSP_POLL 22 (DELAYED): %d\n", ubcsp_config.delay);	
-		#endif
 	}
 	else
 	{
-		#if DEBUG
-		printf("UBCSP_POLL 23 (NO DELAY)\n");
-		#endif
 
 		/* We had no delay, so use the delay we just decided to us */
 

@@ -1,5 +1,6 @@
 var fs = require('fs');
 var http = require('http');
+var https = require('https');
 var crypto = require('crypto');
 var Utils = require('./../lib/Utils');
 
@@ -81,25 +82,38 @@ OTAManager.prototype.downloadImageAndSignatureCheck = function(downloadUrl, pubK
     })
 }
 
-OTAManager.prototype.doUpgrade = function(callback) {
-    console.log('DO UPGRADE!');
-    Utils.cmd_system('tar zcf /tmp/sysupgrade.tgz /etc/config', function(status) {
-        if (status) {
-            Utils.blinkLedFast();
-            Utils.cmd_system('mtd -r -j /tmp/sysupgrade.tgz write /tmp/sysupgrade.bin /dev/mtd6', function(status) {
-                callback(status);
-            })
-        } else {
-            callback(false);
-        }
-    })
+OTAManager.prototype.doUpgrade = function(keepOldSettings, callback) {
+    if (keepOldSettings) {
+        Utils.cmd_system('tar zcf /tmp/sysupgrade.tgz /etc/config', function(status) {
+            if (status) {
+                Utils.blinkLedFast();
+                Utils.cmd_system('mtd -r -j /tmp/sysupgrade.tgz write /tmp/sysupgrade.bin /dev/mtd6', function(status) {
+                    callback(status);
+                })
+            } else {
+                callback(false);
+            }
+        })
+    } else {
+        Utils.blinkLedFast();
+        Utils.cmd_system('mtd -r write /tmp/sysupgrade.bin /dev/mtd6', function(status) {
+            callback(status);
+        })
+    }
 }
 
 // callback(status, error/sigCheck)
 // If status is true, then the second parameter is the sigCheck. Otherwise
 // the second parameter is the error message
 OTAManager.prototype.downloadOTASigCheck = function(sigCheckUrl, callback) {
-    var request = http.get(sigCheckUrl, function(response) {
+    var localHttp = null;
+    if (sigCheckUrl.indexOf('http:') != -1) {
+        localHttp = http;
+    } else {
+        localHttp = https;
+    }
+
+    var request = localHttp.get(sigCheckUrl, function(response) {
         // check if response is success
         if (response.statusCode !== 200) {
             callback(false, 'Server error: ' + response.statusCode);
@@ -129,21 +143,23 @@ OTAManager.prototype.downloadOTASigCheck = function(sigCheckUrl, callback) {
 // callback(status, fileName/message)
 // If status is true, the second parameter is the fileName. Otherwise the second parameter 
 // is the error message
+// The expectation is that the server sends a XXX.tar.gz file. If it does, this code won't work
 function download(url, dest, callback) {
-    var request = http.get(url, function(response) {
+    if (url.indexOf('http:') != -1) {
+        localHttp = http;
+    } else {
+        localHttp = https;
+    }
+
+    var request = localHttp.get(url, function(response) {
         // check if response is success
         if (response.statusCode !== 200) {
             callback(false, 'Server error: ' + response.statusCode);
             return;
         }
 
-        var cd = response.headers['content-disposition'];
-        if (cd === undefined) {
-            callback(false, 'Cannot find update file');
-            return;
-        }
 
-        var fileName = cd.substring(cd.indexOf('filename="') + 'filename="'.length, cd.length - 1);
+        var fileName = 'otafile.tar.gz';
 		var file = fs.createWriteStream(dest + fileName);
 
         response.pipe(file);
@@ -272,7 +288,7 @@ function convertHexToArray(hex) {
 // Get image and check from separate URL calls
 /*fm.downloadOTASigCheck('http://' + HOST + ':' + PORT + '/v1/ota/check/1', function(status, value) {
     if (status) {
-        fm.downloadAndVerify('/pubkey.pem', 
+        fm.downloadAndVerify('/opt/playground/lib/pubkey.pem', 
                              'http://' + HOST + ':' + PORT + '/v1/ota/1', 
                              value, 
                              function(status, err) {
@@ -291,7 +307,7 @@ function convertHexToArray(hex) {
 
 // Get image and check in a single tar file
 // fm.downloadImageAndSignatureCheck('http://' + HOST + ':' + PORT + '/v1/ota/1', 
-//     '/keys/pubkey.pem', 
+//     '/opt/playground/lib/pubkey.pem', 
 //     function(status, err) {
 //         if (status) {
 //             //fm.doUpgrade();

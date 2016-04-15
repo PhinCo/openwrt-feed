@@ -21,7 +21,7 @@ FW_FILES := \
 	lib/HCIProtocolHandler.js \
 	lib/ConnectionManager.js \
 	lib/SharedState.js \
-	lib/KeyValueStore.js \
+	svc/KeyValueStore.js \
 	svc/PlaygroundBridgeProvisioning.js \
 	svc/OTAManager.js \
 

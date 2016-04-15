@@ -18,34 +18,36 @@ var Constants = {
 	MAX_NW_ATTEMPTS:8
 }
 
-var AttributeUUIDs = {
-	// Bridge Provisioning Service
-	PROVISIONING_SERVICE_UUID: [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x00],
-	// Provisioning Characteristics
-	SSIDS_UUIDS: [
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x01],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x02],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x03],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x04],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x05],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x06],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x07],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x08],
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x09],																																				
-					[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0A]
-				],
-
-	STATE_UUID: [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0B],
-	SSID_UUID: 	[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0C],
-	AUTH_UUID:  [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0D],
-	KEY_UUID: 	[0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0E],
-
-	// Required for secret key establishment (ECDH)
-	BRIDGE_PUB_KEY_UUID: [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x0F],
-	PHONE_PUB_KEY_UUID: [0xC0, 0x0A, 0x20, 0x16, 0xF0, 0x11, 0xB3, 0x00, 0x38, 0x00, 0xB0, 0xCA, 0x00, 0x00, 0x00, 0x10]
-}
+var AttributeUUIDs = {}
 
 const PLAYGROUND_BRIDGE_DEFAULT_GAP_NAME = 'PlaygroundRedBridge';
+
+function _setupAttributeUUID(UUIDPrefix) {
+	// Bridge Provisioning Service
+	AttributeUUIDs.PROVISIONING_SERVICE_UUID = UUIDPrefix.concat([0x00, 0x00]);
+	// Provisioning Characteristics
+	AttributeUUIDs.SSIDS_UUIDS = [
+					UUIDPrefix.concat([0x00, 0x01]),
+					UUIDPrefix.concat([0x00, 0x02]),
+					UUIDPrefix.concat([0x00, 0x03]),
+					UUIDPrefix.concat([0x00, 0x04]),
+					UUIDPrefix.concat([0x00, 0x05]),
+					UUIDPrefix.concat([0x00, 0x06]),
+					UUIDPrefix.concat([0x00, 0x07]),
+					UUIDPrefix.concat([0x00, 0x08]),
+					UUIDPrefix.concat([0x00, 0x09]),
+					UUIDPrefix.concat([0x00, 0x0A])
+				],
+
+	AttributeUUIDs.STATE_UUID = UUIDPrefix.concat([0x00, 0x0B]);
+	AttributeUUIDs.SSID_UUID =	UUIDPrefix.concat([0x00, 0x0C]);
+	AttributeUUIDs.AUTH_UUID = UUIDPrefix.concat([0x00, 0x0D]);
+	AttributeUUIDs.KEY_UUID = UUIDPrefix.concat([0x00, 0x0E]);
+
+	// Required for secret key establishment (ECDH)
+	AttributeUUIDs.BRIDGE_PUB_KEY_UUID = UUIDPrefix.concat([0x00, 0x0F]);
+	AttributeUUIDs.PHONE_PUB_KEY_UUID = UUIDPrefix.concat([0x00, 0x10]);
+}
 
 
 function setupWiFiSecurity(ssid, auth, key) {
@@ -120,9 +122,19 @@ function checkNetwork(thisService, bc) {
 	}, Constants.INITIAL_NETWORK_WAIT);
 }
 
-function PlaygroundBridgeProvisioning(gapDeviceName) {
-	if (gapDeviceName === undefined || gapDeviceName === null) {
-		gapDeviceName = PLAYGROUND_BRIDGE_DEFAULT_GAP_NAME;
+// UUIDPrefix is a valid 14 byte UUID that PlaygroundBridgeProvisioning
+// uses with its primary service and characteristics. We ask for 14 bytes
+// instead of 16 (128 bits) so we can automatically create the UUIDs for 
+// all the characteristics by appending a 2 byte suffix
+function PlaygroundBridgeProvisioning(advertisementName, fullDeviceName, UUIDPrefix) {
+	if (UUIDPrefix === undefined || UUIDPrefix === null) {
+		throw new Error("You must provide a 14 byte unique valid BLE UUID");
+	} 
+
+	_setupAttributeUUID(UUIDPrefix);
+
+	if (fullDeviceName === undefined || fullDeviceName === null) {
+		throw new Error('You must provide the full device name');
 	}
 
 	this.parseNetworkInfo = function(str) {
@@ -257,24 +269,6 @@ function PlaygroundBridgeProvisioning(gapDeviceName) {
 	    return result;
 	}
 
-	// Declaring function in this way so I can test it
-/*	this.storeSsidsInAttributes = function(jsonPieces, callback) {
-	    var retValue = null;
-	    var resultBool = true;
-	    for (var j = 0; j < jsonPieces; j++) {
-			var value = jsonPieces[j].split('').map(function(e) { return e.charCodeAt() });
-			resultBool = resultBool && Playground.PeripheralApi.setAttributeValue(AttributeUUIDs.SSIDS_UUIDS[j], new Buffer(value));
-
-			if (j == 0) {
-				retValue = value;
-			}
-	    }
-
-	    //var value = jstr.split('').map(function(e) { return e.charCodeAt() });
-	    //var reStoring = Playground.PeripheralApi.setAttributeValue(AttributeUUIDs.SSIDS_UUIDS[0], new Buffer(value));
-	    callback(value, resultBool);
-	}*/
-
 	///////////// HANDLERS //////////////////////////////////////////////////////////////////
 	this.readSSIDsHandler = function(offset, characteristicUuid, callback) {
 		var currentValue = Playground.PeripheralApi.getAttributeValue(AttributeUUIDs.SSIDS_UUIDS[0]);
@@ -291,19 +285,6 @@ function PlaygroundBridgeProvisioning(gapDeviceName) {
 		    var collisions = {};
 
 		    entries = that.parseNetworkInfo(text);
-
-		    /*var finalSize = 0;
-		    for (var i = 0; i < entries.length; i++) {
-		    	delete entries[i].r;
-		    	var entryStr = JSON.stringify(entries[i]);
-		    	finalSize += entryStr.length;
-		    	if (finalSize > 512) {
-		    		entries = entries.slice(0, i);
-		    		break;
-		    	}
-		    }
-		    var jstr = JSON.stringify(entries);*/
-
 		    var result = that.handleLongResponse(entries, callback);
 
 		    callback(result[0][0], result[1]);
@@ -384,8 +365,18 @@ function PlaygroundBridgeProvisioning(gapDeviceName) {
 		return true;
 	}
 	// END OF HANDLERS //////////////////////////////////////////////////////////////////
+	this.fullDeviceName = fullDeviceName;
+	this.advertisementName = advertisementName;
 
-	this.setupServices(gapDeviceName);
+	this.setupServices(fullDeviceName);
+}
+
+PlaygroundBridgeProvisioning.prototype.startAdvertising = function() {
+	Playground.PeripheralApi.enableAdvertising(this.advertisementName, AttributeUUIDs.PROVISIONING_SERVICE_UUID, true);
+}
+
+PlaygroundBridgeProvisioning.prototype.stopAdvertising = function() {
+	Playground.PeripheralApi.enableAdvertising(this.advertisementName, AttributeUUIDs.PROVISIONING_SERVICE_UUID, false);
 }
 
 PlaygroundBridgeProvisioning.prototype.setupServices = function(gapDeviceName) {

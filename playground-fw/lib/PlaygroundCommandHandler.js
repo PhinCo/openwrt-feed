@@ -13,7 +13,7 @@ const PG_PUBKEY_DECRYPT				= 0x06;
 const PG_INTERNAL_STATUS			= 0x07;
 // End of list of internal commands
 
-const ERROR 						= -1;
+//const ERROR 						= -1;
 
 function PlaygroundCommandHandler() {
 	//Dependencies

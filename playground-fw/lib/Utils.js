@@ -1,4 +1,5 @@
 var fs = require('fs'); 
+var Logger = require('./Logger');
 
 function le16(d,i) {
 	return d[i] | (d[i+1] << 8);
@@ -163,6 +164,78 @@ function enableLed(enable) {
         });
 }
 
+function readMemInfo(callback) {
+	fs.readFile('/proc/meminfo', 'utf8', function (err, data) {
+	    if (err) throw err;
+	    var array = data.split('\n');
+	    var obj = {};
+
+	    for (var i = 0; i < array.length; i++) {
+	            var pieces = array[i].split(':');
+	            if (pieces.length < 2) continue;
+	            var name = pieces[0].trim();
+	            var value = pieces[1].trim();
+	            if (name === 'Active') obj.activeMem = value;
+	            if (name === 'MemTotal') obj.totalMem = value;
+	    }
+	    callback(obj);
+    });
+}
+
+function readNodePid(callback) {
+	execCommand('ps | grep "[n]ode /opt/ConnectedYard/ConnectedYardMain.js"', function(data) {
+		if (data === null || data.length < 5) {
+			callback(-1);
+			return
+		}
+		callback(data.substring(0, data.indexOf('root')).trim());
+	})
+}
+
+function _readCpuInfo(callback) {
+	fs.readFile('/proc/stat', 'utf8', function (err, data) {
+	    if (err) throw err;
+	    var array = data.split('\n');
+	    var obj = {};
+
+	    // The first line has all the info we need:
+	    // user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice
+	    for (var i = 0; i < 1; i++) {
+	    	    var info = array[i].substring('cpu'.length).trim();
+	            var pieces = info.split(' ');
+	            if (pieces.length < 10) continue;
+	            var user = parseInt(pieces[0].trim());
+	            var nice = parseInt(pieces[1].trim());
+	            var system = parseInt(pieces[2].trim());
+	            var idle = parseInt(pieces[3].trim());
+	            var iowait = parseInt(pieces[4].trim());
+	            var irq = parseInt(pieces[5].trim());
+	            var softirq = parseInt(pieces[6].trim());
+	            var steal = parseInt(pieces[7].trim());
+	            var guest = parseInt(pieces[8].trim());
+	            var guest_nice = parseInt(pieces[9].trim());
+	            var total = user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice;
+	            obj.cpuUser = user;
+	            obj.cpuSystem = system;
+	            obj.cpuIdle = idle;
+	            obj.cpuTotal = total;
+	    }
+	    callback(obj);
+    });
+
+}
+
+function readCpuLoad(callback) {
+	_readCpuInfo(function(reading1) {
+		setTimeout(function() {
+			_readCpuInfo(function(reading2) {
+				var user = 100 *  (((reading2.cpuTotal - reading1.cpuTotal) - (reading2.cpuIdle - reading1.cpuIdle)) / (reading2.cpuTotal - reading1.cpuTotal));
+				callback(user);
+			});
+		}, 500);
+	})
+}
+
 module.exports = {
 	cmd_exec:cmd_exec,
 	execCommand:execCommand,
@@ -176,5 +249,8 @@ module.exports = {
 	blinkLedFast:blinkLedFast,
 	blinkLedSlow:blinkLedSlow,
 	stopLedBlinking:stopLedBlinking,
-	enableLed:enableLed
+	enableLed:enableLed,
+	readMemInfo:readMemInfo,
+	readNodePid:readNodePid,
+	readCpuLoad:readCpuLoad
 }

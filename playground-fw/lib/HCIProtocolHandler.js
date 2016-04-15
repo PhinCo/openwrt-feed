@@ -258,7 +258,6 @@ function HCIProtocolHandler(defaultDeviceName) {
 	this.sShouldAvertise = false;
 
 	this.sDeviceName = defaultDeviceName;
-
 }
 
 HCIProtocolHandler.prototype.onEvent = function(data) {
@@ -613,6 +612,7 @@ HCIProtocolHandler.prototype.sendHciCommand = function(cmd, data, callback) {
     }
 
     var buf = new Buffer([(d.length >> 8) & 0xFF, d.length & 0xFF].concat(d));
+    console.log(buf);
     Logger.Log('SENDING HCI_COMMAND', Logger.HCI_LOGS);
     Logger.Log(buf, Logger.HCI_LOGS);
     this.commandQueueManager.queue(cmd, buf, callback);
@@ -655,6 +655,10 @@ HCIProtocolHandler.prototype.setup = function() {
 }
 
 HCIProtocolHandler.prototype.enableAdvertising = function(enable) {
+	if (this.sServiceUUID === undefined || this.sServiceUUID === null) {
+		throw new Error('You must set sServiceUUID');
+	}
+
 	Logger.Log('Enabling Advertising: ' + enable, Logger.DEBUG)
 	this.sIsAdvertising = enable;
 	this.sShouldAdvertise = enable;
@@ -683,6 +687,13 @@ HCIProtocolHandler.prototype.enableAdvertising = function(enable) {
 			partialAdvData.push(this.sDeviceName.charCodeAt(i));
 		}
 
+		// Add Service UUID
+		partialAdvData.push(0x11);
+		partialAdvData.push(AD_SVC_CLASS_LIST_128BIT_ALL)
+		for (var i = this.sServiceUUID.length -1; i >= 0; i--) {
+			partialAdvData.push(this.sServiceUUID[i]);
+		}
+
 		var advData = [
 		   	partialAdvData.length // data length
 		];
@@ -695,6 +706,7 @@ HCIProtocolHandler.prototype.enableAdvertising = function(enable) {
 		}
 
 		Logger.Log('Sending HCI_BLE_WRITE_ADV_DATA', Logger.HCI_LOGS);
+		console.log('@@@@@@@@@@@@@@@@@@@');
 		this.sendHciCommand(HCI_BLE_WRITE_ADV_DATA,advData.concat(partialAdvData));		
 	}
 
@@ -703,16 +715,18 @@ HCIProtocolHandler.prototype.enableAdvertising = function(enable) {
 }
 
 HCIProtocolHandler.prototype.scan = function(on, callback) {
-	var info = [];
-	info.push(0x01); // scan type. 0:passive, 1:active
-	info.push((0x1000 >> 8) & 0xFF); //scan_interval * 0.625ms
-	info.push(0x1000 & 0xFF); 
-	info.push((0x1000 >> 8) & 0xFF); //scan_interval * 0.625ms
-	info.push(0x1000 & 0xFF); 
-	info.push(0x0); //own_addr_type
-	info.push(0x0); //filter_policy
-	Logger.Log('Sending HCI_BLE_WRITE_SCAN_PARAMS', Logger.HCI_LOGS);
-	this.sendHciCommand(HCI_BLE_WRITE_SCAN_PARAMS, info);
+	if (on) {
+		var info = [];
+		info.push(0x01); // scan type. 0:passive, 1:active
+		info.push((0x1000 >> 8) & 0xFF); //scan_interval * 0.625ms
+		info.push(0x1000 & 0xFF); 
+		info.push((0x1000 >> 8) & 0xFF); //scan_interval * 0.625ms
+		info.push(0x1000 & 0xFF); 
+		info.push(0x0); //own_addr_type
+		info.push(0x0); //filter_policy
+		Logger.Log('Sending HCI_BLE_WRITE_SCAN_PARAMS', Logger.HCI_LOGS);
+		this.sendHciCommand(HCI_BLE_WRITE_SCAN_PARAMS, info);
+	}
 
 	var data = [];
 	if (on) {

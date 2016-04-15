@@ -63,8 +63,9 @@ var MasterApi = {
 }
 
 var PeripheralApi = {
-	enableAdvertising:function(advName, enable) {
+	enableAdvertising:function(advName, uuid, enable) {
 		Components.hciProtocolHandler.sDeviceName = advName;
+		Components.hciProtocolHandler.sServiceUUID = uuid;
 		Components.hciProtocolHandler.enableAdvertising(enable);
 	},
 

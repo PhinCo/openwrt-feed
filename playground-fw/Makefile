@@ -17,11 +17,11 @@ FW_FILES := \
 	lib/CrashManager.js \
 	lib/Logger.js \
 	lib/AttributeDb.js \
-	lib/StateStore.js \
 	lib/BTCtrlrLoopbackTCPAdapter.js \
 	lib/HCIProtocolHandler.js \
 	lib/ConnectionManager.js \
 	lib/SharedState.js \
+	lib/KeyValueStore.js \
 	svc/PlaygroundBridgeProvisioning.js \
 	svc/OTAManager.js \
 

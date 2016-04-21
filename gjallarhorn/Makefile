@@ -24,7 +24,7 @@ define Package/gjallarhorn/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/gpiosetup $(1)/etc/init.d/gpiosetup
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/gjallarhorn $(1)/etc/init.d/gjallarhorn
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gjallarhorn $(1)/usr/bin/gjallarhorn
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/resetled.sh $(1)/usr/bin/resetled.sh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/resetled.sh $(1)/usr/bin/resetled.sh
 endef
 
 define Package/gjallarhorn/description

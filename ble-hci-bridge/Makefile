@@ -11,7 +11,7 @@ define Package/ble-hci-bridge
   CATEGORY:=Utilities
   TITLE:=BLE bridge over HCI
   VERSION:=42
-  DEPENDS:=+libopenssl +ble-hci-bridge
+  DEPENDS:=+libopenssl +psrloader
 endef
 
 define Package/ble-hci-bridge/description

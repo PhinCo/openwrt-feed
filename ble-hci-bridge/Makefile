@@ -6,23 +6,27 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/ble-hci-bridge
-  SECTION:=utils
-  CATEGORY:=Utilities
-  TITLE:=BLE bridge over HCI
-  VERSION:=42
-  DEPENDS:=+libopenssl +psrloader
-endef
+FW_DIRS := \
+	bin \
+	logs \
 
-define Package/ble-hci-bridge/description
-	A command-line tool for interacting with the CSR BLE part using HCI over UART.
-	Loads PSR config, etc.
-endef
+TOP_DIRS := \
+	etc \
+	etc/init.d \
+	etc/config \
 
-define Build/Prepare
-	mkdir -p $(PKG_BUILD_DIR)
-	cp -R ./* $(PKG_BUILD_DIR)/
-endef
+TOP_SCRIPTS := \
+	etc/init.d/gpiosetup-led \
+	etc/init.d/playgroundServices \
+
+FW_SCRIPTS := \
+	bin/btsetup.sh \
+
+TOP_TEMPLATES := \
+	etc/default.psr \
+	etc/config/network \
+	etc/config/wireless_template \
+	etc/config/wireless \
 
 BLE_HCI_BRIDGE_FILES := \
 	src/main.c \
@@ -38,14 +42,48 @@ BLE_HCI_BRIDGE_CFLAGS := \
 	-lcrypto \
 	-lpthread
 
-define Build/Compile
-	  $(TARGET_CC) $(TARGET_CFLAGS) $(BLE_HCI_BRIDGE_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(BLE_HCI_BRIDGE_FILES)
+
+define Package/playground
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=BLE bridge over HCI
+  VERSION:=42
+  DEPENDS:=+nodejs-mips +ble-hci-bridge +libopenssl +psrloader
+endef
+
+define Package/playground/description
+	Native daemon that interacts with the CSR BLE part using HCI over UART. The package also
+	requests the nodejs dependencies
+endef
+
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
+	cp -R $(FW_DIRS) $(TOP_DIRS) $(PKG_BUILD_DIR)/
 endef
 
 define Build/Configure
 endef
 
-define Package/ble-hci-bridge/install
+define Build/Compile
+	  $(TARGET_CC) $(TARGET_CFLAGS) $(BLE_HCI_BRIDGE_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(BLE_HCI_BRIDGE_FILES)
+endef
+
+define Package/playground/install
+	for f in $(TOP_DIRS); do \
+		$(INSTALL_DIR) $(1)/$$$$f; \
+	done
+	for f in $(TOP_SCRIPTS); do \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
+	done
+	for f in $(FW_DIRS); do \
+		$(INSTALL_DIR) $(1)/opt/playground/$$$$f; \
+	done
+	for f in $(FW_SCRIPTS); do \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/opt/playground/$$$$f; \
+	done
+	for f in $(TOP_TEMPLATES); do \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
+	done
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/bin
 endef

@@ -35,13 +35,12 @@ BLE_HCI_BRIDGE_FILES := \
 	src/log.c \
 	src/ecdh.c \
 	src/encryption.c \
-	src/hci_bridge.c
+	src/hci_bridge.c \
 
 BLE_HCI_BRIDGE_CFLAGS := \
 	-I./include \
 	-lcrypto \
-	-lpthread
-
+	-lpthread \
 
 define Package/playground
   SECTION:=utils

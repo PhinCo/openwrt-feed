@@ -10,13 +10,11 @@ TOP_DIRS := \
 	etc \
 	etc/init.d \
 	etc/config \
+	etc/btsetup.sh \
 
 TOP_SCRIPTS := \
 	etc/init.d/gpiosetup-led \
 	etc/init.d/playgroundServices \
-
-FW_SCRIPTS := \
-	bin/btsetup.sh \
 
 TOP_TEMPLATES := \
 	etc/default.psr \
@@ -70,8 +68,6 @@ define Package/ble-hci-bridge/install
 	for f in $(TOP_SCRIPTS); do \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
-	$(INSTALL_DIR) $(1)/etc
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/btsetup.sh $(1)/etc/btsetup.sh
 
 	for f in $(TOP_TEMPLATES); do \
 		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \

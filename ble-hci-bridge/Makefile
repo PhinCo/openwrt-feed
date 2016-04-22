@@ -42,7 +42,7 @@ BLE_HCI_BRIDGE_CFLAGS := \
 	-lcrypto \
 	-lpthread \
 
-define Package/playground
+define Package/ble-hci-bridge
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=BLE bridge over HCI
@@ -50,7 +50,7 @@ define Package/playground
   DEPENDS:=+nodejs-mips +ble-hci-bridge +libopenssl +psrloader
 endef
 
-define Package/playground/description
+define Package/ble-hci-bridge/description
 	Native daemon that interacts with the CSR BLE part using HCI over UART. The package also
 	requests the nodejs dependencies
 endef
@@ -67,7 +67,7 @@ define Build/Compile
 	  $(TARGET_CC) $(TARGET_CFLAGS) $(BLE_HCI_BRIDGE_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(BLE_HCI_BRIDGE_FILES)
 endef
 
-define Package/playground/install
+define Package/ble-hci-bridge/install
 	for f in $(TOP_DIRS); do \
 		$(INSTALL_DIR) $(1)/$$$$f; \
 	done

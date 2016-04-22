@@ -70,6 +70,7 @@ define Package/ble-hci-bridge/install
 	for f in $(TOP_SCRIPTS); do \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
+	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/btsetup.sh $(1)/etc/btsetup.sh
 
 	for f in $(TOP_TEMPLATES); do \

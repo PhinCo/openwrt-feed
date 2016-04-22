@@ -10,11 +10,11 @@ TOP_DIRS := \
 	etc \
 	etc/init.d \
 	etc/config \
-	etc/btsetup.sh \
 
 TOP_SCRIPTS := \
 	etc/init.d/gpiosetup-led \
 	etc/init.d/playgroundServices \
+	etc/btsetup.sh \
 
 TOP_TEMPLATES := \
 	etc/default.psr \

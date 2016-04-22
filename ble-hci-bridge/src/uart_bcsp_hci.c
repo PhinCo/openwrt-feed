@@ -231,7 +231,7 @@ int hci_open_device(char *device) {
 	}
 
 	if (system("/bin/psr-loader") < 0) {
-		printf("Error executing psr-loader\n");
+		printf("Error executing psrloader\n");
 		return PG_ERROR;
 	}
 

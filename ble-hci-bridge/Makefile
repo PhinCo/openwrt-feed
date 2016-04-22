@@ -6,10 +6,6 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-FW_DIRS := \
-	bin \
-	logs \
-
 TOP_DIRS := \
 	etc \
 	etc/init.d \
@@ -74,15 +70,12 @@ define Package/ble-hci-bridge/install
 	for f in $(TOP_SCRIPTS); do \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
-	for f in $(FW_DIRS); do \
-		$(INSTALL_DIR) $(1)/opt/playground/$$$$f; \
-	done
-	for f in $(FW_SCRIPTS); do \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/opt/playground/$$$$f; \
-	done
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/btsetup.sh $(1)/etc/btsetup.sh
+
 	for f in $(TOP_TEMPLATES); do \
 		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
+
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/bin
 endef

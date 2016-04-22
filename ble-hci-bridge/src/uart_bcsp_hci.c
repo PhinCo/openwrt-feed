@@ -218,7 +218,7 @@ uint8_t get_uart(uint8_t *ch) {
 }
 
 int hci_powerup_device() {
-	if (system("/opt/playground/bin/btsetup.sh") < 0) {
+	if (system("/etc/btsetup.sh") < 0) {
 		printf("Error executing init script\n");
 		return PG_ERROR;
 	}

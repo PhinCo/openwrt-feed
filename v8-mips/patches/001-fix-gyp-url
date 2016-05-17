@@ -1,0 +1,12 @@
+--- a/Makefile
++++ b/Makefile
+@@ -259,5 +259,7 @@ $(ENVFILE).new:
+ 
+ # Dependencies.
+ dependencies:
+-	svn checkout --force http://gyp.googlecode.com/svn/trunk build/gyp \
+-	    --revision 1282
++	#svn checkout --force http://gyp.googlecode.com/svn/trunk build/gyp \
++	#    --revision 1282
++	git clone https://chromium.googlesource.com/external/gyp build/gyp
++	(cd build/gyp ; git checkout 7c97342c8eba9aa2418a6381e876a7d2bd03df12)

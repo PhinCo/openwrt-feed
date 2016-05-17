@@ -231,7 +231,7 @@ int hci_open_device(char *device) {
 	}
 
 	if (system("/bin/psrloader") < 0) {
-		printf("Error executing psrloader\n");
+		printf("Error executing psr-loader\n");
 		return PG_ERROR;
 	}
 
@@ -272,12 +272,14 @@ void hci_do_poll() {
 		delay = ubcsp_poll(&activity);
 
 		if (activity & UBCSP_PACKET_SENT) {
+			timeout=0;
 			if (!responseExpected) {
 				fetchNewCommand = 1;
 			}	
 		}
 
 		if (activity & UBCSP_PACKET_RECEIVED) {
+			timeout=0;
 			uint8_t code = 0;
 			uint16_t operation = 0;
 
@@ -313,8 +315,7 @@ void hci_do_poll() {
 
 
 		if (fetchNewCommand && !isQueueEmpty()) {
-			printf("On HCI Command\n");
-			sentCommand = getOpFromSendPacket();
+			printf("On HCI Command / Data\n");
 			dequeueIntoSendPacket();
 			responseExpected = 1;
 			fetchNewCommand = 0;
@@ -322,6 +323,16 @@ void hci_do_poll() {
 
 		if (delay) {
 			usleep(delay * 100);
+			if (!fetchNewCommand) {
+				timeout++;
+				printf("Timeout: %d -- Fetch: %d\n", timeout, fetchNewCommand);
+			}
+
+			if (timeout >= 10000 && fetchNewCommand == 0) {
+				fetchNewCommand = 1;
+				responseExpected = 1;
+				hci_bridge_send(PLAYGROUND_TIMEOUT, NULL, 0);
+			}
 		}
 	}
 }

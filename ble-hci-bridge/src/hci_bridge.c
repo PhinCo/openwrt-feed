@@ -86,6 +86,8 @@ static void handleInternalCommand(uint8_t *buffer, uint16_t length) {
 			break;
 		}
 		case PG_DERIVE_SECRET: {
+			printf("Request to derive secret\n");
+
 			uint16_t peerPubKeyLength;
 
             if (length < sizeof(uint16_t)) {
@@ -116,6 +118,8 @@ static void handleInternalCommand(uint8_t *buffer, uint16_t length) {
 			break;
 		}
 		case PG_AES_DECRYPT: {
+			printf("Request to AES decrypt\n");
+
 			if (secret == NULL) {
 				printf("Trying to decrypt without a secret\n");
 				reportStatus(HCI_BRIDGE_ERROR, PG_AES_DECRYPT, NULL, 0);
@@ -147,10 +151,40 @@ static void handleInternalCommand(uint8_t *buffer, uint16_t length) {
 			break;
 		}
 		case PG_AES_ENCRYPT: {
-			reportStatus(HCI_BRIDGE_ERROR, PG_AES_ENCRYPT, NULL, 0);
+			printf("Request to AES encrypt\n");
+
+			if (secret == NULL) {
+				printf("Trying to encrypt without a secret\n");
+				reportStatus(HCI_BRIDGE_ERROR, PG_AES_ENCRYPT, NULL, 0);
+				break;
+			}
+
+			uint16_t dataLength;
+
+            if (length < sizeof(uint16_t)) {
+				printf("Error reading decrypt data\n");
+				reportStatus(HCI_BRIDGE_ERROR, PG_AES_DECRYPT, NULL, 0);
+                break;
+			}
+
+			dataLength = buffer[0] << 8 | buffer[1];
+			buffer += 2;
+			length -= 2;
+
+			if (length != dataLength) {
+				printf("Invalid encrypt data size\n");
+				reportStatus(HCI_BRIDGE_ERROR, PG_AES_ENCRYPT, NULL, 0);
+                break;
+			}
+
+			uint8_t encrypted[4096];
+			int size = encryption_encrypt(buffer, dataLength, secret, NULL, encrypted);
+
+			reportStatus(HCI_BRIDGE_OK, PG_AES_ENCRYPT, encrypted, size);
 			break;
 		}	
 		case PG_PUBLIC_DECRYPT: {
+			printf("Request to public decrypt\n");
 			// We actually don't need this total data length, so we simply skip it.
 			uint16_t totalDataLength;
             if (length < sizeof(uint16_t)) {
@@ -373,6 +407,7 @@ int hci_bridge_send(uint8_t commandType, uint8_t *data, uint16_t length) {
 	free(newData);
 
 	if (sent == newLength) {
+		printf("bridge send\n");
 		return PG_OK;
 	} else {
 		printf("Error sending payload\n");

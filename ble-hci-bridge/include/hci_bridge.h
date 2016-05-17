@@ -11,6 +11,7 @@
 #define HCI_DATA					0x02
 #define HCI_EVENT					0x04
 #define PLAYGROUND_INTERNAL_COMMAND 0x08
+#define PLAYGROUND_TIMEOUT			0x10
 
 // List of internal commands
 #define PG_CREATE_KEY_PAIR			0x01

@@ -329,6 +329,7 @@ void hci_do_poll() {
 			}
 
 			if (timeout >= 10000 && fetchNewCommand == 0) {
+				timeout = 0;
 				fetchNewCommand = 1;
 				responseExpected = 1;
 				hci_bridge_send(PLAYGROUND_TIMEOUT, NULL, 0);

@@ -1,2 +1,2 @@
-cp ./wifiap/* /etc/config
+cp /opt/scripts/wifiap/* /etc/config
 

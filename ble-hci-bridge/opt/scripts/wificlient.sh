@@ -1,2 +1,2 @@
-cp ./wificlient/* /etc/config
+cp /opt/scripts/wificlient/* /etc/config
 

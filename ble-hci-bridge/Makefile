@@ -41,7 +41,7 @@ define Package/ble-hci-bridge
   CATEGORY:=Utilities
   TITLE:=BLE bridge over HCI
   VERSION:=42
-  DEPENDS:=+nodejs-mips +ble-hci-bridge +libopenssl +psrloader
+  DEPENDS:=+nodejs-mips +libopenssl +psrloader
 endef
 
 define Package/ble-hci-bridge/description

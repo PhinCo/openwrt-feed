@@ -10,17 +10,28 @@ TOP_DIRS := \
 	etc \
 	etc/init.d \
 	etc/config \
+	opt \
+	opt/scripts \
+	opt/scripts/wificlient \
+	opt/scripts/wifiap \
 
 TOP_SCRIPTS := \
 	etc/init.d/gpiosetup-led \
 	etc/init.d/playgroundServices \
 	etc/btsetup.sh \
+	opt/scripts/wificlient.sh \
+	opt/scripts/wifiap.sh \
 
 TOP_TEMPLATES := \
 	etc/default.psr \
 	etc/config/network \
-	etc/config/wireless_template \
 	etc/config/wireless \
+	opt/scripts/wificlient/wireless \
+	opt/scripts/wificlient/network \
+	opt/scripts/wificlient/dhcp \
+	opt/scripts/wifiap/wireless \
+	opt/scripts/wifiap/network \
+	opt/scripts/wifiap/dhcp \
 
 BLE_HCI_BRIDGE_FILES := \
 	src/main.c \

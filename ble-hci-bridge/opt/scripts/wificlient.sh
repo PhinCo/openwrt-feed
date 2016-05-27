@@ -1,0 +1,2 @@
+cp ./wificlient/* /etc/config
+

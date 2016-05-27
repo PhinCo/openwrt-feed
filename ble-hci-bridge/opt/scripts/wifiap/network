@@ -1,0 +1,19 @@
+
+config interface 'loopback'
+	option ifname 'lo'
+	option proto 'static'
+	option ipaddr '127.0.0.1'
+	option netmask '255.0.0.0'
+
+config interface 'lan'
+	option ifname 'eth0'
+	option force_link '1'
+	option proto 'static'
+	option ipaddr '10.172.192.168'
+	option netmask '255.255.255.0'
+	option ip6assign '60'
+
+config interface 'wifi'
+	option 'proto' 'static'
+	option 'ipaddr' '196.173.50.1'
+	option 'netmask' '255.255.255.0'

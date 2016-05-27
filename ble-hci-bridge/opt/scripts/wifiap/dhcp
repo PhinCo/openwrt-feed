@@ -1,0 +1,11 @@
+config odhcpd 'odhcpd'
+	option maindhcp '0'
+	option leasefile '/tmp/hosts/odhcpd'
+	option leasetrigger '/usr/sbin/odhcpd-update'
+
+config dhcp 'wifi'
+        option interface  'wifi'
+        option start      200
+        option limit      150
+        option leasetime  '12h'
+        option dhcpv4     'server'

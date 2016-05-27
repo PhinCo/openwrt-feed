@@ -1,0 +1,2 @@
+cp ./wifiap/* /etc/config
+

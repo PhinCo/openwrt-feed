@@ -1,7 +1,7 @@
 config 'wifi-device' 'radio0'
         option 'type'     'mac80211'
         option 'channel'  '11'
-        option 'hwmode'   '11a'
+        option 'hwmode'   '11g'
         option 'path'     'platform/qca953x_wmac'
         list 'ht_capab'   'LDPC'
         list 'ht_capab'   'SHORT-GI-20'

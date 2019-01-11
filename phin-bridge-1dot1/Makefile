@@ -51,7 +51,7 @@ define Build/Compile
 	  $(TARGET_CC) $(TARGET_CFLAGS) $(PHIN_BRIDGE_1DOT1_CFLAGS) -o $(PKG_BUILD_DIR)/$(PKG_NAME) $(PHIN_BRIDGE_1DOT1_FILES)
 endef
 
-define Package/ble-hci-bridge/install
+define Package/phin-bridge-1dot1/install
 	for f in $(TOP_DIRS); do \
 		$(INSTALL_DIR) $(1)/$$$$f; \
 	done
@@ -67,4 +67,4 @@ define Package/ble-hci-bridge/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/bin
 endef
 
-$(eval $(call BuildPackage,ble-hci-bridge))
+$(eval $(call BuildPackage,phin-bridge-1dot1))

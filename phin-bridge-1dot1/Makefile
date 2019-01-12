@@ -8,12 +8,9 @@ include $(INCLUDE_DIR)/package.mk
 
 TOP_DIRS := \
 	etc \
-	etc/init.d \
-	etc/config \
 	opt \
-	opt/phin \
 
-TOP_SCRIPTS := \
+SCRIPTS := \
 	etc/init.d/phinServices \
 	opt/phin/bridge \
 	opt/phin/start.sh \
@@ -33,7 +30,9 @@ define Package/phin-bridge-1dot1/description
 endef
 
 define Build/Prepare
+	echo step Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
+	echo FW_DIRS $(FW_DIRS)
 	cp -R $(FW_DIRS) $(TOP_DIRS) $(PKG_BUILD_DIR)/
 endef
 
@@ -44,14 +43,17 @@ define Build/Compile
 endef
 
 define Package/phin-bridge-1dot1/install
+	echo step 1
 	for f in $(TOP_DIRS); do \
 		$(INSTALL_DIR) $(1)/$$$$f; \
 	done
 
-	for f in $(TOP_SCRIPTS); do \
+	echo step 2
+	for f in $(SCRIPTS); do \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
 
+	echo step 3
 	for f in $(TOP_TEMPLATES); do \
 		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done

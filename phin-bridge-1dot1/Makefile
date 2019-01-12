@@ -6,14 +6,7 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-TOP_DIRS := \
-	etc \
-	etc/init.d \
-	etc/config \
-	opt \
-	opt/scripts \
-	opt/scripts/wificlient \
-	opt/scripts/wifiap \
+TOP_DIRS := 
 
 TOP_SCRIPTS := 
 

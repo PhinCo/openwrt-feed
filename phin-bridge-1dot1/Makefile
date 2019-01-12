@@ -11,6 +11,7 @@ TOP_DIRS := \
 	etc/init.d \
 	etc/config \
 	opt \
+	opt/phin \
 
 TOP_SCRIPTS := \
 	etc/init.d/phinServices \
@@ -33,6 +34,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
+	cp -R $(FW_DIRS) $(TOP_DIRS) $(PKG_BUILD_DIR)/
 endef
 
 define Build/Configure

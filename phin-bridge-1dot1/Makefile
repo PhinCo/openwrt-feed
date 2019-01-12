@@ -6,14 +6,10 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-TOP_DIRS := \
-	etc \
-	opt \
-
-SCRIPTS := \
-	etc/init.d/phinServices \
-	opt/phin/bridge \
-	opt/phin/start.sh \
+BINS := \
+	files/etc/init.d/phinServices \
+	files/opt/phin/bridge \
+	files/opt/phin/start.sh \
 	
 TOP_TEMPLATES := 
 
@@ -43,20 +39,13 @@ define Build/Compile
 endef
 
 define Package/phin-bridge-1dot1/install
-	echo step 1
-	for f in $(TOP_DIRS); do \
-		$(INSTALL_DIR) $(1)/$$$$f; \
-	done
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/opt/phin
 
-	echo step 2
-	for f in $(SCRIPTS); do \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
-	done
-
-	echo step 3
-	for f in $(TOP_TEMPLATES); do \
-		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
-	done
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phinServices $(1)/etc/init.d/phinServices
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)files/opt/phin/start.sh $(1)/opt/phin/start.sh
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

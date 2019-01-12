@@ -22,6 +22,7 @@ PHIN_ECDH_FILES := \
 PHIN_ECDH_CFLAGS := \
 	-I./src/ecdh \
 	-I./src/utils \
+	-lcrypto \
 
 define Package/phin-ecdh
   SECTION:=utils

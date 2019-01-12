@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := phin-bridge-1dot1
-PGK_RELEASE := 3
+PGK_RELEASE := 4
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -24,7 +24,7 @@ define Package/phin-bridge-1dot1
   CATEGORY:=Utilities
   TITLE:=Phin Bridge 1.1
   VERSION:=1
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libopenssl +phin-ecdh
 endef
 
 define Package/phin-bridge-1dot1/description

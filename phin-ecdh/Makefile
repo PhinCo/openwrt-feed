@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := phin-ecdh
-PGK_RELEASE := 1
+PGK_RELEASE := 2
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -26,7 +26,7 @@ PHIN_ECDH_CFLAGS := \
 define Package/ecdh
   SECTION:=utils
   CATEGORY:=Utilities
-  TITLE:=Phin Bridge 1.1
+  TITLE:=phin-ecdh
   VERSION:=1
   DEPENDS:=+libopenssl
 endef

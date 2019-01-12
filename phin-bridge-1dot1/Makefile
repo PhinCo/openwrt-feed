@@ -14,9 +14,13 @@ TOP_TEMPLATES :=
 
 PHIN_BRIDGE_1DOT1_FILES := \
 	src/main.c \
+	src/lib/ecdh.c \
+	src/lib/encryption.c \
+	src/utils/file-utils.c \
+	src/utils/pem-utils.c \
 
 PHIN_BRIDGE_1DOT1_CFLAGS := \
-	-I./include \
+	-I./src/lib -I./src/utils \
 	-lcrypto \
 	-lpthread \
 

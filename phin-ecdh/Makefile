@@ -23,7 +23,7 @@ PHIN_ECDH_CFLAGS := \
 	-I./src/ecdh \
 	-I./src/utils \
 
-define Package/ecdh
+define Package/phin-ecdh
   SECTION:=utils
   CATEGORY:=Utilities
   TITLE:=phin-ecdh

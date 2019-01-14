@@ -11,7 +11,19 @@ BINS := \
 	files/opt/phin/bridge \
 	files/opt/phin/start.sh \
 	
-TOP_TEMPLATES := 
+TEMPLATES := \
+	etc/config/network \
+	etc/config/wireless \
+
+DIRS := \
+	etc/config \
+	etc/init.d \
+	opt/phin \
+
+BINS := \
+	etc/init.d/phinServices \
+	opt/phin/bridge \
+	opt/phin/start.sh \
 
 define Package/phin-bridge-1dot1
   SECTION:=utils
@@ -26,26 +38,28 @@ define Package/phin-bridge-1dot1/description
 endef
 
 define Build/Prepare
-	echo step Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
+	cp -R $(FW_DIRS) $(DIRS) $(PKG_BUILD_DIR)/
 endef
 
 define Build/Configure
-	$(CP) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
-	$(CP) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 endef
 
 define Build/Compile
 endef
 
 define Package/phin-bridge-1dot1/install
-	$(INSTALL_DIR) $(1)/etc/config
-	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_DIR) $(1)/opt/phin
+	for f in $(DIRS); do \
+		$(INSTALL_DIR) $(1)/$$$$f; \
+	done
 
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phinServices $(1)/etc/init.d/phinServices
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/start.sh $(1)/opt/phin/start.sh
+	for f in $(BIN); do \
+		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
+	done
+
+	for f in $(TEMPLATES); do \
+		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
+	done
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

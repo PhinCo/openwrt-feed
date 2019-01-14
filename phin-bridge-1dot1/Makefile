@@ -6,25 +6,6 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-BINS := \
-	files/etc/init.d/phinServices \
-	files/opt/phin/bridge \
-	files/opt/phin/start.sh \
-	
-TEMPLATES := \
-	etc/config/network \
-	etc/config/wireless \
-
-DIRS := \
-	etc/config \
-	etc/init.d \
-	opt/phin \
-
-BINS := \
-	etc/init.d/phinServices \
-	opt/phin/bridge \
-	opt/phin/start.sh \
-
 define Package/phin-bridge-1dot1
   SECTION:=utils
   CATEGORY:=Utilities
@@ -39,30 +20,18 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	cp -R $(FW_DIRS) $(DIRS) $(PKG_BUILD_DIR)/
-endef
-
-define Build/Configure
-endef
-
-define Build/Compile
+	$(CP) -R ./files $(PKG_BUILD_DIR)/
+	echo "all:" > $(PKG_BUILD_DIR)/Makefile
 endef
 
 define Package/phin-bridge-1dot1/install
-	echo INSTALL DIR PHASE
-	for f in $(DIRS); do \
-		$(INSTALL_DIR) $(1)/$$$$f; \
-	done
-
-	echo INSTALL BIN PHASE
-	for f in $(BIN); do \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
-	done
-
-	echo INSTALL TEMPLATES PHASE
-	for f in $(TEMPLATES); do \
-		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
-	done
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DIR) $(1)/opt/phin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phinServices $(1)/etc/init.d/phinServices
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/start.sh $(1)/opt/phin/start.sh
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

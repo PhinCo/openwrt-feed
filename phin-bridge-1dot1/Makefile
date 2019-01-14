@@ -31,7 +31,8 @@ define Build/Prepare
 endef
 
 define Build/Configure
-	$(CP) ./files $(PKG_BUILD_DIR)/
+	$(CP) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
+	$(CP) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 endef
 
 define Build/Compile
@@ -45,8 +46,6 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phinServices $(1)/etc/init.d/phinServices
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/start.sh $(1)/opt/phin/start.sh
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

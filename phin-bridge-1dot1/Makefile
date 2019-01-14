@@ -28,11 +28,10 @@ endef
 define Build/Prepare
 	echo step Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	echo FW_DIRS $(FW_DIRS)
-	cp -R $(FW_DIRS) $(TOP_DIRS) $(PKG_BUILD_DIR)/
 endef
 
 define Build/Configure
+	$(CP) ./files $(PKG_BUILD_DIR)/
 endef
 
 define Build/Compile
@@ -45,7 +44,7 @@ define Package/phin-bridge-1dot1/install
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phinServices $(1)/etc/init.d/phinServices
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)files/opt/phin/start.sh $(1)/opt/phin/start.sh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/start.sh $(1)/opt/phin/start.sh
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

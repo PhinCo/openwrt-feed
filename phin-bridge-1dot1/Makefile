@@ -49,14 +49,17 @@ define Build/Compile
 endef
 
 define Package/phin-bridge-1dot1/install
+	echo INSTALL DIR PHASE
 	for f in $(DIRS); do \
 		$(INSTALL_DIR) $(1)/$$$$f; \
 	done
 
+	echo INSTALL BIN PHASE
 	for f in $(BIN); do \
 		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done
 
+	echo INSTALL TEMPLATES PHASE
 	for f in $(TEMPLATES); do \
 		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
 	done

@@ -6,12 +6,6 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-TOP_DIRS := 
-
-TOP_SCRIPTS := 
-
-TOP_TEMPLATES := 
-
 PHIN_ECDH_FILES := \
 	src/main.c \
 	src/ecdh/ecdh.c \
@@ -48,19 +42,8 @@ define Build/Compile
 endef
 
 define Package/phin-ecdh/install
-	for f in $(TOP_DIRS); do \
-		$(INSTALL_DIR) $(1)/$$$$f; \
-	done
-	for f in $(TOP_SCRIPTS); do \
-		$(INSTALL_BIN) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
-	done
-
-	for f in $(TOP_TEMPLATES); do \
-		$(INSTALL_DATA) $(PKG_BUILD_DIR)/$$$$f $(1)/$$$$f; \
-	done
-
-	$(INSTALL_DIR) $(1)/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/bin
+	$(INSTALL_DIR) $(1)/opt/phin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/opt/phin/phin-ecdh
 endef
 
 $(eval $(call BuildPackage,phin-ecdh))

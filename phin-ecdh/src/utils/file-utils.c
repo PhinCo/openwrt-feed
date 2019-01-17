@@ -10,7 +10,7 @@
 #include <string.h>
 #include <sys/stat.h>
 
-int writeHexFile( unsigned char *data, size_t dataLength, char *filename ){
+int writeHexFile( unsigned char *data, size_t dataLength, const char *filename ){
     FILE *fp = fopen( filename, "w" );
     if( fp == NULL ){
         printf("failed to open %s for writing\n", filename );
@@ -25,7 +25,7 @@ int writeHexFile( unsigned char *data, size_t dataLength, char *filename ){
     return 0;
 }
 
-int readHexFile( unsigned char *data, size_t *dataLength, char *filename ){
+int readHexFile( unsigned char *data, size_t *dataLength, const char *filename ){
     FILE *fp = fopen( filename, "r" );
     if( fp == NULL ){
         printf("failed to open %s for reading\n", filename );
@@ -50,7 +50,7 @@ int readHexFile( unsigned char *data, size_t *dataLength, char *filename ){
 }
 
 
-int readPemFile( unsigned char *pem, char *filename ){
+int readPemFile( unsigned char *pem, const char *filename ){
     struct stat st;
     if( 0 != stat( filename, &st)){
         printf("failed to stat %s\n", filename );
@@ -70,11 +70,13 @@ int readPemFile( unsigned char *pem, char *filename ){
         return -1;
     }
     
+    pem[length] = 0;    // null terminate
+    
     fclose(fp);
     return 0;
 }
 
-int writePemFile( unsigned char *pem, char *filename ){
+int writePemFile( unsigned char *pem, const char *filename ){
     unsigned long pemLength = strlen( (char *)pem );
     
     FILE *fp = fopen( filename, "w" );

@@ -7,14 +7,16 @@ PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 include $(INCLUDE_DIR)/package.mk
 
 PHIN_ECDH_FILES := \
-	src/main.c \
-	src/ecdh/ecdh.c \
-	src/ecdh/encryption.c \
+	src/cli/main.c \
+	src/cli/commands.c \
+	src/lib/ecdh.c \
+	src/lib/encryption.c \
 	src/utils/file-utils.c \
 	src/utils/pem-utils.c \
 
 PHIN_ECDH_CFLAGS := \
-	-I./src/ecdh \
+	-I./src/lib \
+	-I./src/cli \
 	-I./src/utils \
 	-lcrypto \
 

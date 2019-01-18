@@ -31,6 +31,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/opt/phin/firmware
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/unlock.sh $(1)/opt/phin/unlock.sh
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/full.gbl $(1)/opt/phin/firmware/full.gbl

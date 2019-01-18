@@ -24,7 +24,7 @@ fi
 
 LOCKED_PID=`cat ${LOCKFILE}`
 
-echo "Lock found for pid=${PID}"
+echo "Lock found for pid=${LOCKED_PID}"
 
 RUNNING_PID=`ps | awk '{print $1}' | grep ${LOCKED_PID}`
 

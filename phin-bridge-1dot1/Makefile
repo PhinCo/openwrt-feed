@@ -34,7 +34,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/full.gbl $(1)/opt/phin/firmware/full.gbl
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest $(1)/opt/phin/firmware/manifest
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest $(1)/opt/phin/firmware/manifest.json
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

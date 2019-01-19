@@ -3,9 +3,9 @@
 START=99
 USE_PROCD=1
 
-BINFILE=/opt/phin/bridge
+BINFILE="/opt/phin/bridge"
 BINOPTS="-i /opt/phin/firmware"
-UNLOCK=/opt/phin/unlock.sh
+UNLOCK="/opt/phin/unlock.sh"
 LOCKFILE="/var/tmp/bridge.lock"
 
 start_service() {

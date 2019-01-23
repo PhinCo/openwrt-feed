@@ -1,0 +1,92 @@
+body {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  background-color: #003e7e;
+  background-size: cover;
+}
+
+.container {
+  width:90%;
+  max-width:420px;
+  height: 90%;
+  padding:10px;
+  margin:0 auto;
+  background-color: white;
+  overflow-y: scroll;
+  border: 5px solid lightgrey;
+  border-radius: 4px;
+}
+
+/* these fade in */
+h1 { opacity: 0; }
+.buttonContainer { opacity: 0; }
+
+.logo { width: 80px; margin-left: 80px; float:right;}
+
+.lightsContainer { width: 15px; margin: 100px auto;}
+.light {background-color: rgb(243, 169, 10); border: 1px solid #f5f11e; border-radius: 50%;
+  width: 15px; height: 15px; min-width: 15px; min-height: 15px; margin-right:5px; margin-bottom: 15px; 
+}
+
+.blinker1 {
+  animation: blink-animation 1.25s steps(5, start) 1;
+  -webkit-animation: blink-animation 1.25s steps(5, start) 1;
+}
+.blinker2 {
+  animation: blink-animation 1.5s steps(5, start) 1;
+  -webkit-animation: blink-animation 1.5s steps(5, start) 1;
+}
+.blinker3 {
+  animation: blink-animation 1.75s steps(5, start) 1;
+  -webkit-animation: blink-animation 1.75s steps(5, start) 1;
+}
+
+@keyframes blink-animation { 50% { opacity: 0.0; background-color: #f5f11e;} }
+@-webkit-keyframes blink-animation { 50% { opacity: 0.0; background-color: #f5f11e;} }
+
+.small {font-size: .5em;}
+button {line-height: 20px; border-radius: 4px;}
+ul { list-style:none; padding: 0px; }
+li { margin-left: 0px; }
+
+.wifiList {
+  border: 1px solid;
+  padding: 0px 20px;
+  border-radius: 4px;
+}
+
+.wifiList li {
+  width: 100%;
+  background: rgb(51, 122, 183);
+  border-bottom: 2px solid white;
+  color: white;
+  text-align: center;
+  font-weight: 500;
+  padding: 5px;
+  border-radius: 26px;
+}
+
+.wifiList a {
+  text-decoration: none;
+  color: white;
+}
+
+@keyframes fadeIn {
+  0% { opacity:0; }
+  100% { opacity:1; visibility: visible;}
+}
+
+@keyframes fadeOut {
+  0% { opacity:1; }
+  100% { opacity:0; visibility: hidden;}
+}
+
+.fade-in { animation: fadeIn ease 2s forwards; animation-delay: 1s}
+
+.fade-out { animation: fadeOut ease 2s forwards; animation-delay: 2s}
+
+@keyframes expandBridge {
+  0% { max-width:420px; }
+  100% { max-width:840px;}
+}
+
+.expand-bridge { animation: expandBridge 1s forwards; animation-delay: 1s;}

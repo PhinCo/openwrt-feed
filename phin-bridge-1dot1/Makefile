@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := phin-bridge-1dot1
-PGK_RELEASE := 4
+PGK_RELEASE := 5
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -29,6 +29,9 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/opt/phin
 	$(INSTALL_DIR) $(1)/opt/phin/firmware
+	$(INSTALL_DIR) $(1)/opt/phin/admin
+	$(INSTALL_DIR) $(1)/opt/phin/config
+	$(INSTALL_DIR) $(1)/var/tmp
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/unlock.sh $(1)/opt/phin/unlock.sh
@@ -36,6 +39,11 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/full.gbl $(1)/opt/phin/firmware/full.gbl
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest.json $(1)/opt/phin/firmware/manifest.json
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/index.html
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/logo.png $(1)/opt/phin/admin/logo.png
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/script.js $(1)/opt/phin/admin/script.js
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/style.css $(1)/opt/phin/admin/style.css
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

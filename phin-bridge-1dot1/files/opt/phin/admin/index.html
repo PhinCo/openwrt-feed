@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>pHin Bridge</title>
+	<link rel="stylesheet" href="/style.css">
+    <link rel="shortcut icon" type="image/png" href="/favicon.png">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" name="viewport">
+    <script src="/script.js"></script>
+</head>
+
+<body onload="loadPage()">
+<div id="bridge" class="container expand-bridge">
+    <img class="logo" src="/logo.png" />
+    <h1 class="fade-in">
+        Bridge
+    </h1>
+
+    <div>
+        <div id="buttons" class="buttonContainer fade-in">
+        <button onclick="getStats('output')">Stats</button>
+        <button onclick="listIp('output')">IP Networks</button>
+        <button onclick="listWifi('output')">wifi Networks</button>
+        </div>
+        <div id="output"></div>
+        <!-- div id="provisionform">
+            <form action='#'>
+                <input name="provisionUrl" type="text">
+                <input name="monitorHardwareId" type="text">
+            </form>
+        </div -->
+        <div id="lights" class="lightsContainer fade-out">
+        <ul>
+            <li class="light blinker1"></li>
+            <li class="light blinker2"></li>
+            <li class="light blinker3"></li>
+        </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

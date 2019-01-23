@@ -44,8 +44,8 @@ define Build/Compile
 endef
 
 define Package/phin-ecdh/install
-	$(INSTALL_DIR) $(1)/opt/phin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/opt/phin/phin-ecdh
+	$(INSTALL_DIR) $(1)/opt/phin/ecdh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/opt/phin/ecdh/phin-ecdh
 endef
 
 $(eval $(call BuildPackage,phin-ecdh))

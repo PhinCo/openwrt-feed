@@ -10,40 +10,36 @@
 # If lock pid is not valid, report
 #-----------------------------------------------------------
 
-LOCKFILE=/var/tmp/bridge.lock
-POSSIBLE_BRIDGE_PROCESSES=`ps | grep bridge | grep -v grep`
+TMP_PATH=/var/tmp
+LOCKFILE="${TMP_PATH}/bridge.lock"
 
 if [[ ! -f "${LOCKFILE}" ]]; then
-        echo "No lock file found: ${LOCKFILE}"
-        if [[ ! -z "${POSSIBLE_BRIDGE_PROCESSES}" ]]; then
-                echo "Possible processes:"
-                echo "${POSSIBLE_BRIDGE_PROCESSES}"
-        fi
+        echo "No lockfile found: ${LOCKFILE}"
         exit 0
 fi
 
 LOCKED_PID=`cat ${LOCKFILE}`
 
-echo "Lock found for pid=${LOCKED_PID}"
+echo "Lockfile ${LOCKFILE} found for pid=${LOCKED_PID}"
 
 RUNNING_PID=`ps | awk '{print $1}' | grep ${LOCKED_PID}`
 
 if [[ -z "${RUNNING_PID}" ]]; then
-        echo "Process ${LOCKED_PID} not running. Removing lock file: ${LOCKFILE}"
+        echo "No running bridge process found for pid=${LOCKED_PID}. Removing lockfile: ${LOCKFILE}"
         rm ${LOCKFILE}
         exit $?
 fi
 
-echo "Killing process ${RUNNING_PID}"
+echo "Terminating bridge process found with pid=${RUNNING_PID}"
 
 kill -9 ${RUNNING_PID}
 RESULT=$?
 
 if [[ ${RESULT} -eq 0 ]]; then
-        echo "Process ${RUNNING_PID} stopped. Removing lock ${LOCKFILE}"
+        echo "Bridge process with pid=${RUNNING_PID} stopped. Removing lockfile ${LOCKFILE}"
         rm ${LOCKFILE}
         exit $?
 else
-        echo "Process ${RUNNING_PID} could not be stopped. Lock remains: ${LOCKFILE}"
+        echo "Bridge process with pid=${RUNNING_PID} could not be stopped. Lockfile remains: ${LOCKFILE}"
         exit ${RESULT}
 fi

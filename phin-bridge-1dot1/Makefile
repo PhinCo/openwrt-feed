@@ -39,7 +39,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/full.gbl $(1)/opt/phin/firmware/full.gbl
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest.json $(1)/opt/phin/firmware/manifest.json
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/index.html
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/admin/index.html
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/logo.png $(1)/opt/phin/admin/logo.png
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/script.js $(1)/opt/phin/admin/script.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/style.css $(1)/opt/phin/admin/style.css

@@ -14,7 +14,7 @@ function postJSON(path, data, callback) {
   var xhr = new XMLHttpRequest()
   
   xhr.open('POST', path, true)
-  xhr.setRequestHeader("Content-type", "application/json")
+  xhr.setRequestHeader('Content-type', 'application/json')
   xhr.send(JSON.stringify(data))
 
   xhr.onreadystatechange = function () {
@@ -69,15 +69,34 @@ function getStats(targetDiv) {
         hardwareIdList.push('<li>' + hId, '</li>')
       }
 
+      const sampleStats = ({samplesReceived, samplesSent, lastSampleReceivedAt, lastSampleSentAt}) => {
+        var template = `<tr><td>samplesReceived</td><td>${samplesReceived}</td></tr>`
+        if (samplesReceived > 0) {
+          template += `<tr><td>lastSampleReceivedAt</td><td>${lastSampleReceivedAt}</td></tr>`
+        }
+        template += `<tr><td>samplesSent</td><td>${samplesSent}</td></tr>`
+        if (samplesSent > 0) {
+          template += `<tr><td>lastSampleSentAt</td><td>${lastSampleSentAt}</td></tr>`
+        }
+        return template
+      }
+
+      const monitors = () => {
+        if ( hardwareIdList.length > 0 ) {
+            return `<h2> Monitors </h2> <ul> ${hardwareIdList.join('')} </ul>`
+        }
+        return ``
+      }
+
       const outPut =
         `<div class="stats">
-        <table><thead><th>Stats</th><th></th></thead>
+        <table><thead><th>Status</th><th></th></thead>
+        <tr><td>Provisioned</td><td>${response.provisioned}</td></tr>
         <tr><td>workerStartTime</td><td>${response.workerStartTime}</td></tr>
-        <tr><td>samplesReceived</td><td>${response.samplesReceived}</td></tr>
-        <tr><td>samplesSent</td><td>${response.samplesSent}</td></tr>
-        <tr><td>lastSampleReceivedAt</td><td>${response.lastSampleReceivedAt}</td></tr>
+        ${sampleStats(response)}
+
         </td></tr></table>
-        <h2> Monitors </h2> <ul> ${hardwareIdList.join('')} </ul></div>`
+        ${monitors()} </div>`
 
       document.getElementById(targetDiv).innerHTML = outPut
     } else {
@@ -134,10 +153,79 @@ function listIp(targetDiv) {
   })
 }
 
+function listIp(targetDiv) {
+  console.log('getting device ip address.')
+  document.getElementById(targetDiv).innerHTML = ''
+
+  const progresser = new Progresser()
+  progresser.start(targetDiv)
+
+  getJSON('ip', function(response, error) {
+    progresser.stop()
+    if (!error) {
+      const outPut = 
+        `<div class="ipList"> <h3> IP </h3> <ul><li>
+        ${response.ipaddress}
+        </li></ul></div>`
+
+      document.getElementById(targetDiv).innerHTML = outPut
+    } else {
+      document.getElementById(targetDiv).innerHTML = 'error: ' + error.message
+    }
+  })
+}
+
+function provision() {
+  console.log(1)
+  const elem = document.getElementsByName('provisionUrl')[0]
+  const identifyURL = elem.value
+  console.log(identifyURL)
+
+  postJSON('/dev/provision', {identifyURL}, (response, error) => {
+    console.log(2)
+    console.log('provision response: ' + response)
+    console.log(' error: ', error)
+  })
+
+}
+function changeSerialNumber(){
+  console.log('unsupported')
+}
+
+function createSampleGenerator(){
+  console.log('unsupported')
+}
+
+function getDevForm(targetDiv) {
+  document.getElementById(targetDiv).innerHTML = 
+  `
+  <div>
+    <label for="provisionUrl"> provisionUrl </url>
+    <input name="provisionUrl" class="txtin txtin-lg"> 
+    <button name="provision" class="btn btn-sm" onclick="provision()"> Provision </button>
+  </div>
+
+  <div>
+    <label for="serialNumber"> serial number </url>
+    <input name="serialNumber" class="txtin txtin"> 
+    <button name="changeSerialNumber" class="btn btn-sm" onclick="changeSerialNumber()"> change </button>
+  </div>
+
+  <div>
+    <h3> mock a monitor </h3>
+    <input name="hardwareId" class="txtin txtin"> 
+    <button name="changeSerialNumber" class="btn btn-sm" onclick="createSampleGenerator()"> add sample generator </button>
+  </div>
+  `
+}
+
 function loadPage() {
   setTimeout(() => {
     const elems = document.getElementsByClassName('light')
     for ( i in elems ) i.className = 'lighton'
   }, 750)
 
+  setTimeout(() => {
+    getStats('output')
+  }, 3000)
 }

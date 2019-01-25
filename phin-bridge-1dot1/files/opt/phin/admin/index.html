@@ -16,17 +16,14 @@
 
     <div>
         <div id="buttons" class="buttonContainer fade-in">
-        <button onclick="getStats('output')">Stats</button>
-        <button onclick="listIp('output')">IP Networks</button>
-        <button onclick="listWifi('output')">wifi Networks</button>
+        <button class="btn" onclick="getStats('output')"> Status </button>
+        <button class="btn" onclick="listIp('output')"> IP Networks </button>
+        <button class="btn" onclick="listWifi('output')"> WIFI Networks </button>
+        <button class="btn" onclick="getDevForm('output')"> Development </button>
         </div>
+
         <div id="output"></div>
-        <!-- div id="provisionform">
-            <form action='#'>
-                <input name="provisionUrl" type="text">
-                <input name="monitorHardwareId" type="text">
-            </form>
-        </div -->
+
         <div id="lights" class="lightsContainer fade-out">
         <ul>
             <li class="light blinker1"></li>

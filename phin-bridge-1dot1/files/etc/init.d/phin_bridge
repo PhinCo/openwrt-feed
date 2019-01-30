@@ -5,7 +5,7 @@ USE_PROCD=1
 
 BINFILE="/opt/phin/bridge"
 BINOPTS="-i /opt/phin/firmware"
-UNLOCK="/opt/phin/unlock.sh"
+UNLOCK="/opt/phin/unlock"
 LOCKFILE="/var/tmp/bridge.lock"
 
 start_service() {

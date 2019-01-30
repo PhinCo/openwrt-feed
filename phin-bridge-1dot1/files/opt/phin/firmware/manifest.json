@@ -1,1 +1,8 @@
-{ "target": "prod", "version": "0.2.0", "srcdir": "bash/../bluegecko/application", "git-hash": "acabfca-dirty"}
+{
+  "manifest-version": "0.1.0",
+  "application": {
+    "version": "0.3.0",
+    "git-hash": "bb6b11b-dirty",
+    "filename": "application.gbl"
+  }
+}

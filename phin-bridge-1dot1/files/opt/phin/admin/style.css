@@ -63,7 +63,8 @@ li { margin-left: 0px; }
 
 .wifiList li {
   width: 100%;
-  background: rgb(51, 122, 183);
+  background: #3D94F6;
+  background-image: linear-gradient(to bottom, #3D94F6, #1E62D0);
   border-bottom: 2px solid white;
   color: white;
   text-align: center;
@@ -121,6 +122,13 @@ li { margin-left: 0px; }
   text-decoration: none;
 }
 
+.btn:disabled {
+  background: rgb(86, 86, 87);
+  background-image: linear-gradient(to bottom, rgb(86, 86, 87), rgb(176, 177, 179));
+  text-decoration: none;
+  border: solid #000000 1px;
+}
+
 .btn-sm {
   border-radius: 4px;
   font-size: 11px;
@@ -141,4 +149,16 @@ li { margin-left: 0px; }
 }
 .txtin-lg {
   width: 400px;
+}
+
+@media only screen and (max-width: 420px) {
+  .container {
+    width:95%;
+    height:95%;
+    padding:5px;
+  }
+
+  .txtin-lg {
+    max-width:100%;
+  }
 }

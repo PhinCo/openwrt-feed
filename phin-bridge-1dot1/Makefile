@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := phin-bridge-1dot1
-PGK_RELEASE := 6
+PGK_RELEASE := 7
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -15,7 +15,7 @@ define Package/phin-bridge-1dot1
 endef
 
 define Package/phin-bridge-1dot1/description
-	The magical marvelous monstrous pHin Bridge 1.1
+	The magical marvelous and mysteriously monstrous pHin Bridge 1.1
 endef
 
 define Build/Prepare
@@ -32,12 +32,14 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/opt/phin/admin
 	$(INSTALL_DIR) $(1)/opt/phin/admin/js
 	$(INSTALL_DIR) $(1)/opt/phin/config
+	$(INSTALL_DIR) $(1)/root/.secureKeys/phin-bridge-keys
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/unlock $(1)/opt/phin/unlock
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/version $(1)/opt/phin/version
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/root/.secureKeys/phin-bridge-keys/public-key.pem $(1)/root/.secureKeys/phin-bridge-keys/public-key.pem
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless

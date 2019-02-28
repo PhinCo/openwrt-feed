@@ -4,12 +4,11 @@ START=99
 USE_PROCD=1
 
 BINFILE="/opt/phin/bridge"
-BINOPTS="-i /opt/phin/firmware"
+BINOPTS="-F -i /opt/phin/firmware"
 UNLOCK="/opt/phin/unlock"
 LOCKFILE="/var/tmp/bridge.lock"
 
 start_service() {
-  /bin/sh ${UNLOCK}
   procd_open_instance phin_bridge
   procd_set_param command ${BINFILE} ${BINOPTS}
   echo "Starting phin_bridge. lockfile is ${LOCKFILE}"
@@ -31,5 +30,5 @@ start_service() {
 
 stop_service() {
   echo "Stoping bridge"
-  /bin/sh ${UNLOCK}
+  ${UNLOCK}
 }

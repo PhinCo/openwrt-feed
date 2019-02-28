@@ -43,7 +43,6 @@ define Package/phin-bridge-1dot1/install
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/sysupgrade.conf $(1)/etc/sysupgrade.conf
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/combined.gbl $(1)/opt/phin/firmware/combined.gbl
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest.json $(1)/opt/phin/firmware/manifest.json
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png

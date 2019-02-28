@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := phin-bridge-1dot1
-PGK_RELEASE := 7
+PGK_RELEASE := 8
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -43,7 +43,8 @@ define Package/phin-bridge-1dot1/install
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/application.gbl $(1)/opt/phin/firmware/application.gbl
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/sysupgrade.conf $(1)/etc/sysupgrade.conf
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/combined.gbl $(1)/opt/phin/firmware/combined.gbl
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest.json $(1)/opt/phin/firmware/manifest.json
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/admin/index.html
@@ -56,7 +57,6 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/devView.js $(1)/opt/phin/admin/js/devView.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/statsView.js $(1)/opt/phin/admin/js/statsView.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/wifiView.js $(1)/opt/phin/admin/js/wifiView.js
-
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

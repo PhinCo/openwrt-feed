@@ -1,8 +1,11 @@
 {
-  "manifest-version": "0.1.0",
+  "manifest-version": "0.2.0",
   "application": {
-    "version": "0.3.0",
-    "git-hash": "bb6b11b-dirty",
-    "filename": "application.gbl"
+    "version": "0.4.0",
+    "git-hash": "25e7658",
+    "date": "1551315323",
+    "filename": "combined.gbl",
+    "combined": true,
+    "signed": false
   }
 }

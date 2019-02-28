@@ -23,8 +23,19 @@ class DevView{
 			<hr />
 			<div>
 				<h3> mock a monitor </h3>
-				<input name="hardwareId" class="txtin txtin"> 
-				<button name="changeSerialNumber" class="btn btn-sm" onclick="createSampleGenerator()"> add sample generator </button>
+				<label for="hardwareId"> HardwareId </label>
+				<input name="hardwareId" class="txtin txtin" placeholder="enter a monitor id"> 
+				<br />
+				<label for="internval"> Sample Send Interval </label>
+				<select name="interval">
+					<option value="10">10</option>
+					<option value="5">5</option>
+					<option value="3">3</option>
+					<option value="1">1</option>
+				</select>
+				<br />
+				<br />
+				<button name="addSampleGenerator" class="btn btn-sm" onclick="createSampleGenerator()"> add sample generator </button>
 				<div id="virtualMonitors"> </div>
 			</div>
 
@@ -43,7 +54,7 @@ class DevView{
 					<button name="provision" class="btn btn-sm" onclick="provision()"> Provision </button>
 				`
 		}
-		return `${title} <button name="provision" class="btn btn-sm" onclick="unprovision()"> unprovision </button>`
+		return `${title} <button name="provision" class="btn btn-sm" onclick="deprovision()"> deprovision </button>`
 	}
 
 	// getDevInfo
@@ -59,7 +70,7 @@ class DevView{
 		const progresser = new Progresser(devInfo)
 		progresser.start()
 
-		getJSON('dev', function(response, error) {
+		getJSON('/dev', function(response, error) {
 
 			const { generators, samplesURL, bridgeLogsURL, reportVersionURL, developmentMode, provisioned, serialNumber, phinRoot } = response
 
@@ -104,10 +115,17 @@ class DevView{
 			}
 		})
 	}
-
 }
-function unprovision() {
-	toaster(`I'm just not going to let you do that at the moment.`)
+
+function deprovision() {
+  getJSON('/dev/deprovision', (response, error) => {
+    if (response.success) {
+			toaster(`Unprovisioned your bridge`)
+		} else if (error) {
+			toaster(error.status + " returned from call to deprovision")
+		}
+    if (app.devView) app.devView.loadDevInfo()
+  })
 }
 
 function provision() {
@@ -118,27 +136,45 @@ function provision() {
     if (response.success) {
 			toaster(`Provisioned your bridge`)
 		} else if (error) {
-			toaster(error)
+			toaster(error.status + " returned from call to provision")
 		}
-    if (appComponents.devView) appComponents.devView.loadDevInfo()
+
+    if (app.devView) app.devView.loadDevInfo()
   })
 
 }
 
 function changeSerialNumber(){
-  console.log('unsupported')
+	console.log('unsupported')
+	const elem = document.getElementsByName('serialNumber')[0]
+  const serialNumber = elem.value
+
+  postJSON('/dev/serialnumber', {serialNumber}, (response, error) => {
+    if (response.success) {
+			toaster(response.message)
+		} else if (error) {
+			toaster(error.status + " returned from call to change serial number")
+		}
+
+    if (app.devView) app.devView.loadDevInfo()
+  })
 }
 
 function createSampleGenerator(){
   console.log(1)
   const elem = document.getElementsByName('hardwareId')[0]
-  const hardwareID = elem.value
-  console.log(hardwareID)
+	const hardwareID = elem.value
+	const intervalElem = document.getElementsByName('interval')[0]
+  const interval = Number(intervalElem.value)
 
-  postJSON('/dev/generator', {hardwareID}, (response, error) => {
+  console.log({ hardwareID, interval})
+	
+  postJSON('/dev/generator', {hardwareID, interval}, (response, error) => {
 		if (response.success){
 			toaster(`created generator for ${hardwareID}`)
-			if (appComponents.devView) appComponents.devView.loadDevInfo()	
+			if (app.devView) app.devView.loadDevInfo()	
+		} else if (error) {
+			toaster(error.status + " returned from call to change serial number")
 		}
   })
 }

@@ -2,10 +2,10 @@ function responseHandler(xhr, callback) {
   const DONE = 4 
   if (xhr.readyState === DONE) {
     if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText)
+      let response = xhr.responseText && xhr.responseText.length ? JSON.parse(xhr.responseText) : {}
       if (callback) callback(response)
     } else if (callback) {
-      callback(null,  {status: xhr.status, message: xhr.responseText})
+      callback({success: false},  {status: xhr.status, message: xhr.responseText})
     }
   }
 }

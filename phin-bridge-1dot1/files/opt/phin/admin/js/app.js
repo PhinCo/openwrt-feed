@@ -10,6 +10,10 @@ function showDev() {
   app.devView.render()
 }
 
+function showLogs() {
+  app.logFilesView.render()
+}
+
 function enableAllButtons () {
   elems = document.getElementsByClassName('btn')
   for (elem of elems) elem.disabled = false
@@ -44,4 +48,5 @@ function loadApp() {
   app.statsView = new StatsView(output)
   app.wifiView = new WifiView(output)
   app.devView = new DevView(output)
+  app.logFilesView = new LogFilesView(output)
 }

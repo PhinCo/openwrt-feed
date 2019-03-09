@@ -48,7 +48,6 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.jpg $(1)/opt/phin/admin/favicon.jpg
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/bridge-ico.svg $(1)/opt/phin/admin/bridge-ico.svg
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/wifiSelectView.js $(1)/opt/phin/admin/wifiSelectView.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/admin/index.html
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/logo.png $(1)/opt/phin/admin/logo.png
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/script.js $(1)/opt/phin/admin/script.js
@@ -57,8 +56,10 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/app.js $(1)/opt/phin/admin/js/app.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/common.js $(1)/opt/phin/admin/js/common.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/devView.js $(1)/opt/phin/admin/js/devView.js
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/logFilesView.js $(1)/opt/phin/admin/js/logFilesView.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/statsView.js $(1)/opt/phin/admin/js/statsView.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/wifiView.js $(1)/opt/phin/admin/js/wifiView.js
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/wifiSelectView.js $(1)/opt/phin/admin/js/wifiSelectView.js
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

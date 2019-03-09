@@ -1,7 +1,6 @@
 class StatsView {
-	constructor(targetDiv, currentSSID) {
+	constructor(targetDiv) {
 		this.targetDiv = targetDiv
-		this.currentSSID = currentSSID
 	}
 
 	monitorsList (monitorHardwareIDs) {
@@ -29,7 +28,6 @@ class StatsView {
 
 	render() {
 		self = this
-		console.log('getting stats')
 		self.targetDiv.innerHTML = ''
 
 		const progresser = new Progresser(self.targetDiv)
@@ -37,11 +35,11 @@ class StatsView {
 
 		getJSON('stats', function(response, error) {
 			progresser.stop()
-			const {provisioned, workerStartTime, ipaddress, monitorHardwareIDs } =response
+			const {provisioned, workerStartTime, ipaddress, monitorHardwareIDs } = response
 			if (!error) {
 				self.targetDiv.innerHTML =
 					`<div class="stats">
-					<h2> Bridge Status </h2>
+					<h2> Status </h2>
 					<table><thead><th></th><th></th></thead>
 					<tr><td>Provisioned:</td><td>${provisioned}</td></tr>
 					<tr><td>Booted at: </td><td>${workerStartTime}</td></tr>
@@ -53,6 +51,5 @@ class StatsView {
 				self.targetDiv.innerHTML = 'error: ' + error.message
 			}
 		})
-
 	}
 }

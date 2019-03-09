@@ -46,6 +46,9 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/combined.gbl $(1)/opt/phin/firmware/combined.gbl
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest.json $(1)/opt/phin/firmware/manifest.json
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.jpg $(1)/opt/phin/admin/favicon.jpg
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/bridge-ico.svg $(1)/opt/phin/admin/bridge-ico.svg
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/wifiSelectView.js $(1)/opt/phin/admin/wifiSelectView.js
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/admin/index.html
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/logo.png $(1)/opt/phin/admin/logo.png
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/script.js $(1)/opt/phin/admin/script.js

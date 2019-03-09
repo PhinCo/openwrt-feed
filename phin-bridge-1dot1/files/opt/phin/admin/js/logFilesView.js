@@ -18,8 +18,8 @@ class LogFilesView {
 			if (!error){
 				self.targetDiv.innerHTML =
 					`<div>
-						<h3>Log Files</h3>
-						<ul>
+						<h2>Log Files</h2>
+						<ul class="logData">
 							${self.renderLogs(response)}
 						</ul>
 					</div>`

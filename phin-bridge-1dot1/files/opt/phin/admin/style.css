@@ -17,9 +17,10 @@ body {
 }
 
 /* these fade in */
-h1 { opacity: 0; font-weight:normal;}
+h1 { font-weight:normal;}
 h2 { font-weight:normal;}
 h3 { font-weight:normal;}
+
 .buttonContainer { 
   opacity: 0; 
   margin-bottom: 15px;
@@ -99,12 +100,17 @@ li { margin-left: 0px; }
 
 .fade-out { animation: fadeOut ease 2s forwards; animation-delay: 2s}
 
+.faded-in { opacity:1; visibility: visible; }
+
+.faded-out { opacity:0; visibility: hidden; }
+
 @keyframes expandBridge {
   0% { max-width:420px; }
   100% { max-width:840px;}
 }
 
 .expand-bridge { animation: expandBridge 1s forwards; animation-delay: 1s;}
+.expanded-bridge { max-width: 840px;}
 
 #output {
   padding: 0px 15px;
@@ -238,4 +244,8 @@ select {
   color: white;
   padding: 9px;
   border-radius: 7px 7px 0px 0px;
+}
+
+.connected{
+  color: #faff65;
 }

@@ -1,11 +1,27 @@
 {
   "manifest-version": "0.2.0",
+  "release": {
+    "version": "0.4.0",
+    "date": "1552588071"
+  },
   "application": {
     "version": "0.4.0",
-    "git-hash": "25e7658",
-    "date": "1551315323",
+    "git-hash": "e0646f7",
+    "date": "1552621756",
     "filename": "combined.gbl",
     "combined": true,
     "signed": false
+  },
+  "bootloader": {
+    "version": "0.4.0",
+    "git-hash": "e0646f7",
+    "date": "1552621756",
+    "filename": "bootloader.s37"
+  },
+  "bootloader-combined": {
+    "version": "0.4.0",
+    "git-hash": "e0646f7",
+    "date": "1552621756",
+    "filename": "bootloader-combined.s37"
   }
 }

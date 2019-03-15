@@ -47,7 +47,8 @@ class WifiSelectView {
 		console.log(`going to submit ${this.ssid}, ${this.bss}, ${this.encryption}, ${this.wifiKey()} `)
 		const {ssid, bss, encryption} = this
 		const key = this.wifiKey()
-		const epoch = Date().getTime() / 1000 
+
+		const epoch = Math.floor(new Date().getTime() / 1000) + "" // this call expects a string
 		
 		postJSON('/wificonfigure', {ssid, bss, encryption, key, epoch} , (data) => {
 			console.log(data)

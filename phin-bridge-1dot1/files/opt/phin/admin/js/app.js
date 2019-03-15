@@ -44,9 +44,27 @@ function submitWifiSelectForm() {
   }
 }
 
-const app = {}
+// turns off the css animation
+function runAnimationOff() {
+  function replaceClass(classRemove, classReplace) {
+    const elems = document.getElementsByClassName(classRemove)
+    for ( i of elems ) {
+      console.log(i.id)
+      i.className = [i.className.replace(classRemove, ''), ' ', classReplace].join('')
+    }
+  }
+  replaceClass('fade-in', 'faded-in')
+  replaceClass('fade-out', 'faded-out')
+  replaceClass('expand-bridge', 'expanded-bridge')
 
-function loadApp() {
+  showStats()
+  enableAllButtons()
+  bridgeContent = document.getElementById('bridgeContent')
+  bridgeContent.className = 'bridgeContent'
+}
+
+// turns on the css animation
+function runAnimation(){
   disableAllButtons()
   setTimeout(() => {
     const elems = document.getElementsByClassName('light')
@@ -64,11 +82,24 @@ function loadApp() {
     bridgeContent = document.getElementById('bridgeContent')
     bridgeContent.className = 'bridgeContent'
   }, 2000)
+}
 
+const app = {}
+
+const animationOff = true
+
+function loadApp() {
   output = document.getElementById('output')
   // create our components
   app.statsView = new StatsView(output)
   app.wifiView = new WifiView(output)
   app.devView = new DevView(output)
   app.logFilesView = new LogFilesView(output)
+
+  if ( animationOff ) {
+    runAnimationOff()
+  } else {
+    runAnimation()
+  }
+
 }

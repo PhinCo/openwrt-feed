@@ -14,8 +14,8 @@ body {
   overflow-y: scroll;
   border: 5px solid lightgrey;
   border-radius: 4px;
+  
 }
-
 /* these fade in */
 h1 { font-weight:normal;}
 h2 { font-weight:normal;}
@@ -114,6 +114,16 @@ li { margin-left: 0px; }
 
 #output {
   padding: 0px 15px;
+  overflow-x: scroll;
+}
+
+.ipList {
+  overflow: scroll;
+}
+
+.devInfoDetail {
+  font-size: 12;
+  font-family: monospace;
 }
 
 .btn {

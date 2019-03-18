@@ -25,8 +25,8 @@ function showLogs() {
   app.logFilesView.render()
 }
 
-function showWifiSelect(ssid, bssid, encryption, current) {
-  app.wifiSelectView = new WifiSelectView(ssid, bssid, encryption, current)
+function showWifiSelect(ssid, encryption, current) {
+  app.wifiSelectView = new WifiSelectView(ssid, encryption, current)
   app.wifiSelectView.render()
 }
 
@@ -38,10 +38,25 @@ function cancelWifiSelectForm() {
 }
 
 function submitWifiSelectForm() {
-  console.log('submitWifiSelectForm')
   if (app.wifiSelectView) {
     app.wifiSelectView.submit()
   }
+}
+
+function showMonitorStats(hardwareId) {
+  return // for rightnow don't do anything.
+  // if (!app.monitorStats) {
+  //   app.monitorStats = {}
+  // }
+  // app.monitorStats[hardwareId] = new MonitorStatsView(hardwareId+'-details', hardwareId)
+  // app.monitorStats[hardwareId].render()
+}
+
+function hideMonitorStats(hardwareId) {
+  if (!app.monitorStats || app.monitorStats[hardwareId]) {
+    return
+  }
+  app.monitorStats[hardwareId].hide()
 }
 
 // turns off the css animation

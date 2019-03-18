@@ -104,10 +104,10 @@ class DevView{
 					<div class="ipList"> 
 						<h3> Configuration info </h3> 
 						<ul>
-							<li> phinRoot: ${phinRoot} </li>
-							<li> samples: ${samplesURL} </li> 
-							<li> bridgelogs: ${bridgeLogsURL}</li> 
-							<li> report version: ${reportVersionURL}</li>
+							<li> <strong> phinRoot: </strong> <span class="	"> ${phinRoot} </span></li>
+							<li> <strong> samples: </strong> <span class="devInfoDetail"> ${samplesURL} </span></li> 
+							<li> <strong> bridgelogs: </strong> <span class="devInfoDetail"> ${bridgeLogsURL} </span></li> 
+							<li> <strong> report version: </strong> <span class="devInfoDetail"> ${reportVersionURL} </span></li>
 						</ul>
 					</div>`
 			} else {

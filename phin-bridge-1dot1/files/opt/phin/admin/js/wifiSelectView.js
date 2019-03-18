@@ -1,8 +1,7 @@
 class WifiSelectView {
 
-	constructor(ssid, bss, encryption, current) {
+	constructor(ssid, encryption, current) {
 		this.ssid = ssid
-		this.bss = bss
 		this.encryption = encryption
 		this.current = current
 	}
@@ -44,13 +43,13 @@ class WifiSelectView {
 
 	submit() {
 		self = this
-		console.log(`going to submit ${this.ssid}, ${this.bss}, ${this.encryption}, ${this.wifiKey()} `)
-		const {ssid, bss, encryption} = this
+		console.log(`going to submit ${this.ssid}, ${this.encryption}`)
+		const {ssid, encryption} = this
 		const key = this.wifiKey()
 
 		const epoch = Math.floor(new Date().getTime() / 1000) + "" // this call expects a string
 		
-		postJSON('/wificonfigure', {ssid, bss, encryption, key, epoch} , (data) => {
+		postJSON('/wificonfigure', {ssid, encryption, key, epoch} , (data) => {
 			console.log(data)
 			if (data.success) {
 				const content = document.getElementById('wifiSelectContent')

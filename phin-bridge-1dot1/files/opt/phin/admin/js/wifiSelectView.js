@@ -7,6 +7,10 @@ class WifiSelectView {
 	}
 
 	render() {
+		// TODO: decide if we want the wifi to be selectable for users
+		// if not, uncomment this line / change the css for the wifi view and devrestrict the bridgeadmin rest api
+		// if (!app || !app.developmentMode) return
+
 		const renderIfCurrent = () => this.current ? `<div class="note"> You are currently connected to this network. Use this if you want to change the auth key</div>` : ''
 		const template = `
 		<div class="popupFormOverlayContainer">
@@ -43,14 +47,12 @@ class WifiSelectView {
 
 	submit() {
 		self = this
-		console.log(`going to submit ${this.ssid}, ${this.encryption}`)
 		const {ssid, encryption} = this
 		const key = this.wifiKey()
 
 		const epoch = Math.floor(new Date().getTime() / 1000) + "" // this call expects a string
 		
 		postJSON('/wificonfigure', {ssid, encryption, key, epoch} , (data) => {
-			console.log(data)
 			if (data.success) {
 				const content = document.getElementById('wifiSelectContent')
 				content.innerHTML = "Connected"

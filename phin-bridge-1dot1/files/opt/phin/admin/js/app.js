@@ -1,3 +1,22 @@
+class DevTabView {
+  constructor(targetDiv) {
+		this.targetDiv = targetDiv
+  }
+  
+  render() {
+    const self = this
+    getJSON('/stats', function(response, error) {
+      if (error) return
+
+      const { developmentMode } = response
+      app.developmentMode = developmentMode
+      if (developmentMode) {
+        self.targetDiv.innerHTML += `<button id="dev-tab" class="tab btn" onclick="showDev()"> Development </button>`
+      }
+    })
+  }
+}
+
 function selectTab(tab) {
   const elems = document.getElementsByClassName('tab')
   for ( i of elems ) i.className = i.className.replace('active', '')
@@ -7,6 +26,7 @@ function selectTab(tab) {
 
 function showStats() {
   selectTab('stats')
+  app.monitorStats = {}
   app.statsView.render()
 }
 
@@ -23,6 +43,12 @@ function showDev() {
 function showLogs() {
   selectTab('logs')
   app.logFilesView.render()
+}
+
+function refreshlogs() {
+  if(app && app.logFilesView){
+    app.logFilesView.refresh()
+  }
 }
 
 function showWifiSelect(ssid, encryption, current) {
@@ -44,19 +70,57 @@ function submitWifiSelectForm() {
 }
 
 function showMonitorStats(hardwareId) {
-  return // for rightnow don't do anything.
-  // if (!app.monitorStats) {
-  //   app.monitorStats = {}
-  // }
-  // app.monitorStats[hardwareId] = new MonitorStatsView(hardwareId+'-details', hardwareId)
-  // app.monitorStats[hardwareId].render()
+  if (!app.monitorStats[hardwareId]) {
+    const targetDiv = document.getElementById(hardwareId+'-details')
+    if(!targetDiv) return
+    app.monitorStats[hardwareId] = new MonitorStatsView(targetDiv, hardwareId)  
+  }
+
+  if (app.monitorStats[hardwareId].isActive() ){
+    app.monitorStats[hardwareId].hide()
+  } else {
+    app.monitorStats[hardwareId].render()
+  }
+}
+
+function getShowingMonitors() {
+  const hardwareIds = Object.keys(app.monitorStats)
+  let showing = []
+  if (hardwareIds.length > 0) {
+    showing = hardwareIds.reduce((showing, hardwareId) => {
+      if(app.monitorStats[hardwareId] && app.monitorStats[hardwareId].isActive()){
+        showing.push(hardwareId)
+      }
+      return showing
+    }, [])  
+  }
+  return showing
+}
+
+function refreshStats() {
+  const showing = getShowingMonitors()
+  app.monitorStats = {}
+  app.statsView.refresh(showing)
 }
 
 function hideMonitorStats(hardwareId) {
-  if (!app.monitorStats || app.monitorStats[hardwareId]) {
+  if (app.monitorStats[hardwareId]) {
     return
   }
   app.monitorStats[hardwareId].hide()
+}
+
+function toggleAllMonitorStats() {
+  const anyWereActive = !!getShowingMonitors().length
+  const monitorStatEntrys = Object.entries(app.monitorStats)
+  for (monitorStatEntry of monitorStatEntrys) {
+    const monitorStat = monitorStatEntry[1]
+    if (monitorStat.isActive() && anyWereActive){
+      monitorStat.hide()
+    } else if (!anyWereActive) {
+      monitorStat.render()
+    }
+  }
 }
 
 // turns off the css animation
@@ -64,7 +128,6 @@ function runAnimationOff() {
   function replaceClass(classRemove, classReplace) {
     const elems = document.getElementsByClassName(classRemove)
     for ( i of elems ) {
-      console.log(i.id)
       i.className = [i.className.replace(classRemove, ''), ' ', classReplace].join('')
     }
   }
@@ -97,6 +160,7 @@ function runAnimation(){
     bridgeContent = document.getElementById('bridgeContent')
     bridgeContent.className = 'bridgeContent'
   }, 2000)
+
 }
 
 const app = {}
@@ -104,9 +168,14 @@ const app = {}
 const animationOff = true
 
 function loadApp() {
+  const buttons = document.getElementById('buttons')
+  app.DevTabView = new DevTabView(buttons)
+  app.DevTabView.render()
+
   output = document.getElementById('output')
   // create our components
   app.statsView = new StatsView(output)
+  app.monitorStats = {}
   app.wifiView = new WifiView(output)
   app.devView = new DevView(output)
   app.logFilesView = new LogFilesView(output)

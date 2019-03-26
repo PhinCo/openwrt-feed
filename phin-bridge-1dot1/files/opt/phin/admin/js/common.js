@@ -46,18 +46,21 @@ function disableAllButtons () {
 
 class Progresser {
 
-  constructor () {
+  constructor (targetElement) {
     this.timeout = null
-    this.count = 0 
+    this.count = 0
+    this.targetElement = targetElement
   }
 
-  start (targetElement) {
+  start ( message = 'Loading') {
+    if (!this.targetElement) return
+
     disableAllButtons()
     this.timeout = setTimeout(() => {
-      if (this.count === 0 ) targetElement.innerHTML = 'Loading'
+      if (this.count === 0 ) this.targetElement.innerHTML = message
       this.count++
-      targetElement.innerHTML += '.'
-      this.start(targetElement)
+      this.targetElement.innerHTML += '.'
+      this.start(message)
     }, 500)
   }
 
@@ -86,5 +89,11 @@ function toaster(message) {
         elem.parentElement.removeChild(elem)
       }  
     }, 2000)
+}
 
+function formatDateOutput(d) {
+  if (!d) {
+    return "never"
+  }
+  return new Date(d).toLocaleString()
 }

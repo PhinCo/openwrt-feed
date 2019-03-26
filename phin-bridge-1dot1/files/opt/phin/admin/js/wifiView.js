@@ -39,7 +39,7 @@ class WifiView {
 		const self = this
 		self.targetDiv.innerHTML = ''
 		const progresser = new Progresser(self.targetDiv)
-		progresser.start(self.targetDiv)
+		progresser.start('Scanning networks')
 
 		getJSON('wifiscan', function(response, error) {
 			progresser.stop()

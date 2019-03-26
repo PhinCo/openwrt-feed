@@ -7,7 +7,7 @@ body {
 .container {
   width:90%;
   max-width:420px;
-  height: 90%;
+  height: 95%;
   padding:10px;
   margin:0 auto;
   background-color: white;
@@ -42,8 +42,10 @@ h3 { font-weight:normal;}
   border-radius:5px;
 }
 
-.logo { width: 100px; margin-left: 105px; float:right; margin-top:10px; margin-right:5px;}
+.logo { width: 175px; margin-left: 105px; float:right; margin-top:10px; margin-right:5px;}
 .bridgeIcon { width: 50px;}
+.monitorToggle { cursor: pointer;}
+.monitorIcon { width: 40px; position: relative; top: 13px;}
 
 .lightsContainer { width: 15px; margin: 100px auto;}
 .light {background-color: rgb(243, 169, 10); border: 1px solid #f5f11e; border-radius: 50%;
@@ -69,7 +71,7 @@ h3 { font-weight:normal;}
 .small {font-size: .5em;}
 button {line-height: 20px; border-radius: 4px;}
 ul { list-style:none; padding: 0px; }
-li { margin-left: 0px; }
+li { margin: 0px 0px 5px; }
 
 .wifiList {
   padding: 0px 20px;
@@ -81,8 +83,8 @@ li { margin-left: 0px; }
   color: white;
   text-align: center;
   padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 5px;
+  border-radius: 7px;
+  margin-bottom: 8px;
   cursor: pointer;
 }
 
@@ -154,11 +156,12 @@ li { margin-left: 0px; }
   background-image: linear-gradient(to bottom, rgb(86, 86, 87), rgb(176, 177, 179));
   text-decoration: none;
   border: solid #000000 1px;
+  cursor: none;
 }
 
 .btn-sm {
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 100;
   padding: 2px 5px;
   box-shadow: 0px 0px 0px 0px #FFFFFF;
@@ -184,7 +187,7 @@ li { margin-left: 0px; }
   padding: 5px;
   border-radius: 4px;
   box-shadow: 0px 0px 0px 0px lightgrey;
-  margin-bottom: 5px;
+  margin: 5px 15px;
   width: 150px;
 }
 .txtin-lg {
@@ -256,6 +259,58 @@ select {
   border-radius: 7px 7px 0px 0px;
 }
 
+.fieldError {
+  color: #f90505;
+  font-size:12px;
+}
+
+.fieldGood{
+  color:#1bea1b;
+  margin-left:5px;
+  font-size:20px;
+}
+
 .connected{
   color: #faff65;
+}
+
+.hardwareIdListItem {
+  color: #003e7e;
+  cursor: pointer;
+}
+
+/* .hardwareIdListItem-inactive::after {
+  content: "\0271A";
+  font-size:12px;
+}
+
+.hardwareIdListItem-active::after {
+  content: "\02716";
+  font-size:12px;
+} */
+
+.hardwareIdListItem-active::after {
+  content: "\02716";
+  font-size:12px;
+}
+
+.monitorstats {
+  font-size: 12px;
+  max-width:300px;
+  margin-bottom: 10px;
+}
+
+.monitorstats ul {
+  padding-left: 10px;
+  font-size: 12px;
+  max-width:300px;
+}
+.refresher {
+  float:right;
+  color: #003e7e;
+  cursor: pointer;
+  padding-right:10px;
+  font-size:26px;
+  transform: rotate(40deg);
+  font-weight: lighter;
 }

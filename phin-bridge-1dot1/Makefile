@@ -28,38 +28,20 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/opt/phin
-	$(INSTALL_DIR) $(1)/opt/phin/firmware
-	$(INSTALL_DIR) $(1)/opt/phin/admin
-	$(INSTALL_DIR) $(1)/opt/phin/admin/js
-	$(INSTALL_DIR) $(1)/opt/phin/config
-	$(INSTALL_DIR) $(1)/root/.secureKeys/phin-bridge-keys
+	$(INSTALL_DIR) $(1)/root/.secureKeys
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/unlock $(1)/opt/phin/unlock
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/version $(1)/opt/phin/version
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/root/.secureKeys/phin-bridge-keys/public-key.pem $(1)/root/.secureKeys/phin-bridge-keys/public-key.pem
+	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/admin $(1)/opt/phin/admin
+	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/firmware $(1)/opt/phin/firmware
+
+	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys $(1)/root/.secureKeys
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/combined.gbl $(1)/opt/phin/firmware/combined.gbl
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/firmware/manifest.json $(1)/opt/phin/firmware/manifest.json
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.png $(1)/opt/phin/admin/favicon.png
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/favicon.jpg $(1)/opt/phin/admin/favicon.jpg
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/bridge-ico.svg $(1)/opt/phin/admin/bridge-ico.svg
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/index.html $(1)/opt/phin/admin/index.html
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/logo.png $(1)/opt/phin/admin/logo.png
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/script.js $(1)/opt/phin/admin/script.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/style.css $(1)/opt/phin/admin/style.css
-
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/app.js $(1)/opt/phin/admin/js/app.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/common.js $(1)/opt/phin/admin/js/common.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/devView.js $(1)/opt/phin/admin/js/devView.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/logFilesView.js $(1)/opt/phin/admin/js/logFilesView.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/statsView.js $(1)/opt/phin/admin/js/statsView.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/wifiView.js $(1)/opt/phin/admin/js/wifiView.js
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/admin/js/wifiSelectView.js $(1)/opt/phin/admin/js/wifiSelectView.js
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

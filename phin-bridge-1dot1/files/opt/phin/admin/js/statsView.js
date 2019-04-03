@@ -149,7 +149,7 @@ class StatsView {
 			const { 
 				serialNumber,
 				softwareRevision,
-				phinVersion,
+				softwareVersion,
 				deviceName,
 				provisioned, 
 				workerStartTime, 
@@ -165,7 +165,7 @@ class StatsView {
 					${self.provisioned(provisioned)}	
 					<table style="min-width: 50%;"><thead><th></th><th></th></thead>
 					<tr><td>Serial Number: </td><td>${serialNumber}</td></tr>
-					<tr><td>Phin Version: </td><td>${phinVersion}</td></tr>
+					<tr><td>Phin Version: </td><td>${softwareVersion}</td></tr>
 					<tr><td>Software Revision: </td><td>${softwareRevision}</td></tr>
 					<tr><td>Device Name: </td><td>${deviceName}</td></tr>
 					<tr><td>Started at: </td><td>${formatDateOutput(workerStartTime)}</td></tr>

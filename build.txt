@@ -1,1 +1,1 @@
-feed=0.1.15_277fc5a,ts=1554326763,app=0.3.6_751f5bb,bluegecko_app=1.0.0,bluegecko_release=1.0.0
+feed=0.1.15_8cf6648,ts=1554326853,app=0.3.6_751f5bb,bluegecko_app=1.0.0,bluegecko_release=1.0.0

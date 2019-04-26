@@ -19,5 +19,9 @@
     "git-hash": "c595754",
     "date": "1556152024",
     "filename": "bootloader-combined.s37"
+  },
+  "release": {
+    "version": "1.0.2",
+    "date": "1556152039"
   }
 }

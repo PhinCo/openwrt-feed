@@ -41,7 +41,6 @@ define Package/phin-bridge-1dot1/install
 	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys $(1)/root/.secureKeys
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/wireless $(1)/etc/config/wireless
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

@@ -1,8 +1,8 @@
 {
   "manifest-version": "0.3.0",
-  "version": "2.0.0",
-  "hash": "a097a53",
-  "timestamp": "1557190709",
+  "version": "2.0.1",
+  "hash": "8705c7e",
+  "timestamp": "1557255547",
   "insecure-application": {
     "filename": "application.gbl"
   },
@@ -16,7 +16,6 @@
     "filename": "bootloader-combined.s37"
   },
   "release": {
-    "timestamp": "1557190759",
-    "force": true
+    "timestamp": "1557255559"
   }
 }

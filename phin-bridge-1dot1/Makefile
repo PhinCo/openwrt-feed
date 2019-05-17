@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := phin-bridge-1dot1
-PGK_RELEASE := 8
+PGK_RELEASE := 9
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
@@ -28,7 +28,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/opt/phin
-	$(INSTALL_DIR) $(1)/root/.secureKeys
+	$(INSTALL_DIR) $(1)/root
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
@@ -38,7 +38,7 @@ define Package/phin-bridge-1dot1/install
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/admin $(1)/opt/phin/admin
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/firmware $(1)/opt/phin/firmware
 
-	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys $(1)/root/.secureKeys
+	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys/ $(1)/root
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
 endef

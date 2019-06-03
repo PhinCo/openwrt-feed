@@ -38,7 +38,8 @@ define Package/phin-bridge-1dot1/install
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/admin $(1)/opt/phin/admin
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/firmware $(1)/opt/phin/firmware
 	$(CP) -R $(PKG_BUILD_DIR)/files/root/scripts $(1)/root/scripts
-	chmod +x $(1)/opt/phin/scripts/*
+	chmod +x $(1)/root/scripts/*
+
 	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys/ $(1)/root
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network

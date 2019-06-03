@@ -1,0 +1,17 @@
+config wifi-device  mt7628
+	option type     mt7628
+	option channel  'auto'
+	option htmode 'HT40'
+	option hwmode '11ng'
+	option country     'CN'
+	option region      '1'
+	option txpower	'20'
+
+config wifi-iface
+	option device   mt7628
+	option ifname   ra0
+	option network  lan
+	option mode     ap
+	option ssid     LEDE
+	option encryption psk2
+	option key      goodlife

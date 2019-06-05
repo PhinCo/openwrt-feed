@@ -13,4 +13,5 @@ Helpful Tips (Don't fuck it up):
   /var/log - phin brige logs
   logread -f -e bridge - tail bridge logs
   service phin_bridge disable && reboot - disable the service
+  cat /etc/phin_version - build info
 -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~

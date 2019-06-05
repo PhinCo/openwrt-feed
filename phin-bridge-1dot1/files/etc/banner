@@ -1,0 +1,16 @@
+       _   _ _      ______      _     _            __    __
+      | | | (_)     | ___ \    (_)   | |          /  |  /  |
+ _ __ | |_| |_ _ __ | |_/ /_ __ _  __| | __ _  ___`| |  `| |
+| '_ \|  _  | | '_ \| ___ \ '__| |/ _` |/ _` |/ _ \| |   | |
+| |_) | | | | | | | | |_/ / |  | | (_| | (_| |  __/| |___| |_
+| .__/\_| |_/_|_| |_\____/|_|  |_|\__,_|\__, |\___\___(_)___/
+| |                                      __/ |
+|_| (c) Connected Yard, Inc.            |___/
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+Helpful Tips (Don't fuck it up):
+  /root/scripts - tools for inspecting bridge wifi config
+  /opt/phin - the phin bridge application and it's files
+  /var/log - phin brige logs
+  logread -f -e bridge - tail bridge logs
+  service phin_bridge disable && reboot - disable the service
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+uci -q batch <<-EOT
+    delete wireless.@wifi-iface[0]
+EOT

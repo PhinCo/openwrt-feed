@@ -43,6 +43,8 @@ define Package/phin-bridge-1dot1/install
 	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys/ $(1)/root
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
+
+	$(CP) -R $(PKG_BUILD_DIR)/files/etc/uci-defaults $(1)/files/etc
 endef
 
 $(eval $(call BuildPackage,phin-bridge-1dot1))

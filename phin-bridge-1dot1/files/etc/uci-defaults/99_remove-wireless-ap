@@ -8,6 +8,7 @@ uci -q batch <<-EOT
         set wireless.sta.network=wwan
         set wireless.sta.mode=sta
         set wireless.sta.ifname=apcli0
+        delete wireless.@wifi-iface[0].mode
         delete wireless.@wifi-iface[0].ssid
         delete wireless.@wifi-iface[0].encryption
         delete wireless.@wifi-iface[0].key

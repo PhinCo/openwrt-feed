@@ -1,5 +1,14 @@
 #!/bin/sh
 
 uci -q batch <<-EOT
-    delete wireless.@wifi-iface[0]
+        uci set wireless.mt7628.country=US
+        uci set wireless.mt7628.region=0
+        uci set wireless.sta=wifi-iface
+        uci set wireless.sta.device=mt7628
+        uci set wireless.sta.network=wwan
+        uci set wireless.sta.mode=sta
+        uci set wireless.sta.ifname=apcli0
+        uci delete wireless.@wifi-iface[0].ssid
+        uci delete wireless.@wifi-iface[0].encryption
+        uci delete wireless.@wifi-iface[0].key
 EOT

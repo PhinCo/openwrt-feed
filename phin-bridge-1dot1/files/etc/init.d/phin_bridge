@@ -12,7 +12,7 @@ UNLOCK="/opt/phin/unlock"
 
 set_cron() {
   REBOOTED_FILE="/etc/phin-auto-rebooted.txt"
-  if [ ! -f "$REBOOTED_FILE" ]; then
+  if [[ ! -f "$REBOOTED_FILE" ]]; then
     echo "PREPARING CRON"
     RANDMIN=$(awk -v min=0 -v max=59 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
     RANDHR=$(awk -v min=0 -v max=23 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')

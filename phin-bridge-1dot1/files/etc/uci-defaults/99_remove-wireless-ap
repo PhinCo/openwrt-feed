@@ -12,6 +12,4 @@ uci -q batch <<-EOT
         delete wireless.@wifi-iface[0].ssid
         delete wireless.@wifi-iface[0].encryption
         delete wireless.@wifi-iface[0].key
-
-        set system.@system[0].ttylogin='1'
 EOT

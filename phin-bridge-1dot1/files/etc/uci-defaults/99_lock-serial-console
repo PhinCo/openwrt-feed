@@ -1,0 +1,5 @@
+#!/bin/sh
+
+uci -q batch <<-EOT
+        set system.@system[0].ttylogin='1'
+EOT

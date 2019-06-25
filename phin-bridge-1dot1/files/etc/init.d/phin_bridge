@@ -10,6 +10,17 @@ BINOPTS="-F"
 
 UNLOCK="/opt/phin/unlock"
 
+set_cron() {
+  REBOOTED_FILE="/etc/phin-auto-rebooted.txt"
+  if [ ! -f "$REBOOTED_FILE" ]; then
+    echo "PREPARING CRON"
+    RANDMIN=$(awk -v min=0 -v max=59 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
+    RANDHR=$(awk -v min=0 -v max=23 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
+    CRONTAB="00 00"
+    echo "SETTING CRON RESTART AS: $CRONTAB"
+    echo $CRONTAB '* * * sleep 70 && touch /etc/banner && date >' $REBOOTED_FILE '&& reboot' > /etc/crontabs/root
+  fi
+}
 
 set_hostname() {
   SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
@@ -19,6 +30,7 @@ set_hostname() {
 
 start_service() {
   set_hostname
+  set_cron
   procd_open_instance phin_bridge
   procd_set_param command ${BINFILE} ${BINOPTS} -i ${FIRMWARE} -a ${ADMIN}
 

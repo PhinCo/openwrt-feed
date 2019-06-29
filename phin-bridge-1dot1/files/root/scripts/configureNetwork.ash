@@ -1,15 +1,26 @@
 #!/bin/ash
-if [ $# -ne 3 ]
+if [ $# -ne 4 ]
   then
     echo "missing arguments"
-    echo "configureNetwork <ssid> <channel> <key>"
+    echo "configureNetwork <ssid> <channel> <encryption> <key>"
     echo "configures the network on a pHin bridge"
+    echo "valid encryption type settings are psk, psk2, wep and none"
     exit 1
 fi
 
 ssid=$1
 channel=$2
+encryption=$3
 key=$3
+
+if [ $encryption == "wep" -o $encryption == "psk" -o $encryption == "psk2" -o $encryption == "none" ]
+then
+  echo "Valid encryption option"
+else
+  echo "Invalid encryption option"
+  echo "Valid encryption type settings are psk, psk2, wep and none"
+  exit 1
+fi
 
 echo "setting network to $ssid on channel $channel"
 
@@ -28,7 +39,7 @@ uci set wireless.sta.network=wwan
 uci set wireless.sta.mode=sta
 uci set wireless.sta.ifname=apcli0
 uci set wireless.sta.ssid=$ssid
-uci set wireless.sta.encryption=psk2
+uci set wireless.sta.encryption=$encryption
 uci set wireless.sta.key=$key
 uci commit wireless
 

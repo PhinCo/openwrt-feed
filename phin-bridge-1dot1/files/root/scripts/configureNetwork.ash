@@ -11,7 +11,7 @@ fi
 ssid=$1
 channel=$2
 encryption=$3
-key=$3
+key=$4
 
 if [ $encryption == "wep" -o $encryption == "psk" -o $encryption == "psk2" -o $encryption == "none" ]
 then

@@ -40,7 +40,17 @@ uci set wireless.sta.mode=sta
 uci set wireless.sta.ifname=apcli0
 uci set wireless.sta.ssid=$ssid
 uci set wireless.sta.encryption=$encryption
-uci set wireless.sta.key=$key
+if [ $encryption == "wep" ]
+then
+  uci delete wireless.sta.key
+  uci set wireless.sta.key1=$key
+elif [ $encryption == "none"]
+  uci delete wireless.sta.key
+  uci delete wireless.sta.key1
+else
+  uci set wireless.sta.key=$key
+  uci delete wireless.sta.key1
+fi
 uci commit wireless
 
 echo "configured wireless interface"

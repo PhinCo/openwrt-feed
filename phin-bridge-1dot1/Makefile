@@ -28,6 +28,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/opt/phin
+	$(INSTALL_DIR) $(1)/opt/phin/cache
 	$(INSTALL_DIR) $(1)/root
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge

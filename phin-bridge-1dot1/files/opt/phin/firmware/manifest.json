@@ -14,5 +14,8 @@
   },
   "bootloader-combined": {
     "filename": "bootloader-combined.s37"
+  },
+  "release": {
+    "timestamp": "1561495868"
   }
 }

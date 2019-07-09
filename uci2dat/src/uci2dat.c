@@ -171,7 +171,7 @@ param CFG_ELEMENTS[] =
     {"CountryRegion", "region", {0}, hooker,  "1"},
     {"CountryRegionABand", "aregion", {0}, hooker, "7"},
     {"CountryCode", "country", {0}, hooker, NULL},
-    {"BssidNum", NULL, {0}, hooker,  "1"},
+    {"BssidNum", "bssidnum", {0}, hooker,  "1"},
     {"SSID1", NULL, {0}, hooker,  "OpenWrt"},
     {"SSID2", NULL, {0}, hooker,  NULL},
     {"SSID3", NULL, {0}, hooker,  NULL},

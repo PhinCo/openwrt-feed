@@ -640,12 +640,15 @@ void parse_uci(char * arg)
     uci_foreach_element(&uci_wireless->sections, e) {
         struct uci_section *s = uci_to_section(e);
 
+        printf("%s(), looking at section: %s!\n", __FUNCTION__, s->type);
         if (!strcmp(s->type, "wifi-iface")) {
             value = NULL;
             value = uci_lookup_option_string(uci_ctx, s, "device");
 
+            printf("%s(), found wifi-iface\n", __FUNCTION__);
 			/* Search device index */
             for (cur_dev = 0; cur_dev < DEVNUM_MAX; cur_dev++) {
+                printf("%s(), looking at wifi-iface cfg: %s\n", __FUNCTION__, wifi_cfg[cur_dev].devname);
                 if (!strcmp(value, wifi_cfg[cur_dev].devname))
                     break;
             }
@@ -723,6 +726,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].ssid.value);
 		}
     } else if (!strcmp(p->dat_key, "BssidNum")) {
+        printf("%s() strcmp(p->dat_key=%s, %d, %d\n", __FUNCTION__, strcmp(p->dat_key), N, wifi_cfg[N].vifnum );
         FPRINT(fp, p, "%d", wifi_cfg[N].vifnum);
     } else if (!strcmp(p->dat_key, "EncrypType")) {
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
@@ -1129,15 +1133,17 @@ void init_wifi_cfg(void)
 
     uci_foreach_element(&uci_wireless->sections, e)
     {
-        struct uci_section *s = uci_to_section(e);
-        if(0 == strcmp(s->type, "wifi-device"))
-        {
+       struct uci_section *s = uci_to_section(e);
+       printf("%s(), inspecting section: %s!\n", __FUNCTION__, s->type);
+       if(0 == strcmp(s->type, "wifi-device"))
+       {
             for(i=0; i<DEVNUM_MAX; i++)
             {
-                if(0 == strlen(wifi_cfg[i].devname))
+               if(0 == strlen(wifi_cfg[i].devname))
                 {
                     strncpy(wifi_cfg[i].devname, s->e.name, sizeof(wifi_cfg[i].devname));
-                    break;
+                    printf("%s(), noting name wifi-device %d (%s): %s!\n", __FUNCTION__, i, wifi_cfg[i].devname);
+                   break;
                 }
             }
 
@@ -1233,7 +1239,7 @@ int main(int argc, char ** argv)
         return NG;
     }
 
-#if 0
+#if 1
     uci_foreach_element(&uci_wireless->sections, e)
     {
         struct uci_section *s   = uci_to_section(e);

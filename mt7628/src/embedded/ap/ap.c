@@ -770,7 +770,7 @@ VOID APStartUp(RTMP_ADAPTER *pAd)
 	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_TRACE, ("===> APStartUp\n"));
 
     return;
-    
+
 #ifdef INF_AMAZON_SE
 	for (idx=0;idx<NUM_OF_TX_RING;idx++)
 		pAd->BulkOutDataSizeLimit[i]=24576;

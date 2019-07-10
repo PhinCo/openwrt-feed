@@ -685,9 +685,9 @@ void parse_uci(char * arg)
 
             printf("%s(), Built wifi_cfg[%d].vifs[%d] wifi-iface: %s\n", __FUNCTION__, cur_dev, cur_vif, value);
             printf("      mode=%s, ssid=%s, disabled=%s\n",
-                wifi_cfg[cur_dev].vifs[cur_vif].mode,
-                wifi_cfg[cur_dev].vifs[cur_vif].ssid,
-                wifi_cfg[cur_dev].vifs[cur_vif].disabled);
+                wifi_cfg[cur_dev].vifs[cur_vif].mode.value,
+                wifi_cfg[cur_dev].vifs[cur_vif].ssid.value,
+                wifi_cfg[cur_dev].vifs[cur_vif].disabled.value);
 			wifi_cfg[cur_dev].vifnum++;
 
 		}

@@ -660,7 +660,6 @@ void parse_uci(char * arg)
 
             value = NULL;
             value = uci_lookup_option_string(uci_ctx, s, "ifname");
-            printf("%s(), wifi-iface: %s\n", __FUNCTION__, value);
 
             cur_vif = wifi_cfg[cur_dev].vifnum;
 
@@ -684,6 +683,11 @@ void parse_uci(char * arg)
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].preauth, value);
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].pmkcacheperiod, value);
 
+            printf("%s(), Built wifi_cfg[%d].vifs[%d] wifi-iface: %s\n", __FUNCTION__, cur_dev, cur_vif, value);
+            printf("      mode=%s, ssid=%s, disabled=%s\n", __FUNCTION__,
+                wifi_cfg[cur_dev].vifs[cur_vif].mode,
+                wifi_cfg[cur_dev].vifs[cur_vif].ssid,
+                wifi_cfg[cur_dev].vifs[cur_vif].disabled);
 			wifi_cfg[cur_dev].vifnum++;
 
 		}
@@ -726,7 +730,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].ssid.value);
 		}
     } else if (!strcmp(p->dat_key, "BssidNum")) {
-        printf("%s() strcmp(p->dat_key=%s, %d, %d\n", __FUNCTION__, p->dat_key, N, wifi_cfg[N].vifnum );
+        printf("%s() p->dat_key=%s, %d, %d\n", __FUNCTION__, p->dat_key, N, wifi_cfg[N].vifnum );
         FPRINT(fp, p, "%d", wifi_cfg[N].vifnum);
     } else if (!strcmp(p->dat_key, "EncrypType")) {
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {

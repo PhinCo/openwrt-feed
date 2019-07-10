@@ -769,8 +769,7 @@ VOID APStartUp(RTMP_ADAPTER *pAd)
 
 	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_TRACE, ("===> APStartUp\n"));
 
-error/0;
-
+    // SAE: Never start an access point!
     return;
 
 #ifdef INF_AMAZON_SE

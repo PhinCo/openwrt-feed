@@ -684,7 +684,7 @@ void parse_uci(char * arg)
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].pmkcacheperiod, value);
 
             printf("%s(), Built wifi_cfg[%d].vifs[%d] wifi-iface: %s\n", __FUNCTION__, cur_dev, cur_vif, value);
-            printf("      mode=%s, ssid=%s, disabled=%s\n", __FUNCTION__,
+            printf("      mode=%s, ssid=%s, disabled=%s\n",
                 wifi_cfg[cur_dev].vifs[cur_vif].mode,
                 wifi_cfg[cur_dev].vifs[cur_vif].ssid,
                 wifi_cfg[cur_dev].vifs[cur_vif].disabled);

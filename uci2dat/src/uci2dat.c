@@ -726,7 +726,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].ssid.value);
 		}
     } else if (!strcmp(p->dat_key, "BssidNum")) {
-        printf("%s() strcmp(p->dat_key=%s, %d, %d\n", __FUNCTION__, strcmp(p->dat_key), N, wifi_cfg[N].vifnum );
+        printf("%s() strcmp(p->dat_key=%s, %d, %d\n", __FUNCTION__, p->dat_key, N, wifi_cfg[N].vifnum );
         FPRINT(fp, p, "%d", wifi_cfg[N].vifnum);
     } else if (!strcmp(p->dat_key, "EncrypType")) {
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
@@ -1142,7 +1142,7 @@ void init_wifi_cfg(void)
                if(0 == strlen(wifi_cfg[i].devname))
                 {
                     strncpy(wifi_cfg[i].devname, s->e.name, sizeof(wifi_cfg[i].devname));
-                    printf("%s(), noting name wifi-device %d (%s): %s!\n", __FUNCTION__, i, wifi_cfg[i].devname);
+                    printf("%s(), noting name wifi-device %d (%s)\n", __FUNCTION__, i, wifi_cfg[i].devname);
                    break;
                 }
             }

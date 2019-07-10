@@ -767,10 +767,7 @@ VOID APStartUp(RTMP_ADAPTER *pAd)
 	BOOLEAN bWmmCapable = FALSE;
 	EDCA_PARM *edca_param;
 
-	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_TRACE, ("===> APStartUp\n"));
-
-    // SAE: Never start an access point!
-    return;
+	MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_NOISY, ("===> APStartUp\n"));
 
 #ifdef INF_AMAZON_SE
 	for (idx=0;idx<NUM_OF_TX_RING;idx++)
@@ -780,6 +777,7 @@ VOID APStartUp(RTMP_ADAPTER *pAd)
 	AsicDisableSync(pAd);
 	for (idx = 0; idx < pAd->ApCfg.BssidNum; idx++)
 	{
+	    MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_NOISY, ("=====> APStartUp idx: %d\n", idx));
 		BSS_STRUCT *pMbss = &pAd->ApCfg.MBSSID[idx];
 		struct wifi_dev *wdev = &pMbss->wdev;
 		UCHAR tr_tb_idx = MAX_LEN_OF_MAC_TABLE + idx;
@@ -787,6 +785,7 @@ VOID APStartUp(RTMP_ADAPTER *pAd)
 		pMbss->mbss_idx = idx;
 		if ((pMbss->SsidLen <= 0) || (pMbss->SsidLen > MAX_LEN_OF_SSID))
 		{
+	        MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_NOISY, ("=====> APStartUp HT_AP\n"));
 			NdisMoveMemory(pMbss->Ssid, "HT_AP", 5);
 			pMbss->Ssid[5] = '0' + idx;
 			pMbss->SsidLen = 6;

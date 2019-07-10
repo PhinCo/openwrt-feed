@@ -90,7 +90,7 @@ static inline void netdev_priv_set(struct net_device *dev, void *priv)
 }
 
 
-ULONG RTDebugLevel = DBG_LVL_ERROR;
+ULONG RTDebugLevel = DBG_LVL_NOISY; // SAE: Getting some extra help here
 ULONG RTDebugFunc = 0;
 ULONG DebugCategory = DBG_CAT_ALL;
 

@@ -1239,7 +1239,7 @@ int main(int argc, char ** argv)
         return NG;
     }
 
-#if 1
+#if 0
     uci_foreach_element(&uci_wireless->sections, e)
     {
         struct uci_section *s   = uci_to_section(e);

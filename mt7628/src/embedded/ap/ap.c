@@ -776,7 +776,6 @@ VOID APStartUp(RTMP_ADAPTER *pAd)
 #endif /* INF_AMAZON_SE */
 
 	AsicDisableSync(pAd);
-	pAd->ApCfg.BssidNum = 0;	// SAE: don't run this sheet
 	for (idx = 0; idx < pAd->ApCfg.BssidNum; idx++)
 	{
 	    MTWF_LOG(DBG_CAT_ALL, DBG_SUBCAT_ALL, DBG_LVL_NOISY, ("=====> APStartUp idx: %d\n", idx));

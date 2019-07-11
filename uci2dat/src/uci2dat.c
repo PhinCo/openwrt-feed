@@ -723,7 +723,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].ssid.value);
 		}
     } else if (!strcmp(p->dat_key, "BssidNum")) {
-        FPRINT(fp, p, "%d", 0) // SAE: Force it, was: wifi_cfg[N].vifnum);
+        FPRINT(fp, p, "%d", 0); // SAE: Force it, was: wifi_cfg[N].vifnum);
     } else if (!strcmp(p->dat_key, "EncrypType")) {
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
 			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "ap"))

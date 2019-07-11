@@ -44,7 +44,8 @@ if [ $encryption == "wep" ]
 then
   uci delete wireless.sta.key
   uci set wireless.sta.key1=$key
-elif [ $encryption == "none"]
+elif [ $encryption == "none" ]
+then
   uci delete wireless.sta.key
   uci delete wireless.sta.key1
 else

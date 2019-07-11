@@ -2,7 +2,7 @@
   "manifest-version": "0.3.0",
   "version": "2.0.2",
   "hash": "15ecc1d",
-  "timestamp": "1562643184",
+  "timestamp": "1562641594",
   "insecure-application": {
     "filename": "application.gbl"
   },

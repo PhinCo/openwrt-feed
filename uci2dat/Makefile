@@ -36,18 +36,13 @@ TARGET_CFLAGS += -Wno-error=format-security
 define Build/Configure
 endef
 
-# SAE: Being a dirty bastard and shunting uci2dat
+
 define Package/uci2dat/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) ./src/uci2dat.sh $(1)/usr/bin/uci2dat
-endef
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uci2dat $(1)/usr/bin
 
-#define Package/uci2dat/install
-#	$(INSTALL_DIR) $(1)/usr/bin
-#	$(INSTALL_BIN) $(PKG_BUILD_DIR)/uci2dat $(1)/usr/bin
-#
-#	$(CP) ./files/* $(1)
-#endef
+	$(CP) ./files/* $(1)
+endef
 
 
 $(eval $(call BuildPackage,uci2dat))

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
+
+uci -q batch <<-EOT
+  set system.@system[0].hostname=${SERIAL_NUMBER}
+EOT

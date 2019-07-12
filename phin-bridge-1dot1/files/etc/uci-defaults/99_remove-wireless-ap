@@ -1,5 +1,11 @@
 #!/bin/sh
 
+SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
+RAND1=$(awk -v min=10000000 -v max=99999999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
+RAND2=$(awk -v min=10000000 -v max=99999999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
+RAND3=$(awk -v min=10000000 -v max=99999999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
+KEY=${RAND1}${RAND2}${RAND3}
+
 uci -q batch <<-EOT
         set wireless.mt7628.country=US
         set wireless.mt7628.region=0
@@ -8,8 +14,9 @@ uci -q batch <<-EOT
         set wireless.sta.network=wwan
         set wireless.sta.mode=sta
         set wireless.sta.ifname=apcli0
-        delete wireless.@wifi-iface[0].mode
-        delete wireless.@wifi-iface[0].ssid
-        delete wireless.@wifi-iface[0].encryption
-        delete wireless.@wifi-iface[0].key
+        set wireless.@wifi-iface[0].ssid=phin-bridge-${SERIAL_NUMBER}
+        set wireless.@wifi-iface[0].mode=ap
+        set wireless.@wifi-iface[0].encryption=psk2
+        set wireless.@wifi-iface[0].key=${KEY}
+        set wireless.@wifi-iface[0].hidden=1
 EOT

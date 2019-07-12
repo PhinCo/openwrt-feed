@@ -171,7 +171,7 @@ param CFG_ELEMENTS[] =
     {"CountryRegion", "region", {0}, hooker,  "1"},
     {"CountryRegionABand", "aregion", {0}, hooker, "7"},
     {"CountryCode", "country", {0}, hooker, NULL},
-    {"BssidNum", NULL, {0}, hooker,  "1"},
+    {"BssidNum", "bssidnum", {0}, hooker,  "1"},
     {"SSID1", NULL, {0}, hooker,  "OpenWrt"},
     {"SSID2", NULL, {0}, hooker,  NULL},
     {"SSID3", NULL, {0}, hooker,  NULL},
@@ -772,6 +772,7 @@ void hooker(FILE * fp, param * p, const char * devname)
             FPRINT(fp, p, "%s", enc);
         }
     } else if (!strcmp(p->dat_key, "HideSSID")) {
+        FPRINT(fp, p, wifi_cfg[N].vifs[i].hidden.value[0]=='1'?"1":"0");
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
 			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "ap"))
 				continue;
@@ -1043,7 +1044,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 		}
 	} else {
 		/* the rest part is quite simple! */
-        printf("%s(), fall through setting: %s=%s", p->dat_key, p->value);
+        printf("%s(), fall through setting: %s=%s", __FUNCTION__, p->dat_key, p->value);
         FPRINT(fp, p, "%s", p->value);
     }
 }

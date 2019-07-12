@@ -722,8 +722,9 @@ void hooker(FILE * fp, param * p, const char * devname)
 		if (!strcmp(wifi_cfg[N].vifs[i].mode.value, "ap")) {
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].ssid.value);
 		}
-    } else if (!strcmp(p->dat_key, "BssidNum")) {
-        FPRINT(fp, p, "%d", 0); // SAE: Force it, was: wifi_cfg[N].vifnum);
+// SAE: Use fall through instead --- default behavior was "2"
+//    } else if (!strcmp(p->dat_key, "BssidNum")) {
+//        FPRINT(fp, p, "%d", wifi_cfg[N].vifnum);
     } else if (!strcmp(p->dat_key, "EncrypType")) {
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
 			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "ap"))
@@ -1042,6 +1043,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 		}
 	} else {
 		/* the rest part is quite simple! */
+        printf("%s(), fall through setting: %s=%s", p->name, p->value);
         FPRINT(fp, p, "%s", p->value);
     }
 }

@@ -1043,7 +1043,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 		}
 	} else {
 		/* the rest part is quite simple! */
-        printf("%s(), fall through setting: %s=%s", p->name, p->value);
+        printf("%s(), fall through setting: %s=%s", p->dat_key, p->value);
         FPRINT(fp, p, "%s", p->value);
     }
 }

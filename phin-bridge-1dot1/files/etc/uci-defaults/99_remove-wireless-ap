@@ -1,10 +1,7 @@
 #!/bin/sh
 
 SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
-RAND1=$(awk -v min=10000000 -v max=99999999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
-RAND2=$(awk -v min=10000000 -v max=99999999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
-RAND3=$(awk -v min=10000000 -v max=99999999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')
-KEY=${RAND1}${RAND2}${RAND3}
+KEY=$(head /dev/urandom | tr -dc 'A-Za-z0-9#%&()*+,-./:;<=>?@[\]^_{|}~' | head -c 33)
 
 uci -q batch <<-EOT
         set wireless.mt7628.country=US

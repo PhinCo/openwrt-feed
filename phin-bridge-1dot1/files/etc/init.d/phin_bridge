@@ -22,14 +22,7 @@ set_cron() {
   fi
 }
 
-set_hostname() {
-  SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
-  uci set system.@system[0].hostname=${SERIAL_NUMBER}
-  uci commit system
-}
-
 start_service() {
-  set_hostname
   set_cron
   procd_open_instance phin_bridge
   procd_set_param command ${BINFILE} ${BINOPTS} -i ${FIRMWARE} -a ${ADMIN}

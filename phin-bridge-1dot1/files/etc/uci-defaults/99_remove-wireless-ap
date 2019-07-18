@@ -16,4 +16,5 @@ uci -q batch <<-EOT
         set wireless.@wifi-iface[0].encryption=psk2
         set wireless.@wifi-iface[0].key=${KEY}
         set wireless.@wifi-iface[0].hidden=1
+        set wireless.@wifi-iface[0].disabled=1
 EOT

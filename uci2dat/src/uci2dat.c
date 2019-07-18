@@ -74,7 +74,7 @@
 
 
 #define LOG10_MAGIC	1.25892541179
-
+static int ApNum = 0;
 int dbm2mw(int in)
 {
 	double res = 1.0;
@@ -403,15 +403,15 @@ param CFG_ELEMENTS[] =
     {"ApCliAuthMode", NULL, {0}, hooker, NULL},
     {"ApCliEncrypType", NULL, {0}, hooker, NULL},
     {"ApCliWPAPSK", NULL, {0}, hooker, NULL},
-    {"ApCliDefaultKeyID", NULL, {0}, NULL, "0"},
+    {"ApCliDefaultKeyID", NULL, {0}, hooker, "0"},
     {"ApCliKey1Type", NULL, {0}, NULL, "0"},
-    {"ApCliKey1Str", NULL, {0}, NULL, NULL},
+    {"ApCliKey1Str", NULL, {0}, hooker, NULL},
     {"ApCliKey2Type", NULL, {0}, NULL, "0"},
-    {"ApCliKey2Str", NULL, {0}, NULL, NULL},
+    {"ApCliKey2Str", NULL, {0}, hooker, NULL},
     {"ApCliKey3Type", NULL, {0}, NULL, "0"},
-    {"ApCliKey3Str", NULL, {0}, NULL, NULL},
+    {"ApCliKey3Str", NULL, {0}, hooker, NULL},
     {"ApCliKey4Type", NULL, {0}, NULL, "0"},
-    {"ApCliKey4Str", NULL, {0}, NULL, NULL},
+    {"ApCliKey4Str", NULL, {0}, hooker, NULL},
     {"EfuseBufferMode", "efusebufmode", {0}, hooker, "0"},
     {"E2pAccessMode", "e2paccmode", {0}, hooker, "2"},
     {"RadioOn", "radio", {0}, hooker, "1"},
@@ -625,7 +625,7 @@ void parse_uci(char * arg)
                     value = NULL;
                     value = uci_lookup_option_string(uci_ctx, s, CFG_ELEMENTS[i].uci_key);
                     if (value) {
-						if (!strcmp(CFG_ELEMENTS[i].uci_key, "htmode") && strcmp(value, "NOHT")) {
+						if (!strcmp(CFG_ELEMENTS[i].uci_key, "htmode")) {
 							wireless_11n = 1;
 						}
                         strncpy(wifi_cfg[cur_dev].params[i].value, value, sizeof(CFG_ELEMENTS[i].value));
@@ -663,6 +663,9 @@ void parse_uci(char * arg)
 
 			/* Get all values */
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].mode, value);
+
+			if(strcmp(value, "sta"))
+				ApNum++;
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].disabled, value);
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].macaddr, value);
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].ssid, value);
@@ -680,7 +683,6 @@ void parse_uci(char * arg)
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].rekeyinteval, value);
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].preauth, value);
 			PARSE_UCI_OPTION(wifi_cfg[cur_dev].vifs[cur_vif].pmkcacheperiod, value);
-
 			wifi_cfg[cur_dev].vifnum++;
 
 		}
@@ -723,7 +725,8 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].ssid.value);
 		}
     } else if (!strcmp(p->dat_key, "BssidNum")) {
-        FPRINT(fp, p, "%d", wifi_cfg[N].vifnum);
+        //FPRINT(fp, p, "%d", wifi_cfg[N].vifnum);
+        FPRINT(fp, p, "%d", ApNum);
     } else if (!strcmp(p->dat_key, "EncrypType")) {
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
 			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "ap"))
@@ -818,11 +821,9 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "1");
 		} else if (!strcmp(p->value, "11g")) {
 			if (wireless_11n) 
-				FPRINT(fp, p, "7");
+				FPRINT(fp, p, "9");
 			else 
-				FPRINT(fp, p, "4");
-		} else if (!strcmp(p->value, "11n")) {
-			FPRINT(fp, p, "6");
+				FPRINT(fp, p, "0");
 		} else if (!strcmp(p->value, "11ac")) {
 			FPRINT(fp, p, "14");
 		} else {
@@ -1009,6 +1010,8 @@ void hooker(FILE * fp, param * p, const char * devname)
 				sprintf(enc, "WPAPSK");
 			} else if (strstr(encryption, "none")) {
 				sprintf(enc, "NONE"); 
+			} else if (strstr(encryption, "wep")) {
+				sprintf(enc, "WEPAUTO"); 
 			} else {
 				sprintf(enc, "WPA2PSK");
 			}
@@ -1027,6 +1030,8 @@ void hooker(FILE * fp, param * p, const char * devname)
 				sprintf(auth, "OPEN");
 			} else if (strstr(encryption, "tkip+aes")) {
 				sprintf(auth, "TKIPAES");
+			} else if (strstr(encryption, "wep")) {
+				sprintf(auth, "WEP");
 			} else {
 				sprintf(auth, "AES");
 			}
@@ -1039,6 +1044,70 @@ void hooker(FILE * fp, param * p, const char * devname)
 				continue;
 
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].key.value);
+		}
+	} else if (!strmatch(p->dat_key, "ApCliDefaultKeyID")) {
+    	for (i = 0; i < wifi_cfg[N].vifnum; i++) {
+			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "sta"))
+				continue;
+
+			char *encryption = wifi_cfg[N].vifs[i].encryption.value;
+
+			if (strstr(encryption, "wep"))
+		        FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].key.value);
+			else 
+				FPRINT(fp, p, "%s", "1");//default value
+		}
+	} else if(!strmatch(p->dat_key, "ApCliKey1Str")) {
+        for(i = 0; i < wifi_cfg[N].vifnum; i++) {
+			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "sta"))
+				continue;
+
+			char *encryption = wifi_cfg[N].vifs[i].encryption.value;
+
+			if (strstr(encryption, "wep")) {
+		        FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].wepkey[0].value);
+			} else {
+		        FPRINT(fp, p, "%s", "");
+			}
+		}
+	} else if(!strmatch(p->dat_key, "ApCliKey2Str")) {
+        for(i = 0; i < wifi_cfg[N].vifnum; i++) {
+			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "sta"))
+				continue;
+
+			char *encryption = wifi_cfg[N].vifs[i].encryption.value;
+
+			if (strstr(encryption, "wep")) {
+		        FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].wepkey[1].value);
+			} else {
+		        FPRINT(fp, p, "%s", "");
+			}
+		}
+	} else if(!strmatch(p->dat_key, "ApCliKey3Str")) {
+        for(i = 0; i < wifi_cfg[N].vifnum; i++) {
+			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "sta"))
+				continue;
+
+			char *encryption = wifi_cfg[N].vifs[i].encryption.value;
+
+			if (strstr(encryption, "wep")) {
+		        FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].wepkey[2].value);
+			} else {
+		        FPRINT(fp, p, "%s", "");
+			}
+		}
+	} else if(!strmatch(p->dat_key, "ApCliKey4Str")) {
+        for(i = 0; i < wifi_cfg[N].vifnum; i++) {
+			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "sta"))
+				continue;
+
+			char *encryption = wifi_cfg[N].vifs[i].encryption.value;
+
+			if (strstr(encryption, "wep")) {
+		        FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].wepkey[3].value);
+			} else {
+		        FPRINT(fp, p, "%s", "");
+			}
 		}
 	} else {
 		/* the rest part is quite simple! */

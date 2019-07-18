@@ -7,7 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=uci2dat
-PKG_RELEASE:=5
+PKG_VERSION:=3.0.4
+PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_CONFIG_DEPENDS:=
@@ -35,7 +36,6 @@ TARGET_CFLAGS += -Wno-error=format-security
 
 define Build/Configure
 endef
-
 
 define Package/uci2dat/install
 	$(INSTALL_DIR) $(1)/usr/bin

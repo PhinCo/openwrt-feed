@@ -1,11 +1,12 @@
-config wifi-device  mt7628
+config wifi-device      mt7628
 	option type     mt7628
 	option channel  'auto'
 	option htmode 'HT40'
 	option hwmode '11ng'
 	option country     'CN'
 	option region      '1'
-	option txpower	'20'
+	option ht_txstream '2'
+	option ht_rxstream '2'
 
 config wifi-iface
 	option device   mt7628

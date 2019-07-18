@@ -1,7 +1,8 @@
 #!/bin/sh
+exit
 
 SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
-KEY=$(head /dev/urandom | tr -dc 'A-Za-z0-9#%&()*+,-./:;<=>?@[\]^_{|}~' | head -c 33)
+KEY=$(head /dev/urandom | tr -dc 'A-Za-z0-9#%&' | head -c 33)
 
 uci -q batch <<-EOT
         set wireless.mt7628.country=US

@@ -1,4 +1,3 @@
-#@IgnoreInspection BashAddShebang
 # this file will be included in
 #     /lib/wifi/mt{chipname}.sh
 
@@ -223,7 +222,7 @@ enable_ralink_wifi() {
     config_get vifs "$device" vifs
 
 	# must start up ra0 first, to create all wireless related interface
-	#ifconfig ra0 up
+	ifconfig ra0 up
 
     # bring up vifs
     for vif in $vifs; do
@@ -239,11 +238,6 @@ enable_ralink_wifi() {
         else
             echo "ifconfig $ifname up" >>/dev/null
             ifconfig $ifname up
-			if [ -f "/tmp/first_time" ]; then 
-				sleep 10
-			else
-				sleep 3
-			fi
         fi
         #Radio On/Off only support iwpriv command but dat file
         [ "$radio" == "0" ] && iwpriv $ifname set RadioOn=0
@@ -251,30 +245,43 @@ enable_ralink_wifi() {
 
         local net_cfg br
         net_cfg="$(find_net_config "$vif")"
+        [ -z "$net_cfg" ] || {
+            # bridge="$(bridge_interface "$net_cfg")"
+            # config_set "$vif" bridge "$bridge"
+            start_net "$ifname" "$net_cfg"
+        }
 		# chk8021x $device
-		# set_wifi_up "$vif" "$ifname"
+		set_wifi_up "$vif" "$ifname"
 
-		[ -z "$net_cfg" ] || {
-			start_net "$ifname" "$net_cfg"
-		}
+		# mtk driver cannot bridge to lan when firstboot 
+		local try_count=0
+		while true;do
+			brctl show | grep "br-lan" >/dev/null 2>&1
+			if [ "$?" == "0" ];then
+				echo "br-lan ready, don't need action" >>/tmp/wifi.log
+				break
+			fi
 
-		# if [ "$mode" == "ap" ];then
-			# br=`brctl show | grep $ifname`
-			# if [ -z "$br" ];then
-				# if [ "$ifname" = "ra1" ];then
-					# echo "bridge $ifname to br-guest" >>/tmp/wifi.log
-					# brctl addif br-guest $ifname
-				# else
-					# echo "bridge $ifname to br-lan" >>/tmp/wifi.log
-					# brctl addif br-lan $ifname
-				# fi
-			# fi
-		# elif [ "$mode" == "sta" ];then
-			# wds=`uci get wireless.sta.wds`
-			# if [ "$wds" == "1" ];then
-				# brctl addif br-lan apcli0
-			# fi
-		# fi
+			sleep 1
+			try_count=`expr $try_count + 1`
+			if [ "$try_count" == "5" ];then
+				echo "wait timeout" >>/tmp/wifi.log
+				break;
+			fi
+		done
+
+		if [ "$mode" == "ap" ];then
+			br=`brctl show | grep $ifname`
+			if [ -z "$br" ];then
+				echo "bridge $ifname to br-lan" >>/tmp/wifi.log
+				brctl addif br-lan $ifname
+			fi
+		elif [ "$mode" == "sta" ];then
+			wds=`uci get wireless.sta.wds`
+			if [ "$wds" == "1" ];then
+				brctl addif br-lan apcli0
+			fi
+		fi
 	done
 }
 

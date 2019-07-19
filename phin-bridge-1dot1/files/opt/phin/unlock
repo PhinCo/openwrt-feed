@@ -25,18 +25,21 @@ RUNNING_PID=`ps | awk '{print $1}' | grep ${LOCKED_PID}`
 
 if [[ -z "${RUNNING_PID}" ]]; then
         echo "No running bridge process found for pid=${LOCKED_PID}. Removing lockfile: ${LOCKFILE}"
-        rm ${LOCKFILE}
+        rm ${LOCKFILE} 1> /dev/null 2>&1
         exit $?
 fi
 
 echo "Terminating bridge process found with pid=${RUNNING_PID}"
 
-kill -9 ${RUNNING_PID}
+kill -15 ${RUNNING_PID} # send a sigterm so that application can cleanup before exiting
 RESULT=$?
+
+echo "Waiting 3 seconds for process to terminate"
+sleep 3
 
 if [[ ${RESULT} -eq 0 ]]; then
         echo "Bridge process with pid=${RUNNING_PID} stopped. Removing lockfile ${LOCKFILE}"
-        rm ${LOCKFILE}
+        rm ${LOCKFILE} 1> /dev/null 2>&1
         exit $?
 else
         echo "Bridge process with pid=${RUNNING_PID} could not be stopped. Lockfile remains: ${LOCKFILE}"

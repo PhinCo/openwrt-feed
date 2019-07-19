@@ -8,17 +8,18 @@ FIRMWARE="/opt/phin/firmware"
 ADMIN="/opt/phin/admin"
 BINOPTS="-F"
 
-UNLOCK="/opt/phin/unlock"
+UNLOCK="/opt/phin/unlock"       # calling unlock sends running bridge a signal to stop and cleanup before exiting
 
 set_cron() {
   REBOOTED_FILE="/etc/phin-auto-rebooted.txt"
   if [[ ! -f "$REBOOTED_FILE" ]]; then
     echo "PREPARING CRON"
+    echo "never" > "$REBOOTED_FILE"
     RANDMIN=$(awk -v min=0 -v max=59 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')   # minute 0 to min 59
     RANDHR=$(awk -v min=7 -v max=9 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')     # approx CA 12am to 2am
     CRONTAB="${RANDMIN} ${RANDHR}"
     echo "SETTING CRON RESTART AS: $CRONTAB UTC"
-    echo $CRONTAB '* * * sleep 70 && touch /etc/banner && date >' $REBOOTED_FILE '&& reboot' > /etc/crontabs/root
+    echo $CRONTAB '* * * sleep 70 && touch /etc/banner && date >' $REBOOTED_FILE '&&' ${UNLOCK} '; reboot' > /etc/crontabs/root
   fi
 }
 

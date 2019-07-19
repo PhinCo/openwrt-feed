@@ -1,20 +1,11 @@
 #!/bin/sh
-exit
 SERIAL_NUMBER=$(dd if=/dev/mtd2 bs=1 count=12 skip=$((0x4030)) 2>/dev/null)
-KEY=$(head /dev/urandom | tr -dc 'A-Za-z0-9#%&' | head -c 33)
+KEY=$(head /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 33)
 
 uci -q batch <<-EOT
         set wireless.mt7628.country=US
         set wireless.mt7628.region=0
-        set wireless.sta=wifi-iface
-        set wireless.sta.device=mt7628
-        set wireless.sta.network=wwan
-        set wireless.sta.mode=sta
-        set wireless.sta.ifname=apcli0
         set wireless.@wifi-iface[0].ssid=phin-bridge-${SERIAL_NUMBER}
-        set wireless.@wifi-iface[0].mode=ap
-        set wireless.@wifi-iface[0].encryption=psk2
-        set wireless.@wifi-iface[0].key=${KEY}
-        set wireless.@wifi-iface[0].hidden=1
+        set wireless.@wifi-iface[0].key="${KEY}"
         set wireless.@wifi-iface[0].disabled=1
 EOT

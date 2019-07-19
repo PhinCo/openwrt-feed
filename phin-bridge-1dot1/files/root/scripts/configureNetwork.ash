@@ -42,7 +42,7 @@ uci set wireless.sta.ssid=$ssid
 uci set wireless.sta.encryption=$encryption
 if [ $encryption == "wep" ]
 then
-  uci delete wireless.sta.key
+  uci set wireless.sta.key=1
   uci set wireless.sta.key1=$key
 elif [ $encryption == "none" ]
 then

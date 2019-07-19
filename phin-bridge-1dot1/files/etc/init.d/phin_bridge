@@ -30,7 +30,7 @@ disable_ap() {
 
 start_service() {
   set_cron
-  disable_ap
+  #disable_ap ## This does not seem to be late enough! ARGH!
   procd_open_instance phin_bridge
   procd_set_param command ${BINFILE} ${BINOPTS} -i ${FIRMWARE} -a ${ADMIN}
 

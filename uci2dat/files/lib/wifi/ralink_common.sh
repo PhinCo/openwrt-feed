@@ -223,7 +223,7 @@ enable_ralink_wifi() {
     config_get vifs "$device" vifs
 
 	# must start up ra0 first, to create all wireless related interface
-	ifconfig ra0 up
+	#ifconfig ra0 up
 
     # bring up vifs
     for vif in $vifs; do

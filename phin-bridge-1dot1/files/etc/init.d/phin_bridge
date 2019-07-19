@@ -22,8 +22,15 @@ set_cron() {
   fi
 }
 
+disable_ap() {
+  uci set wireless.@wifi-iface[0].disabled='1'
+  uci commit wireless
+  wifi
+}
+
 start_service() {
   set_cron
+  disable_ap
   procd_open_instance phin_bridge
   procd_set_param command ${BINFILE} ${BINOPTS} -i ${FIRMWARE} -a ${ADMIN}
 

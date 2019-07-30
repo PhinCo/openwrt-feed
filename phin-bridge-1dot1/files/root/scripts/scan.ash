@@ -1,6 +1,6 @@
 #!/bin/ash
-echo "setting SiteSurvey"
+echo "Setting SiteSurvey"
 iwpriv apcli0 set SiteSurvey=1
 sleep 1
-echo "getting SiteSurvey"
+echo "Getting SiteSurvey"
 iwpriv apcli0 get_site_survey

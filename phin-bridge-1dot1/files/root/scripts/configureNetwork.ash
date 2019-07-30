@@ -4,7 +4,11 @@ if [ $# -ne 4 ]
     echo "missing arguments"
     echo "configureNetwork <ssid> <channel> <encryption> <key>"
     echo "configures the network on a pHin bridge"
-    echo "valid encryption type settings are psk, psk2, wep and none"
+    echo "valid encryption type settings are:"
+    echo "   psk  (for WPA)""
+    echo "   psk2 (for WPA2)""
+    echo "   wep  (well this one is pretty obvious)""
+    echo "   none (duh)"
     exit 1
 fi
 
@@ -15,7 +19,7 @@ key=$4
 
 if [ $encryption == "wep" -o $encryption == "psk" -o $encryption == "psk2" -o $encryption == "none" ]
 then
-  echo "Valid encryption option"
+  echo "Encryption option is valid: $encryption"
 else
   echo "Invalid encryption option"
   echo "Valid encryption type settings are psk, psk2, wep and none"
@@ -23,9 +27,9 @@ else
 fi
 
 echo "setting network to $ssid on channel $channel"
+echo "and configuring network wan interface."
 
-echo "configured network wan interface."
-
+echo "Configuring wireless interface"
 uci set wireless.mt7628.channel=$channel
 uci set wireless.sta.ssid=$ssid
 uci set wireless.sta.encryption=$encryption
@@ -43,8 +47,7 @@ else
 fi
 uci commit wireless
 
-echo "configured wireless interface"
 
+echo "Restarting network"
 /etc/init.d/network restart
 
-echo "Restarted network"

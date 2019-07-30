@@ -1,9 +1,9 @@
 #!/bin/ash
-echo "bouncing network"
+echo "Bouncing network"
 
 /etc/init.d/network restart
 
 sleep 5
 
+echo "Bouncing WiFi"
 wifi
-echo "bounced network"

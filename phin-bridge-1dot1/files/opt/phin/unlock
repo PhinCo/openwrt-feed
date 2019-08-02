@@ -12,6 +12,7 @@
 TMP_PATH=/var/tmp
 LOCKFILE="${TMP_PATH}/bridge.lock"
 KILLSIGNAL=-15
+WAIT_FOR_KILL_SECONDS=5
 
 if [[ ! -f "${LOCKFILE}" ]]; then
         echo "No lockfile found: ${LOCKFILE}"
@@ -35,8 +36,8 @@ echo "Terminating bridge process found with pid=${RUNNING_PID}"
 kill ${KILLSIGNAL} ${RUNNING_PID} # send a sigterm so that application can cleanup before exiting
 RESULT=$?
 
-echo "Waiting 3 seconds for process to terminate"
-sleep 3
+echo "Waiting ${WAIT_FOR_KILL_SECONDS} seconds for process to terminate"
+sleep ${WAIT_FOR_KILL_SECONDS}
 
 if [[ ${RESULT} -eq 0 ]]; then
         echo "Bridge process with pid=${RUNNING_PID} stopped. Removing lockfile ${LOCKFILE}"

@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/usr/bin/env ash
 echo "Setting SiteSurvey"
 iwpriv apcli0 set SiteSurvey=1
 sleep 1

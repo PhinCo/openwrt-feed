@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/usr/bin/env ash
 echo "Bouncing network"
 
 /etc/init.d/network restart

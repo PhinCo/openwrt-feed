@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/usr/bin/env ash
                                         
 
 echo "Disfiguring Wireless interface"

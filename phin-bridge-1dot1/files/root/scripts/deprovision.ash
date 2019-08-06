@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ash
 
 echo "Deleting phin bridge configuration"
 rm /etc/phin-bridge.json 2> /dev/null

@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/usr/bin/env ash
 if [ $# -ne 1 ]
   then
     echo "missing arguments"

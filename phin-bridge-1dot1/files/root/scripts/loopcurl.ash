@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/usr/bin/env ash
 loopcurl(){
   counter=1
   while true

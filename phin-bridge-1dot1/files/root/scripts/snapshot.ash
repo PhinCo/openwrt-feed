@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/usr/bin/env ash
 
 if [[ $# -gt 1 ]] ; then
     SNAPSHOT_FILE="$1"

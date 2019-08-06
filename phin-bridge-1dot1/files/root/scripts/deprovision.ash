@@ -1,7 +1,8 @@
 #!/usr/bin/env ash
 
 echo "Deleting phin bridge configuration"
-rm /etc/phin-bridge.json 2> /dev/null
+/opt/phin/unlock
+rm /etc/phin_bridge.json 2> /dev/null
 
 echo "Disfiguring Wireless interface"
 uci delete wireless.mt7628.channel

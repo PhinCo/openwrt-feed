@@ -4,14 +4,14 @@
 #
 # Unlock phin bridge
 #
-# If bridge is running, kill bridge endure lock is removed
+# If bridge is running, kill bridge ensure lock is removed
 # If bridge is not running, clean up lock
 # If lock pid is not valid, report
 #-----------------------------------------------------------
 
 TMP_PATH=/var/tmp
 LOCKFILE="${TMP_PATH}/bridge.lock"
-KILLSIGNAL=-15
+KILLSIGNAL=15
 WAIT_FOR_KILL_SECONDS=5
 
 if [[ ! -f "${LOCKFILE}" ]]; then
@@ -33,7 +33,7 @@ fi
 
 echo "Terminating bridge process found with pid=${RUNNING_PID}"
 
-kill ${KILLSIGNAL} ${RUNNING_PID} # send a sigterm so that application can cleanup before exiting
+kill -${KILLSIGNAL} ${RUNNING_PID} # send a sigterm so that application can cleanup before exiting
 RESULT=$?
 
 echo "Waiting ${WAIT_FOR_KILL_SECONDS} seconds for process to terminate"

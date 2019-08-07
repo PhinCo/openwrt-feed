@@ -19,7 +19,7 @@ set_cron() {
     RANDHR=$(awk -v min=7 -v max=9 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')     # approx CA 12am to 2am
     CRONTAB="${RANDMIN} ${RANDHR}"
     echo "SETTING CRON RESTART AS: $CRONTAB UTC"
-    echo $CRONTAB '* * * sleep 70 && touch /etc/banner && date >' $REBOOTED_FILE '&&' ${UNLOCK} '; reboot' > /etc/crontabs/root
+    echo $CRONTAB '* * * sleep 60 && touch /etc/banner && date >' $REBOOTED_FILE '&&' ${UNLOCK} '; sleep 10 ; reboot' > /etc/crontabs/root
   fi
 }
 
@@ -36,7 +36,7 @@ start_service() {
   procd_set_param command ${BINFILE} ${BINOPTS} -i ${FIRMWARE} -a ${ADMIN}
 
   # respawn automatically if something died, be careful if you have an alternative process supervisor
-  procd_set_param respawn 3600 5 0
+  procd_set_param respawn 3600 20 0
 
   # procd_set_param env SOME_VARIABLE=funtimes  # pass environment variables to your process
   procd_set_param stdout 1 # forward stdout of the command to logd

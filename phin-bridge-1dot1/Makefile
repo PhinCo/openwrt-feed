@@ -34,6 +34,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/bridge $(1)/opt/phin/bridge
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/unlock $(1)/opt/phin/unlock
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/opt/phin/unlock $(1)/opt/phin/post-update-script.ash
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/opt/phin/version $(1)/opt/phin/version
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/admin $(1)/opt/phin/admin

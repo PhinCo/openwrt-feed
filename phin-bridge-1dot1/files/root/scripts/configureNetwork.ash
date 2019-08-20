@@ -5,9 +5,9 @@ if [ $# -ne 4 ]
     echo "configureNetwork <ssid> <channel> <encryption> <key>"
     echo "configures the network on a pHin bridge"
     echo "valid encryption type settings are:"
-    echo "   psk  (for WPA)""
-    echo "   psk2 (for WPA2)""
-    echo "   wep  (well this one is pretty obvious)""
+    echo "   psk  (for WPA)"
+    echo "   psk2 (for WPA2)"
+    echo "   wep  (well this one is pretty obvious)"
     echo "   none (duh)"
     exit 1
 fi

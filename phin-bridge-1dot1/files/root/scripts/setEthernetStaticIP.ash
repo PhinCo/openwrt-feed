@@ -13,8 +13,9 @@ fi
 
 echo "Setting ethernet (lan) to static ipaddress ${ipaddress}"
 
-uci set network.lan.proto="static"
-uci set network.lan.ipaddr="${ipaddress}"
+uci set network.lan.proto=static
+uci set network.lan.ipaddr=${ipaddress}
+uci set network.lan.netmask=255.255.255.0
 uci commit network
 
 echo "Bouncing Network (takes about 27 seconds)"

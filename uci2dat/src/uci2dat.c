@@ -1028,8 +1028,10 @@ void hooker(FILE * fp, param * p, const char * devname)
 
 			if (strstr(encryption, "none")) {
 				sprintf(auth, "OPEN");
-			} else if (strstr(encryption, "tkip+aes")) {
-				sprintf(auth, "TKIPAES");
+			} else if (strstr(encryption, "aes")) {
+				sprintf(auth, "AES");
+			} else if (strstr(encryption, "tkip")) {
+				sprintf(auth, "TKIP");
 			} else if (strstr(encryption, "wep")) {
 				sprintf(auth, "WEP");
 			} else {

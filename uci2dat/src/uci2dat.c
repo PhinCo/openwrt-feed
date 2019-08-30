@@ -995,6 +995,15 @@ void hooker(FILE * fp, param * p, const char * devname)
 			FPRINT(fp, p, "%s", wifi_cfg[N].vifs[i].bssid.value);
 		}
 	} else if (!strmatch(p->dat_key, "ApCliAuthMode")) {
+//From Driver Documentation:
+//https://usermanual.wiki/Pdf/MTKWiFiSoftAPSoftwareProgrammingGuidev42.1276024433/html
+// OPEN SHARED WEPAUTO WPAPSK WPA2PSK WPANONE WPA WPA2
+//OPEN      For open system
+//SHARED    For shared key system
+//WEPAUTO   Auto switch between OPEN and SHARED For WPA pre-shared key (Infra)
+//WPAPSK    For WPA2 pre-shared key (Infra)
+//WPA2PSK   For WPA pre-shared key (Adhoc)
+//For enterprise mode (Need wpa_supplicant) For enterprise mode (Need wpa_supplicant)
         for(i = 0; i < wifi_cfg[N].vifnum; i++) {
 			if (strcmp(wifi_cfg[N].vifs[i].mode.value, "sta"))
 				continue;
@@ -1003,7 +1012,7 @@ void hooker(FILE * fp, param * p, const char * devname)
 			char enc[32] = {0};
 
 			if (strstr(encryption, "mixed")) {
-				sprintf(enc, "WPAPSKWPA2PSK");
+				sprintf(enc, "WPAPSKWPA2PSK");          // SAE: This doesn't match what the driver reports in scan.ash
 			} else if (strstr(encryption, "psk2")) {
 				sprintf(enc, "WPA2PSK");
 			} else if (strstr(encryption, "psk")) {

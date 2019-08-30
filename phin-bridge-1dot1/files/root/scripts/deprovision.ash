@@ -5,11 +5,11 @@ echo "Deleting phin bridge configuration"
 rm /etc/phin_bridge.json 2> /dev/null
 
 echo "Disfiguring Wireless interface"
-uci delete wireless.mt7628.channel
-uci delete wireless.sta.ssid
-uci delete wireless.sta.encryption
-uci delete wireless.sta.key
-uci delete wireless.sta.key1
+uci -q delete wireless.mt7628.channel
+uci -q delete wireless.sta.ssid
+uci -q delete wireless.sta.encryption
+uci -q delete wireless.sta.key
+uci -q delete wireless.sta.key1
 uci commit wireless
 
 echo "Restarting network"

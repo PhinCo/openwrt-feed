@@ -3,7 +3,7 @@ if [[ $# -lt 3 ]]
   then
     echo "missing arguments"
     echo ""
-    echo "usage: configureNetwork <ssid> <channel> <protocol> [<key>] [cipher]"
+    echo "usage: configureNetwork <ssid> <channel> <protocol> [key] [cipher]"
     echo ""
     echo "configures the network on a pHin bridge"
     echo ""
@@ -42,7 +42,7 @@ if [[ ${protocol} == "psk" || ${protocol} == "psk2" ]]
 then
   if [[ ${cipher} == "aes" || ${cipher} == "tkip" ]]
   then
-    echo "Cipher selected: $cipher"
+    echo "Cipher selected: ${cipher}"
     encryption="${protocol}+${cipher}"
   else
     echo "Invalid cipher option: ${cipher}"

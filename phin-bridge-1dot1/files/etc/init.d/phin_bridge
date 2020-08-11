@@ -8,45 +8,38 @@ FIRMWARE="/opt/phin/firmware"
 ADMIN="/opt/phin/admin"
 BINOPTS="-F"
 
-UNLOCK="/opt/phin/unlock"       # calling unlock sends running bridge a signal to stop and cleanup before exiting
+UNLOCK="/opt/phin/unlock ; sleep 10"       # calling unlock sends running bridge a signal to stop and cleanup before exiting
+REBOOT="/root/scripts/reboot.ash"          # calling reboot saves a snapshot and reboots the bridge
 
 POST_UPDATE_SCRIPT="/opt/phin/post-update-script.ash"
 
 post_update_installation() {
   LAST_BOOTED_VERSION_FILE="/etc/phin-last-booted-version.txt"
   PHIN_VERSION_FILE="/etc/phin_version"
-  UPDATE_INSTALL_SCRIPT="/opt/phin/update-script"
-  VERSION=$(cat ${PHIN_VERSION_FILE} | sed -r 's/^version=([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
+  VERSION=$(sed -r 's/^version=([0-9]+\.[0-9]+\.[0-9]+).*/\1/g' < ${PHIN_VERSION_FILE})
 
   ## Check if this is the first time this bridge has run this version
-  if [[ -f ${LAST_BOOTED_VERSION_FILE} ]] ; then
-    LAST_BOOTED_VERSION=$(cat ${LAST_BOOTED_VERSION_FILE})
-  else
-    LAST_BOOTED_VERSION="unknown"
-  fi
+  LAST_BOOTED_VERSION="unknown"
+  [[ -f ${LAST_BOOTED_VERSION_FILE} ]] && LAST_BOOTED_VERSION=$(cat "${LAST_BOOTED_VERSION_FILE}")
 
   ## Handle post firmware update installation with script
-  if [[ ${VERSION} != ${LAST_BOOTED_VERSION} ]] ; then
-    if [[ -f ${POST_UPDATE_SCRIPT} ]] ; then
-      ${POST_UPDATE_SCRIPT}
-    fi
-  fi
+  [[ "${VERSION}" != "${LAST_BOOTED_VERSION}" &&  -f "${POST_UPDATE_SCRIPT}" ]] && "${POST_UPDATE_SCRIPT}"
 
-  echo ${VERSION} > ${LAST_BOOTED_VERSION_FILE}
+  echo "${VERSION}" > "${LAST_BOOTED_VERSION_FILE}"
 }
 
 set_cron() {
   AUTO_REBOOTED_FILE="/etc/phin-auto-rebooted.txt"
   CRON_TAB_FILE="/etc/crontabs/root"
 
-  if [[ ! -f ${AUTO_REBOOTED_FILE} || ! -f ${CRON_TAB_FILE} ]]; then
+  if [ ! -f "${AUTO_REBOOTED_FILE}" ] || [ ! -f "${CRON_TAB_FILE}" ]; then
     echo "PREPARING CRON"
     echo "never" > ${AUTO_REBOOTED_FILE}
     RANDMIN=$(awk -v min=0 -v max=59 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')   # minute 0 to min 59
     RANDHR=$(awk -v min=7 -v max=9 'BEGIN{srand(); print int(min+rand()*(max-min+1))}')     # approx CA 12am to 2am
     CRONTIME="${RANDMIN} ${RANDHR}"
     echo "SETTING CRON RESTART AS: ${CRONTIME} UTC"
-    echo ${CRONTIME} '* * * sleep 60 && touch /etc/banner && date >' ${AUTO_REBOOTED_FILE} '&&' ${UNLOCK} '; sleep 10 ; reboot' > ${CRON_TAB_FILE}
+    echo "${CRONTIME} * * * sleep 60 ; touch /etc/banner ; date > ${AUTO_REBOOTED_FILE} ; ${UNLOCK} ; ${REBOOT}" > "${CRON_TAB_FILE}"
   fi
 }
 

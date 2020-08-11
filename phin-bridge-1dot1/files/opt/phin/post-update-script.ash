@@ -8,35 +8,50 @@
 # This script could perform actions specific to the version we are coming from
 #-------------------------------------------------------
 
-echo "Beginning post firmware update script"
+# Converts a semver to an integer 11.22.333 to 011022333
+# numerical weight of 1000, up to 3 places per semver part
+function integer_version {
+  local semver=$1
+  local array=${semver//\./ }
+  local placeweight=1000
+  local sum=0
+  for place in $array ; do
+    let sum="$sum * $placeweight + $place"
+  done
+  echo -n $sum
+}
+
+##-------------------------------------------------------
+## Setup, Getting versions
+##-------------------------------------------------------
 
 LAST_BOOTED_VERSION_FILE="/etc/phin-last-booted-version.txt"
 PHIN_VERSION_FILE="/etc/phin_version"
 
-VERSION=$(cat ${PHIN_VERSION_FILE} | sed -r 's/^version=([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
-LAST_BOOTED_VERSION=""
+VERSION=$(cat "${PHIN_VERSION_FILE}" | sed -r 's/^version=([0-9]+\.[0-9]+\.[0-9]+).*/\1/g')
+INT_VERSION=$(integer_version "${VERSION}")
 
-if [[ -f ${LAST_BOOTED_VERSION_FILE} ]] ; then
-    LAST_BOOTED_VERSION=$(cat ${LAST_BOOTED_VERSION_FILE})
-else
-    LAST_BOOTED_VERSION="unknown"
-fi
+LAST_BOOTED_VERSION="0.0.0"
+[[ -f ${LAST_BOOTED_VERSION_FILE} ]] && LAST_BOOTED_VERSION=$(cat ${LAST_BOOTED_VERSION_FILE})
+INT_LAST_BOOTED_VERSION=$(integer_version "${LAST_BOOTED_VERSION}")
 
-#-------------------------------------------------------
+
+##-------------------------------------------------------
 ## Transitions - Can specify from and To
-#-------------------------------------------------------
+##-------------------------------------------------------
+INT_VERSION_4_4_4=$(integer_version 4.4.4)
 
-## From any unknown version (before 4.3.8)
-if [[ ${LAST_BOOTED_VERSION} == unknown ]] ; then
-   echo "Running update from unknown version to ${VERSION}"
+echo "Beginning post firmware update script from ${LAST_BOOTED_VERSION} --> ${VERSION}"
+
+## From any version (before 4.4.4) rebuild crontab
+if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_4_4} ]] ; then
+   echo "Migration: ${INT_LAST_BOOTED_VERSION} --> ${INT_VERSION_4_4_4}"
    CRON_TAB_FILE="/etc/crontabs/root"
 
    # Remove old cron file so it can be regenerated
    echo "removing old cron tab file: ${CRON_TAB_FILE}"
    rm ${CRON_TAB_FILE}
 fi
-
-
 
 #-------------------------------------------------------
 ## DONE

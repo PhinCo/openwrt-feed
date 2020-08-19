@@ -7,8 +7,8 @@ uci -q delete wireless.sta.ssid
 uci -q delete wireless.sta.encryption
 uci -q delete wireless.sta.key
 uci -q delete wireless.sta.key1
+uci -q delete wireless.sta.bssid
 uci commit wireless
                                     
 echo "Restarting network"
-/etc/init.d/network restart         
-                                    
+/etc/init.d/network restart

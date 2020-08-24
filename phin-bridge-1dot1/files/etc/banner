@@ -1,0 +1,21 @@
+       _   _ _      ______      _     _             __    __
+      | | | (*)     | ___ \    (*)   | |           /  |  /  |
+ _ __ | |_| |_ _ __ | |_/ /_ __ _  __| | __ _  ___ `| |  `| |
+| '_ \|  _  | | '_ \| ___ \ '__| |/ _` |/ _` |/ _ \ | |   | |
+| |_) | | | | | | | | |_/ / |  | | (_| | (_| |  __/ | |___| |_
+| .__/\_| |_/_|_| |_\____/|_|  |_|\__,_|\__, |\___\ \___(*)___/
+| |                                      __/ |
+|_| (c) 2020 Connected Yard, Inc.       |___/
+
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+  Helpful Tips for a Healthy Bridge
+
+  /root/scripts       - tools for inspecting bridge wifi config
+  /opt/phin        - the phin bridge application and it's files
+  /var/log                                   - phin bridge logs
+  logread -f -e bridge -l 100                - tail bridge logs
+  service phin_bridge disable && reboot   - disable the service
+  cat /etc/phin_version                       - list build info
+  ifconfig eth0 down ; ifconfig eth0 up       - bounce ethernet
+  top                               - monitor running processes
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-

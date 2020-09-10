@@ -1,1 +1,1 @@
-feed_version=1.3.51,feed_ts=1598471409,app_version=1.0.50,app_hash=3eeca2b,bluegecko_version=2.0.2,bluegecko_hash=15ecc1d
+feed_version=1.3.52,feed_ts=1599775687,app_version=1.0.51,app_hash=1e4b78b,bluegecko_version=2.0.2,bluegecko_hash=15ecc1d

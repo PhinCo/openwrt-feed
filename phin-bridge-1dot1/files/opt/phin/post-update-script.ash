@@ -58,12 +58,10 @@ INT_VERSION_4_5_8=$(integer_version 4.5.8)
 if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_5_8} ]] ; then
    echo "Migration: ${INT_LAST_BOOTED_VERSION} --> ${INT_VERSION_4_5_8}"
 
-   # replace /etc/sysupgrade.conf with the latest, since it doesn't get updated
-   rm /etc/sysupgrade.conf
-   echo "/var/log/phin_bridge.log" >> /etc/sysupgrade.conf
-   echo "/opt/phin/cache/" >> /etc/sysupgrade.conf
-   echo "/opt/phin/snapshots/" >> /etc/sysupgrade.conf
-   echo "updated /etc/sysupgrade.conf"
+   # ensure these files get added to the sysupgrade.conf file
+   cat /opt/phin/patches/sysupgrade.conf /etc/sysupgrade.conf | sort | uniq > /tmp/sysupgrade.conf
+   mv /tmp/sysupgrade.conf /etc/sysupgrade.conf
+   echo "updated /etc/sysupgrade.conf to $(wc -l /etc/sysupgrade.conf | grep -o '^[^ ]*') lines"
 fi
 
 #-------------------------------------------------------

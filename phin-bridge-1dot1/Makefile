@@ -29,6 +29,7 @@ define Package/phin-bridge-1dot1/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/opt/phin
 	$(INSTALL_DIR) $(1)/opt/phin/cache
+	$(INSTALL_DIR) $(1)/opt/phin/patches
 	$(INSTALL_DIR) $(1)/root
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/phin_bridge $(1)/etc/init.d/phin_bridge
@@ -40,13 +41,12 @@ define Package/phin-bridge-1dot1/install
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/admin $(1)/opt/phin/admin
 	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/firmware $(1)/opt/phin/firmware
 	$(CP) -R $(PKG_BUILD_DIR)/files/root/scripts $(1)/root/scripts
+	$(CP) -R $(PKG_BUILD_DIR)/files/opt/phin/patches $(1)/opt/phin/patches
 	chmod +x $(1)/root/scripts/*
 
 	$(CP) -R $(PKG_BUILD_DIR)/files/root/.secureKeys/ $(1)/root
 
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/config/network $(1)/etc/config/network
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/sysupgrade.conf $(1)/etc/sysupgrade.conf
-	$(INSTALL_CONF) $(PKG_BUILD_DIR)/files/etc/banner $(1)/etc/banner
 
 	$(CP) -R $(PKG_BUILD_DIR)/files/etc/uci-defaults $(1)/etc
 endef

@@ -53,6 +53,22 @@ if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_4_4} ]] ; then
    rm ${CRON_TAB_FILE}
 fi
 
+INT_VERSION_4_5_8=$(integer_version 4.5.8)
+## From any version (before 4.5.8) get new sysupgrade.conf
+if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_5_8} ]] ; then
+   echo "Migration: ${INT_LAST_BOOTED_VERSION} --> ${INT_VERSION_4_5_8}"
+
+   # ensure these files get added to the sysupgrade.conf file
+   cp /opt/phin/patches/sysupgrade.conf /tmp/sysupgrade.conf
+   [[ -f /etc/sysupgrade.conf ]] && cat /etc/sysupgrade.conf >> /tmp/sysupgrade.conf
+   sort -u /tmp/sysupgrade.conf > /etc/sysupgrade.conf
+   echo "updated /etc/sysupgrade.conf to $(wc -l /etc/sysupgrade.conf | grep -o '^[^ ]*') lines"
+
+   # update the banner file
+   cp /opt/phin/patches/banner /etc/banner
+fi
+
+
 #-------------------------------------------------------
 ## DONE
 #-------------------------------------------------------

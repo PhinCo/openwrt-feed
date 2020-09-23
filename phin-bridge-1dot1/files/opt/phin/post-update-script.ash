@@ -53,6 +53,19 @@ if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_4_4} ]] ; then
    rm ${CRON_TAB_FILE}
 fi
 
+INT_VERSION_4_5_8=$(integer_version 4.5.8)
+## From any version (before 4.5.8) get new sysupgrade.conf
+if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_5_8} ]] ; then
+   echo "Migration: ${INT_LAST_BOOTED_VERSION} --> ${INT_VERSION_4_5_8}"
+
+   # replace /etc/sysupgrade.conf with the latest, since it doesn't get updated
+   rm /etc/sysupgrade.conf
+   echo "/var/log/phin_bridge.log" >> /etc/sysupgrade.conf
+   echo "/opt/phin/cache/" >> /etc/sysupgrade.conf
+   echo "/opt/phin/snapshots/" >> /etc/sysupgrade.conf
+   echo "updated /etc/sysupgrade.conf"
+fi
+
 #-------------------------------------------------------
 ## DONE
 #-------------------------------------------------------

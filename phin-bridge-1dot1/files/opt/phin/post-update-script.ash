@@ -53,17 +53,6 @@ if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_4_4} ]] ; then
    rm ${CRON_TAB_FILE}
 fi
 
-INT_VERSION_4_5_8=$(integer_version 4.5.8)
-## From any version (before 4.5.8) get new sysupgrade.conf
-if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_5_8} ]] ; then
-   echo "Migration: ${INT_LAST_BOOTED_VERSION} --> ${INT_VERSION_4_5_8}"
-
-   # ensure these files get added to the sysupgrade.conf file
-   cat /opt/phin/patches/sysupgrade.conf /etc/sysupgrade.conf | sort | uniq > /tmp/sysupgrade.conf
-   mv /tmp/sysupgrade.conf /etc/sysupgrade.conf
-   echo "updated /etc/sysupgrade.conf to $(wc -l /etc/sysupgrade.conf | grep -o '^[^ ]*') lines"
-fi
-
 #-------------------------------------------------------
 ## DONE
 #-------------------------------------------------------

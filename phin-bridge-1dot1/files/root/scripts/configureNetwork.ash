@@ -74,20 +74,20 @@ echo "and configuring network wan interface for encryption: ${encryption}."
 
 echo "Configuring wireless interface"
 
-uci set wireless.mt7628.channel=${channel}
-uci set wireless.sta.ssid=${ssid}
-uci set wireless.sta.encryption=${encryption}
+uci set wireless.mt7628.channel="${channel}"
+uci set wireless.sta.ssid="${ssid}"
+uci set wireless.sta.encryption="${encryption}"
 
 if [[ ${encryption} == "wep" ]]
 then
-  uci set wireless.sta.key=1
-  uci set wireless.sta.key1=${key}
+  uci set wireless.sta.key="1"
+  uci set wireless.sta.key1="${key}"
 elif [[ ${encryption} == "none" ]]
 then
   uci -q delete wireless.sta.key
   uci -q delete wireless.sta.key1
 else
-  uci set wireless.sta.key=${key}
+  uci set wireless.sta.key="${key}"
   uci -q delete wireless.sta.key1
 fi
 uci commit wireless

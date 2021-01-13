@@ -79,6 +79,8 @@ uci show network > "${DEST}/uci_show_network.txt"
 uci show wireless | grep -iv key > "${DEST}/uci_show_wireless.txt"
 top -n 1 > "${DEST}/top"
 cp /etc/crontabs/root "${DEST}/crontabs_root"
+dmesg > "$DEST}/dmesg.txt"
+cp /etc/resolv.conf "$DEST"
 
 #------------------------------------------------
 # Optionally gather additional folder

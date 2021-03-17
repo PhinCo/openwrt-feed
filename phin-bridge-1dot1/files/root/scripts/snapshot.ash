@@ -74,13 +74,16 @@ cp /etc/phin* "${DEST}"
 iwpriv ra0 stat > "${DEST}/ra0_stat.txt"
 iwinfo apcli0 info > "${DEST}/iwinfo_apcli0_info.txt"
 /root/scripts/scan.ash > "${DEST}/scan.txt"
-cp /etc/wireless/mt7628/mt7628.dat "${DEST}/mt7628.dat"
 uci show network > "${DEST}/uci_show_network.txt"
-uci show wireless | grep -iv key > "${DEST}/uci_show_wireless.txt"
 top -n 1 > "${DEST}/top"
 cp /etc/crontabs/root "${DEST}/crontabs_root"
 dmesg > "$DEST}/dmesg.txt"
 cp /etc/resolv.conf "$DEST"
+
+# be careful not to gather passwords
+cat /etc/wireless/mt7628/mt7628.dat | grep -iv ApCliWPAPSK | grep -iv ApCliKey > "${DEST}/mt7628.dat"
+uci show wireless | grep -iv key > "${DEST}/uci_show_wireless.txt"
+
 
 #------------------------------------------------
 # Optionally gather additional folder

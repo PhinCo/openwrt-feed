@@ -59,7 +59,7 @@ mkdir -p "${DEST}"
 rm "${DEST}"/* 2> /dev/null
 
 #------------------------------------------------
-# Gather system data
+# Gather system data. Errors for missing files will be ignored
 #------------------------------------------------
 hostname > "${DEST}/hostname.txt"
 date > "${DEST}/date.txt"
@@ -79,8 +79,10 @@ top -n 1 > "${DEST}/top"
 cp /etc/crontabs/root "${DEST}/crontabs_root"
 dmesg > "$DEST}/dmesg.txt"
 cp /etc/resolv.conf "$DEST"
+cp /etc/phin-ota.json "${DEST}"
 
 # be careful not to gather passwords
+# shellcheck disable=SC2002
 cat /etc/wireless/mt7628/mt7628.dat | grep -iv ApCliWPAPSK | grep -iv ApCliKey > "${DEST}/mt7628.dat"
 uci show wireless | grep -iv key > "${DEST}/uci_show_wireless.txt"
 

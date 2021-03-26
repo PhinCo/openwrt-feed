@@ -68,6 +68,17 @@ if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_5_8} ]] ; then
    cp /opt/phin/patches/banner /etc/banner
 fi
 
+INT_VERSION_4_8_14=$(integer_version 4.8.14)
+## From any version before 4.8.13 add to sysupgrade.conf
+if [[ ${INT_LAST_BOOTED_VERSION} -lt ${INT_VERSION_4_8_14} ]] ; then
+   echo "Migration: ${INT_LAST_BOOTED_VERSION} --> ${INT_VERSION_4_8_14}"
+
+   # ensure new files get added to the sysupgrade.conf file
+   echo "/etc/phin-ota.json" > /tmp/sysupgrade.conf
+   [[ -f /etc/sysupgrade.conf ]] && cat /etc/sysupgrade.conf >> /tmp/sysupgrade.conf
+   sort -u /tmp/sysupgrade.conf > /etc/sysupgrade.conf
+   echo "updated /etc/sysupgrade.conf to $(wc -l /etc/sysupgrade.conf | grep -o '^[^ ]*') lines"
+fi
 
 #-------------------------------------------------------
 ## DONE
